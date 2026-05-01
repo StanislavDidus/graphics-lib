@@ -4,8 +4,8 @@
 #include <memory>
 #include <variant>
 
-#include "TileMap.hpp"
-#include "GpuTexture.hpp"
+#include <graphics/TileMap.hpp>
+#include <graphics/GpuTexture.hpp>
 #include "glm/vec4.hpp"
 #include "glm/vec2.hpp"
 

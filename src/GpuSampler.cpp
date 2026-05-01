@@ -1,4 +1,4 @@
-#include "GpuSampler.hpp"
+#include <graphics/GpuSampler.hpp>
 
 #include <format>
 #include <optional>

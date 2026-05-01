@@ -3,9 +3,9 @@
 #include <memory>
 #include <vector>
 
-#include "GpuRenderer.hpp"
-#include "GpuRenderFunctions.hpp"
-#include "Sprite.hpp"
+#include <graphics/GpuRenderer.hpp>
+#include <graphics/GpuRenderFunctions.hpp>
+#include <graphics/Sprite.hpp>
 #include "glm/glm.hpp"
 
 namespace graphics

@@ -3,8 +3,8 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <filesystem>
-#include "Color.hpp"
-#include "Font.hpp"
+#include <graphics/Color.hpp>
+#include <graphics/Font.hpp>
 #include <optional>
 
 namespace graphics

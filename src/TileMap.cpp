@@ -1,10 +1,10 @@
 
-#include "TileMap.hpp"
+#include <graphics/TileMap.hpp>
 
 #include <utility>
 
-#include "GpuTransferBuffer.hpp"
-#include "GpuRenderer.hpp"
+#include <graphics/GpuTransferBuffer.hpp>
+#include <graphics/GpuRenderer.hpp>
 
 graphics::TileMap::TileMap(std::shared_ptr<SDL_GPUDevice> device, std::shared_ptr<GpuTexture> texture, int world_width_tiles, int world_height_tiles,
                            int tile_width_world, int tile_height_world, int chunk_width_tiles, int chunk_height_tiles)

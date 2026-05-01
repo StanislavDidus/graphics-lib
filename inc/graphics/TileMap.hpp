@@ -2,10 +2,10 @@
 
 #include <memory>
 
-#include "GpuTexture.hpp"
+#include <graphics/GpuTexture.hpp>
 #include "glm/vec2.hpp"
 #include "glm/vec4.hpp"
-#include "Chunk.hpp"
+#include <graphics/Chunk.hpp>
 
 namespace graphics
 {

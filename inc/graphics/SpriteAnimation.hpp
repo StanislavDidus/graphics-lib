@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SpriteSheet.hpp"
+#include <graphics/SpriteSheet.hpp>
 
 #include <vector>
 #include <memory>

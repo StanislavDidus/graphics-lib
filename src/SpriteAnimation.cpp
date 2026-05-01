@@ -1,4 +1,4 @@
-#include "SpriteAnimation.hpp"
+#include <graphics/SpriteAnimation.hpp>
 
 using namespace graphics;
 

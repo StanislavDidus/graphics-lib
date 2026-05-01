@@ -1,17 +1,17 @@
-#include "GpuRenderer.hpp"
-#include "Window.hpp"
-#include "GpuRenderFunctions.hpp"
+#include <graphics/GpuRenderer.hpp>
+#include <graphics/Window.hpp>
+#include <graphics/GpuRenderFunctions.hpp>
 
 #include <iostream>
 
 #include "glm/mat4x4.hpp"
 #include <SDL3_shadercross/SDL_shadercross.h>
 
-#include "GpuSampler.hpp"
-#include "Surface.hpp"
-#include "TileMap.hpp"
+#include <graphics/GpuSampler.hpp>
+#include <graphics/Surface.hpp>
+#include <graphics/TileMap.hpp>
+#include <graphics/CommandBuffer.hpp>
 #include "SDL3/SDL_gpu.h"
-#include "CommandBuffer.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/transform.hpp"

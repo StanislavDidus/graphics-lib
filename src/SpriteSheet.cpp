@@ -1,8 +1,8 @@
-#include "SpriteSheet.hpp"
+#include <graphics/SpriteSheet.hpp>
 
 #include <iostream>
 
-#include "Surface.hpp"
+#include <graphics/Surface.hpp>
 
 namespace graphics
 {

@@ -1,7 +1,7 @@
-#include "Chunk.hpp"
+#include <graphics/Chunk.hpp>
 
-#include "CommandBuffer.hpp"
-#include "GpuTransferBuffer.hpp"
+#include <graphics/CommandBuffer.hpp>
+#include <graphics/GpuTransferBuffer.hpp>
 
 namespace graphics
 {

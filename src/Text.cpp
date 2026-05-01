@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "Text.hpp"
+#include <graphics/Text.hpp>
 
-#include "Color.hpp"
-#include "GpuRenderer.hpp"
-#include "Surface.hpp"
+#include <graphics/Color.hpp>
+#include <graphics/GpuRenderer.hpp>
+#include <graphics/Surface.hpp>
 
 namespace graphics
 {

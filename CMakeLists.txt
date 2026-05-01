@@ -9,7 +9,6 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 add_subdirectory(extern)
 
 set(SOURCE_FILES 
-    "src/Renderer.cpp"
     "src/GpuRenderer.cpp"
     "src/Sprite.cpp"
     "src/Surface.cpp"
@@ -30,34 +29,41 @@ set(SOURCE_FILES
     )
 
 set(HEADER_FILES
-    "inc/GpuRenderer.hpp"
-    "inc/Sprite.hpp"
-    "inc/Surface.hpp"
-    "inc/Window.hpp"
-    "inc/SpriteSheet.hpp"
-    "inc/Color.hpp"
-    "inc/Font.hpp"
-    "inc/Text.hpp"
-    "inc/ViewportGuard.hpp"
-    "inc/SpriteAnimation.hpp"
-    "inc/ColorModGuard.hpp"
-    "inc/GpuShader.hpp"
-    "inc/GpuGraphicsPipeline.hpp"
-    "inc/Vertex.hpp"
-    "inc/GpuBuffer.hpp"
-    "inc/GpuTransferBuffer.hpp"
-    "inc/GpuTexture.hpp"
-    "inc/GpuRenderFunctions.hpp"
-    "inc/GpuSampler.hpp"
-    "inc/TileMap.hpp"
-    "inc/CommandBuffer.hpp"
-    "inc/RenderBatch.hpp"
-    "inc/Chunk.hpp"
+	"inc/graphics/graphics.hpp"
+	"inc/graphics/exception.hpp"
+    "inc/graphics/GpuRenderer.hpp"
+    "inc/graphics/Sprite.hpp"
+    "inc/graphics/Surface.hpp"
+    "inc/graphics/Window.hpp"
+    "inc/graphics/SpriteSheet.hpp"
+    "inc/graphics/Color.hpp"
+    "inc/graphics/Font.hpp"
+    "inc/graphics/Text.hpp"
+    "inc/graphics/ViewportGuard.hpp"
+    "inc/graphics/SpriteAnimation.hpp"
+    "inc/graphics/ColorModGuard.hpp"
+    "inc/graphics/GpuShader.hpp"
+    "inc/graphics/GpuGraphicsPipeline.hpp"
+    "inc/graphics/Vertex.hpp"
+    "inc/graphics/GpuBuffer.hpp"
+    "inc/graphics/GpuTransferBuffer.hpp"
+    "inc/graphics/GpuTexture.hpp"
+    "inc/graphics/GpuRenderFunctions.hpp"
+    "inc/graphics/GpuSampler.hpp"
+    "inc/graphics/TileMap.hpp"
+    "inc/graphics/CommandBuffer.hpp"
+    "inc/graphics/RenderBatch.hpp"
+    "inc/graphics/Chunk.hpp"
     )
 
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})
 
 add_library(GRAPHICS_LIB ${ALL_FILES})
+
+add_custom_target(copy_assets
+		COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_LIST_DIR}/copy_assets.cmake
+)
+add_dependencies(GRAPHICS_LIB copy_assets)
 
 target_include_directories(GRAPHICS_LIB PUBLIC inc)
 
@@ -65,7 +71,9 @@ target_link_libraries(GRAPHICS_LIB PUBLIC
 	SDL3::SDL3-static 
 	SDL3_ttf::SDL3_ttf-static 
 	SDL3_shadercross::SDL3_shadercross-static 
-	glm::glm imgui
+	glm::glm glm
 )
 
 target_compile_features(GRAPHICS_LIB PUBLIC cxx_std_23)
+
+add_subdirectory(examples)

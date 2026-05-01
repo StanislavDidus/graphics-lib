@@ -1,9 +1,9 @@
-#include "GpuGraphicsPipeline.hpp"
+#include <graphics/GpuGraphicsPipeline.hpp>
 
 #include <iostream>
 
-#include "GpuShader.hpp"
-#include "Vertex.hpp"
+#include <graphics/GpuShader.hpp>
+#include <graphics/Vertex.hpp>
 
 graphics::GpuGraphicsPipeline::GpuGraphicsPipeline(
 		std::shared_ptr<SDL_GPUDevice> device,

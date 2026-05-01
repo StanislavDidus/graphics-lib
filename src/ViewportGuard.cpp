@@ -1,4 +1,4 @@
-#include "ViewportGuard.hpp"
+#include <graphics/ViewportGuard.hpp>
 
 namespace graphics
 {

@@ -1,4 +1,4 @@
-#include "Sprite.hpp"
+#include <graphics/Sprite.hpp>
 
 namespace graphics
 {
