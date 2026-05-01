@@ -1,0 +1,12 @@
+[submodule "extern/SDL"]
+	path = extern/SDL
+	url = git@github.com:libsdl-org/SDL.git
+[submodule "extern/SDL_ttf"]
+	path = extern/SDL_ttf
+	url = git@github.com:libsdl-org/SDL_ttf.git
+[submodule "extern/SDL_shadercross"]
+	path = extern/SDL_shadercross
+	url = git@github.com:libsdl-org/SDL_shadercross.git
+[submodule "extern/glm"]
+	path = extern/glm
+	url = git@github.com:g-truc/glm.git
