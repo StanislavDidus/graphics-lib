@@ -82,16 +82,16 @@ namespace graphics
 	private:
 		void initSamplers();
 
-		void render(CommandBuffer& command_buffer, SDL_GPUColorTargetInfo& target_info, glm::mat4& matrix, const std::vector<DrawData>&
-		            draw_buffer_, SpriteBatch& sprite_batch_, RectangleBatch& rectangle_batch_, LineBatch& line_batch_);
-		void renderChunk(const ChunkData& chunk_data, CommandBuffer& command_buffer, SDL_GPUColorTargetInfo& target_info, const glm::mat4&
-		                   matrix) const;
+		//void render(CommandBuffer& command_buffer, SDL_GPUColorTargetInfo& target_info, glm::mat4& matrix, const std::vector<DrawObject>&
+		            //draw_buffer_, SpriteBatch& sprite_batch_, RectangleBatch& rectangle_batch_, LineBatch& line_batch_);
+		//void renderChunk(const ChunkData& chunk_data, CommandBuffer& command_buffer, SDL_GPUColorTargetInfo& target_info, const glm::mat4&
+		                   //matrix) const;
 
 		Window& window;
 		std::shared_ptr<SDL_GPUDevice> device = nullptr;
 
-		std::vector<DrawData> draw_buffer;
-		std::vector<DrawData> ui_draw_buffer;
+		std::vector<DrawObject> draw_buffer;
+		std::vector<DrawObject> ui_draw_buffer;
 
 		// <Render Parameters> //
 		glm::vec2 view = {0.0f, 0.0f};
@@ -100,13 +100,17 @@ namespace graphics
 		glm::mat4 world_matrix;
 		Uint32 render_resolution_width;
 		Uint32 render_resolution_height;
+		
+		std::unique_ptr<Batcher> batcher;
 
+		/*
 		std::unique_ptr<SpriteBatch> sprite_batch;
 		std::unique_ptr<SpriteBatch> ui_sprite_batch;
 		std::unique_ptr<RectangleBatch> rectangle_batch;
 		std::unique_ptr<RectangleBatch> ui_rectangle_batch;
 		std::unique_ptr<LineBatch> line_batch;
 		std::unique_ptr<LineBatch> ui_line_batch;
+		*/
 
 		std::unique_ptr<WindowClaimer> window_claimer;
 		std::unique_ptr<GpuGraphicsPipeline> tilemap_graphics_pipeline;

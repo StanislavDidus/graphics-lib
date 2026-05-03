@@ -10,3 +10,6 @@
 [submodule "extern/glm"]
 	path = extern/glm
 	url = git@github.com:g-truc/glm.git
+[submodule "extern/Cram"]
+	path = extern/Cram
+	url = git@github.com:MoonsideGames/Cram.git

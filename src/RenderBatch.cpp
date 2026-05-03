@@ -1,9 +1,183 @@
+#include <iostream>
 #include <graphics/RenderBatch.hpp>
-
-#include <graphics/CommandBuffer.hpp>	
+#include <graphics/exception.hpp>
 
 namespace graphics
 {
+	void Batch::closeBatch()
+	{
+		closed = true;
+	}
+
+	bool Batch::isClosed() const
+	{
+		return closed;
+	}
+
+	bool ::graphics::SpriteBatch::canBatch(const DrawObject& draw_object) const
+	{
+		return std::visit([&](auto&& object) -> bool
+		{
+			using T = std::decay_t<decltype(object)>;
+			
+			if constexpr (std::is_same_v<T, GpuSprite>)
+			{
+				return object.texture == texture || sprites.empty();
+			}
+			else
+			{
+				return false;
+			}
+		}, draw_object);
+	}
+
+	void SpriteBatch::addToBatch(const DrawObject& draw_object)
+	{
+		std::visit([&](auto&& object)
+		{
+			using T = std::decay_t<decltype(object)>;
+			
+			if constexpr (std::is_same_v<T, GpuSprite>)
+			{
+				if (sprites.empty())
+				{
+					sprites.emplace_back(object.data);
+					texture = object.texture;
+				}
+				else
+				{
+					sprites.emplace_back(object.data);
+				}
+			}
+			else
+			{
+				throw graphics_error{"Attempted to add a wrong object type."};
+			}
+		}, draw_object);
+	}
+
+	void SpriteBatch::pushAllToGPU(SDL_GPUCopyPass* copy_pass, GpuBuffer& sprite_buffer,
+	                               GpuTransferBuffer& sprite_transfer_buffer, size_t sprite_offset)
+	{
+		if (sprites.empty()) return;
+
+		auto* data = sprite_transfer_buffer.map<SpriteData>(false);
+		data += sprite_offset;
+		SDL_memcpy(data, sprites.data(), sprites.size() * sizeof(SpriteData));
+		sprite_transfer_buffer.unmap();
+		
+		// Upload vertices
+		SDL_GPUTransferBufferLocation vertices_transfer_info = {};
+		vertices_transfer_info.transfer_buffer = sprite_transfer_buffer.get();
+		vertices_transfer_info.offset = sprite_offset * sizeof(SpriteData);
+		SDL_GPUBufferRegion vertices_buffer_region = {};
+		vertices_buffer_region.buffer = sprite_buffer.get();
+		vertices_buffer_region.offset = sprite_offset * sizeof(SpriteData);
+		vertices_buffer_region.size = sprites.size() * sizeof(SpriteData);
+
+		SDL_UploadToGPUBuffer(copy_pass, &vertices_transfer_info, &vertices_buffer_region, false);
+	}
+
+	void SpriteBatch::renderAllOnGPU(SDL_GPURenderPass* render_pass, CommandBuffer& command_buffer,
+	                                 const glm::mat4& world_matrix, std::shared_ptr<GpuGraphicsPipeline> sprite_graphics_pipeline,
+	                                 GpuBuffer& sprite_buffer, SpriteUniform& sprite_uniform, size_t& sprite_offset)
+	{
+		SDL_GPUTextureSamplerBinding texture_sampler_binding;
+		texture_sampler_binding.texture = texture->get();
+		texture_sampler_binding.sampler = texture->getSampler()->get();
+		SDL_BindGPUFragmentSamplers(render_pass, 0, &texture_sampler_binding, 1);
+
+		SDL_BindGPUGraphicsPipeline(render_pass, sprite_graphics_pipeline->get());
+		SDL_BindGPUVertexStorageBuffers(render_pass, 0, &sprite_buffer.get(), 1);
+		SDL_PushGPUVertexUniformData(command_buffer.get(), 0, &world_matrix, sizeof(glm::mat4));
+		sprite_uniform.index = sprite_offset;
+		SDL_PushGPUVertexUniformData(command_buffer.get(), 1, &sprite_uniform, sizeof(SpriteUniform));
+		SDL_DrawGPUPrimitives(render_pass, 6, sprites.size(), 0, 0);
+
+		sprite_offset += sprites.size();
+	}
+
+	Batcher::Batcher(const std::shared_ptr<SDL_GPUDevice>& device,
+	                 std::shared_ptr<GpuGraphicsPipeline> sprite_graphics_pipeline,
+	                 std::shared_ptr<GpuGraphicsPipeline> vertex_graphics_pipeline,
+	                 std::shared_ptr<GpuGraphicsPipeline> line_graphics_pipeline)
+		: sprite_graphics_pipeline{sprite_graphics_pipeline}
+		, vertex_graphics_pipeline{vertex_graphics_pipeline}
+		, line_graphics_pipeline{line_graphics_pipeline}
+		, sprite_buffer{device, static_cast<Uint32>(MAX_SPRITES_RENDERED * sizeof(SpriteData)), SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_READ}
+		, sprite_transfer_buffer(device, static_cast<Uint32>(MAX_SPRITES_RENDERED * sizeof(SpriteData)), SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD)
+	{
+	}
+
+	void Batcher::setWorldMatrix(const glm::mat4& world_matrix)
+	{
+		this->world_matrix = world_matrix;
+	}
+
+	bool Batcher::canBatch(const DrawObject& draw_object) const
+	{
+		if (batches.empty())		
+			return true;
+		return batches.back()->canBatch(draw_object);
+	}
+
+	void Batcher::closeBatch()
+	{
+		if (batches.empty())
+			return;
+		batches.back()->closeBatch();
+	}
+
+	void Batcher::addToBatch(const DrawObject& draw_object)
+	{
+		if (batches.empty())
+			createNewBatch(draw_object);
+		const auto& last_batch = batches.back();
+			
+		if (!last_batch->canBatch(draw_object))
+			throw graphics_error{"Invalid add call to a batch. Ensure that canBatch is called beforehand."};
+		if (last_batch->isClosed())
+			createNewBatch(draw_object);
+		const auto& new_last_batch = batches.back();
+		new_last_batch->addToBatch(draw_object);
+	}
+
+	void Batcher::pushAllToGPU(SDL_GPUCopyPass* copy_pass)
+	{
+		for (const auto& batch : batches)
+		{
+			batch->pushAllToGPU(copy_pass, sprite_buffer, sprite_transfer_buffer, sprite_offset);
+		}
+	}
+
+	void Batcher::renderAll(SDL_GPURenderPass* render_pass, CommandBuffer& command_buffer)
+	{
+		for (const auto& batch : batches)
+		{
+			batch->renderAllOnGPU(render_pass, command_buffer, world_matrix, sprite_graphics_pipeline, sprite_buffer, sprite_uniform, sprite_offset);
+		}
+	}
+
+	void Batcher::clearAll()
+	{
+		batches.clear();
+		sprite_offset = 0;
+	}
+
+	void Batcher::createNewBatch(const DrawObject& draw_object)
+	{
+		std::visit([&](auto&& object)
+		{
+			using T = std::decay_t<decltype(object)>;
+		
+			if constexpr(std::is_same_v<T, GpuSprite>)
+			{
+				batches.emplace_back(std::make_unique<SpriteBatch>());
+			}
+		}, draw_object);
+	}
+
+	/*
 	graphics::Batch::Batch(std::shared_ptr<SDL_GPUDevice> device, std::shared_ptr<GpuGraphicsPipeline> graphics_pipeline)
 		: device{device}
 	, graphics_pipeline{graphics_pipeline}
@@ -293,4 +467,5 @@ namespace graphics
 		vertices.clear();
 		first_draw = true;
 	}
+*/
 }

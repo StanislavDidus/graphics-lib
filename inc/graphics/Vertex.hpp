@@ -62,7 +62,7 @@ namespace graphics
 		SpriteData data;
 	};
 
-	using DrawData = std::variant<GpuSprite, RectangleData, LineData, ChunkData>;
+	using DrawObject = std::variant<GpuSprite, RectangleData, LineData, ChunkData>;
 
 	struct alignas(16) SpriteUniform
 	{

@@ -99,12 +99,16 @@ graphics::GpuRenderer::GpuRenderer(Window& window)
 		texture_graphics_pipeline = std::make_shared<GpuGraphicsPipeline>(device, window, *texture_vertex_shader, *texture_fragment_shader, SDL_GPU_PRIMITIVETYPE_TRIANGLELIST);
 	}
 
+	/*
 	sprite_batch = std::make_unique<SpriteBatch>(device, texture_graphics_pipeline);
 	ui_sprite_batch = std::make_unique<SpriteBatch>(device, texture_graphics_pipeline);
 	rectangle_batch = std::make_unique<RectangleBatch>(device, vertex_graphics_pipeline);
 	ui_rectangle_batch = std::make_unique<RectangleBatch>(device, vertex_graphics_pipeline);
 	line_batch = std::make_unique<LineBatch>(device, line_graphics_pipeline);
 	ui_line_batch = std::make_unique<LineBatch>(device, line_graphics_pipeline);
+	*/
+	
+	batcher = std::make_unique<Batcher>(device, texture_graphics_pipeline, vertex_graphics_pipeline, line_graphics_pipeline);
 }
 
 
@@ -120,12 +124,12 @@ void graphics::GpuRenderer::initSamplers()
 	std::cout << "Samplers initialized." << std::endl;
 }
 
-void graphics::GpuRenderer::render
+/*void graphics::GpuRenderer::render
 (
 	CommandBuffer& command_buffer,
 	SDL_GPUColorTargetInfo& target_info,
 	glm::mat4& matrix,
-	const std::vector<DrawData>& draw_buffer_,
+	const std::vector<DrawObject>& draw_buffer_,
 	SpriteBatch& sprite_batch_,
 	RectangleBatch& rectangle_batch_,
 	LineBatch& line_batch_
@@ -214,7 +218,7 @@ void graphics::GpuRenderer::renderChunk(const ChunkData& chunk_data, CommandBuff
 	SDL_DrawGPUPrimitives(render_pass, 6, chunk->getSize(), 0, 0);
 
 	SDL_EndGPURenderPass(render_pass);
-}
+}*/
 
 void graphics::GpuRenderer::render()
 {
@@ -265,13 +269,29 @@ void graphics::GpuRenderer::render()
 		
 		//std::cout << std::format("Width: {}, Height: {}", width, height) << std::endl;
 
-		render(command_buffer, target_info, world_matrix, draw_buffer, *sprite_batch, *rectangle_batch, *line_batch);
-		render(command_buffer, target_info, base_matrix, ui_draw_buffer, *ui_sprite_batch, *ui_rectangle_batch, *ui_line_batch);
+		batcher->setWorldMatrix(world_matrix);
+		
+		for (const auto& draw_object : draw_buffer)
+		{
+			if (!batcher->canBatch(draw_object))
+				batcher->closeBatch();
+			batcher->addToBatch(draw_object);
+		}
+		
+		SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(command_buffer.get());
+		batcher->pushAllToGPU(copy_pass);
+		SDL_EndGPUCopyPass(copy_pass);
+		
+		SDL_GPURenderPass* render_pass = SDL_BeginGPURenderPass(command_buffer.get(), &target_info, 1, nullptr);
+		batcher->renderAll(render_pass, command_buffer);
+		SDL_EndGPURenderPass(render_pass);
+		batcher->clearAll();
+		
+		//render(command_buffer, target_info, world_matrix, draw_buffer, *sprite_batch, *rectangle_batch, *line_batch);
+		//render(command_buffer, target_info, base_matrix, ui_draw_buffer, *ui_sprite_batch, *ui_rectangle_batch, *ui_line_batch);
 
 		// Render ImGui
-		SDL_GPURenderPass* render_pass = SDL_BeginGPURenderPass(command_buffer.get(), &target_info, 1, nullptr);
-
-		SDL_EndGPURenderPass(render_pass);
+		//SDL_EndGPURenderPass(render_pass);
 	}
 
 	//draw_buffer.clear();

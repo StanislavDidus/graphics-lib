@@ -68,10 +68,10 @@ target_include_directories(GRAPHICS_LIB
 )
 
 target_link_libraries(GRAPHICS_LIB PUBLIC 
-	SDL3::SDL3-static 
-	SDL3_ttf::SDL3_ttf-static 
-	SDL3_shadercross::SDL3_shadercross-static 
-	glm::glm glm
+		SDL3::SDL3-static 
+		SDL3_ttf::SDL3_ttf-static 
+		SDL3_shadercross::SDL3_shadercross-static 
+		glm::glm
 )
 
 target_compile_features(GRAPHICS_LIB PUBLIC cxx_std_23)

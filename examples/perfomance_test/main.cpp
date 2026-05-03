@@ -3,7 +3,7 @@
 #include <graphics/graphics.hpp>
 
 #include "glm/gtc/random.hpp"
-#include "graphics/SpriteSheet.hpp"
+#include <graphics/SpriteSheet.hpp>
 
 using namespace graphics;
 
@@ -22,12 +22,12 @@ int main()
     
     init();
     
-    Window window{"Perfomance Test Example", 960, 540, SDL_WINDOW_RESIZABLE};
+    Window window{"Performance Test Example", 960, 540, SDL_WINDOW_RESIZABLE};
     GpuRenderer renderer{window};
     
     Surface surface{"assets/ice-cream.bmp"};
     std::shared_ptr<GpuTexture> texture = renderer.loadTexture(surface, "PointClamp");
-    Sprite sprite{texture, SDL_FRect{0.0f, 0.0f, 1920.0f, 1920.0f}};
+    Sprite sprite{texture, SDL_FRect{0.0f, 0.0f, 100.0f, 100.0f}};
     
     // Test
     int number_objects = 1'000;
