@@ -67,6 +67,6 @@ namespace graphics
 	{
 		Surface surface{ font, text, color, wrapped_width };
 
-		texture = renderer.loadTexture(surface);
+		texture = renderer.loadTexture(surface, "PointClamp");
 	}
 } // namespace graphics

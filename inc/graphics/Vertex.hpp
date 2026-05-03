@@ -11,15 +11,6 @@
 
 namespace graphics
 {
-	/*static const char* SamplerNames[] =
-	{
-		"PointClamp",
-		"PointWrap",
-		"LinearClamp",
-		"LinearWrap",
-		"AnisotropicClamp",
-		"AnisotropicWrap",
-	};*/
 	struct Vertex
 	{
 		float x, y, z;
@@ -65,7 +56,7 @@ namespace graphics
 		glm::vec4 color; // Color4
 		glm::vec4 flip; // Flip1 Padding3
 	};
-	struct GpuSprite
+	struct alignas(16) GpuSprite
 	{
 		std::shared_ptr<GpuTexture> texture;
 		SpriteData data;
@@ -76,6 +67,12 @@ namespace graphics
 	struct alignas(16) SpriteUniform
 	{
 		uint32_t index;
+	};
+
+	struct ScreenSize
+	{
+		int width;
+		int height;
 	};
 
 }

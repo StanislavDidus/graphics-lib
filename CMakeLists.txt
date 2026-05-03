@@ -10,6 +10,7 @@ add_subdirectory(extern)
 
 set(SOURCE_FILES 
     "src/GpuRenderer.cpp"
+    "src/exception.cpp"
     "src/Sprite.cpp"
     "src/Surface.cpp"
     "src/Window.cpp"
@@ -17,9 +18,7 @@ set(SOURCE_FILES
     "src/Color.cpp"
     "src/Font.cpp"
     "src/Text.cpp"
-    "src/ViewportGuard.cpp"
     "src/SpriteAnimation.cpp"
-    "src/ColorModGuard.cpp"
     "src/GpuShader.cpp"
     "src/GpuGraphicsPipeline.cpp"
     "src/GpuSampler.cpp"
@@ -39,9 +38,7 @@ set(HEADER_FILES
     "inc/graphics/Color.hpp"
     "inc/graphics/Font.hpp"
     "inc/graphics/Text.hpp"
-    "inc/graphics/ViewportGuard.hpp"
     "inc/graphics/SpriteAnimation.hpp"
-    "inc/graphics/ColorModGuard.hpp"
     "inc/graphics/GpuShader.hpp"
     "inc/graphics/GpuGraphicsPipeline.hpp"
     "inc/graphics/Vertex.hpp"
@@ -65,7 +62,10 @@ add_custom_target(copy_assets
 )
 add_dependencies(GRAPHICS_LIB copy_assets)
 
-target_include_directories(GRAPHICS_LIB PUBLIC inc)
+target_include_directories(GRAPHICS_LIB 
+		PUBLIC inc
+		PRIVATE src
+)
 
 target_link_libraries(GRAPHICS_LIB PUBLIC 
 	SDL3::SDL3-static 

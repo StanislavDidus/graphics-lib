@@ -21,8 +21,8 @@ namespace graphics
 			GpuShader& vertex_shader,
 			GpuShader& fragment_shader,
 			SDL_GPUPrimitiveType primitive_type,
-			std::optional<std::vector<SDL_GPUVertexBufferDescription>> vertex_buffer_descriptions = std::nullopt,
-			std::optional<const std::vector<SDL_GPUVertexAttribute>> vertex_attributes = std::nullopt
+			const std::optional<std::vector<SDL_GPUVertexBufferDescription>>& vertex_buffer_descriptions = std::nullopt,
+			const std::optional<const std::vector<SDL_GPUVertexAttribute>>& vertex_attributes = std::nullopt
 		);
 		~GpuGraphicsPipeline();
 

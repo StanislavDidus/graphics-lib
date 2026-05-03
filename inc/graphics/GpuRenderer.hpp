@@ -24,26 +24,11 @@
 namespace graphics
 {
 	class TileMap;
-	constexpr int ALLOCATED_NUMBER_OBJECTS = 1'000;
-	constexpr int ALLOCATED_NUMBER_UI_OBJECTS = ALLOCATED_NUMBER_OBJECTS;
-	constexpr int TOTAL_NUMBER_OBJECTS = ALLOCATED_NUMBER_OBJECTS + ALLOCATED_NUMBER_UI_OBJECTS;
 
 	enum class RenderType
 	{
 		NONE,
 		FILL,
-	};
-
-	constexpr bool IGNORE_VIEW_ZOOM = true;
-
-	struct GPUCommandBufferDeleter
-	{
-		constexpr GPUCommandBufferDeleter() = default;
-
-		void operator()(SDL_GPUCommandBuffer* command_buffer) const
-		{
-			SDL_SubmitGPUCommandBuffer(command_buffer);
-		}
 	};
 
 	struct WindowClaimer
@@ -59,39 +44,18 @@ namespace graphics
 				SDL_ReleaseWindowFromGPUDevice(device, window);
 		}
 	};
-
-	/*struct UniformBuffer
-	{
-		float time = 0.0f;
-	};
-
-	static UniformBuffer time_uniform;*/
-
-	struct ScreenSize
-	{
-		int width = 960;
-		int height = 540;
-	};
-
-	struct Uniform
-	{
-		float time;
-	};
 	
 	static ScreenSize screen_size_uniform;
-	static Uniform time_uniform;
 
-	class TextEngine;
-	
 	class GpuRenderer
 	{
 	public:
 		explicit GpuRenderer(Window& window);
 		~GpuRenderer() = default;
 
-		void update();
+		void render();
 
-		std::shared_ptr<GpuTexture> loadTexture(const Surface& surface);
+		std::shared_ptr<GpuTexture> loadTexture(const Surface& surface, const std::string& sampler_name);
 		void createNewSampler(const std::string& name, SDL_GPUFilter filter, SDL_GPUSamplerMipmapMode mipmap, SDL_GPUSamplerAddressMode address_mode, std::optional<int> anisotropy = std::nullopt);
 
 		//Getters
@@ -113,7 +77,7 @@ namespace graphics
 		//void renderTriangle(float x1, float y1, float x2, float y2, float x3, float y3, SDL_FColor color);
 		void renderRectangle(float x, float y, float w, float h, RenderType render_type, glm::vec4 color, bool ignore_view_zoom = false);
 		void renderSprite(const Sprite& sprite, float x, float y, float w, float h, float angle, SDL_FlipMode flip = SDL_FLIP_NONE, bool ignore_view_zoom = false, graphics::Color color = graphics::Color::WHITE);
-		void renderTexture(std::shared_ptr<GpuTexture> texture, std::optional<SDL_FRect> source, std::optional<SDL_FRect> destination, float angle, SDL_FlipMode flip = SDL_FLIP_NONE, bool ignore_view_zoom = false, graphics::Color color = graphics::Color::WHITE);
+		void renderTexture(std::shared_ptr<GpuTexture> texture, const std::optional<SDL_FRect>& source, const std::optional<SDL_FRect>& destination, float angle, SDL_FlipMode flip = SDL_FLIP_NONE, bool ignore_view_zoom = false, graphics::Color color = graphics::Color::WHITE);
 		void renderTileMap(std::shared_ptr<TileMap> tilemap, float x, float y);
 	private:
 		void initSamplers();

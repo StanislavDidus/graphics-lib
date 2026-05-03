@@ -19,8 +19,12 @@
 graphics::GpuRenderer::GpuRenderer(Window& window)
 	: window{ window }
 {
+	
+	// Initiliaze ScreenSize uniform
+	screen_size_uniform.width = window.getWindowSize().x;
+	screen_size_uniform.height = window.getWindowSize().y;
+	
 	//Create GPU
-
 	bool debug = false;
 #if _DEBUG
 	debug = true;
@@ -212,7 +216,7 @@ void graphics::GpuRenderer::renderChunk(const ChunkData& chunk_data, CommandBuff
 	SDL_EndGPURenderPass(render_pass);
 }
 
-void graphics::GpuRenderer::update()
+void graphics::GpuRenderer::render()
 {
 	CommandBuffer command_buffer{ device };
 
@@ -270,18 +274,20 @@ void graphics::GpuRenderer::update()
 		SDL_EndGPURenderPass(render_pass);
 	}
 
+	//draw_buffer.clear();
 	draw_buffer.clear();
 	ui_draw_buffer.clear();
 }
 
-std::shared_ptr<graphics::GpuTexture> graphics::GpuRenderer::loadTexture(const Surface& surface)
+std::shared_ptr<graphics::GpuTexture> graphics::GpuRenderer::loadTexture(const Surface& surface, const std::string& sampler_name)
 {
-	auto texture = std::make_shared<GpuTexture>(device, surface, samplers["PointClamp"]);
+	auto texture = std::make_shared<GpuTexture>(device, surface, samplers.at(sampler_name));
 
 	// Upload texture on the GPU
 	GpuTransferBuffer texture_transfer_buffer{ device, static_cast<Uint32>(texture->w() * texture->h() * 4), SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD };
 
-	std::unique_ptr<SDL_GPUCommandBuffer, GPUCommandBufferDeleter> command_buffer{ SDL_AcquireGPUCommandBuffer(device.get()) };
+	CommandBuffer command_buffer{device};
+	
 	SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(command_buffer.get());
 
 	Uint8* texture_data = texture_transfer_buffer.map<Uint8>(false);
@@ -406,8 +412,8 @@ void graphics::GpuRenderer::renderSprite(const Sprite& sprite, float x, float y,
 	renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ x,y,w,h }, angle, flip, ignore_view_zoom, color);
 }
 
-void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, std::optional<SDL_FRect> source,
-                                          std::optional<SDL_FRect> destination, float angle, SDL_FlipMode flip, bool ignore_view_zoom, graphics::Color color)
+void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, const std::optional<SDL_FRect>& source,
+                                          const std::optional<SDL_FRect>& destination, float angle, const SDL_FlipMode flip, bool ignore_view_zoom, graphics::Color color)
 {
 	//flip = SDL_FLIP_HORIZONTAL;
 	SDL_FRect src = source.value_or(SDL_FRect{ 0.0f, 0.0f, static_cast<float>(texture->w()), static_cast<float>(texture->h()) });
@@ -415,9 +421,9 @@ void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, s
 
 	if (!ignore_view_zoom)
 	{
-		draw_buffer.emplace_back(GpuSprite
-		{
-			texture,
+		draw_buffer.emplace_back(
+			std::in_place_type<GpuSprite>,
+			std::move(texture),
 			SpriteData
 			{
 			.pos_rot{dst.x, dst.y, 0.0f, angle},
@@ -426,13 +432,13 @@ void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, s
 			.color{color.r, color.g, color.b, color.a},
 			.flip{static_cast<float>(static_cast<unsigned int>(flip)), 0.0f, 0.0f, 0.0f}
 			}
-		});
+		);
 	}
 	else
 	{
-		ui_draw_buffer.emplace_back(GpuSprite
-		{
-			texture,
+		ui_draw_buffer.emplace_back(
+			std::in_place_type<GpuSprite>,
+			std::move(texture),
 			SpriteData
 			{
 			.pos_rot{dst.x, dst.y, 0.0f, angle},
@@ -441,7 +447,7 @@ void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, s
 			.color{color.r, color.g, color.b, color.a},
 			.flip{static_cast<float>(static_cast<unsigned int>(flip)), 0.0f, 0.0f, 0.0f}
 			}
-		});
+		);
 	}
 }
 

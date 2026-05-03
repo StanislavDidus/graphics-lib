@@ -24,10 +24,7 @@ public:
 	template<typename Self>
 	auto&& get(this Self&& self);
 
-	explicit operator bool() const
-	{
-		return running;
-	}
+	bool isOpen() const;	
 private:
 	bool running = true;
 

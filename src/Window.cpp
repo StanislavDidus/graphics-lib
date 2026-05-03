@@ -10,7 +10,6 @@ Window::Window(const char* title, int width, int height, SDL_WindowFlags flags) 
 	std::cout << "Window was created" << std::endl;
 
 	SDL_RaiseWindow(window);
-	//SDL_SetWindowAlwaysOnTop(window, true);
 }
 
 Window::~Window()
@@ -31,13 +30,6 @@ bool Window::pollEvent(SDL_Event& event)
 		case SDL_EVENT_QUIT:
 			running = false;
 			break;
-		case SDL_EVENT_WINDOW_RESIZED:
-			//SDL_GetWindowSize(window, &window_size.x, &window_size.y);
-			break;
-		case SDL_EVENT_KEY_DOWN:
-			if (event.key.key == SDLK_ESCAPE)
-				running = false;
-			break;
 		}
 	}
 
@@ -49,4 +41,8 @@ glm::ivec2 Window::getWindowSize() const
 	return { width, height };
 }
 
+bool Window::isOpen() const
+{
+	return running;
+}
 } //namespace graphics

@@ -16,7 +16,7 @@ namespace graphics
 	{
 	public:
 		SpriteSheet(graphics::GpuRenderer& renderer, const std::filesystem::path& path, const SpriteList& sprite_list, SDL_ScaleMode scale_mode = SDL_SCALEMODE_LINEAR);
-		//SpriteSheet(graphics::GpuRenderer& renderer, const Surface& surface, const glm::vec2& sprite_size, SDL_ScaleMode scale_mode = SDL_SCALEMODE_LINEAR);
+		SpriteSheet(graphics::GpuRenderer& renderer, const Surface& surface, const SpriteList& sprite_list, SDL_ScaleMode scale_mode = SDL_SCALEMODE_LINEAR);
 
 		SpriteSheet(const SpriteSheet& other) = delete;
 		SpriteSheet(SpriteSheet&& other) noexcept = delete;

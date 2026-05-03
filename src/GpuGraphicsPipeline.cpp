@@ -11,8 +11,8 @@ graphics::GpuGraphicsPipeline::GpuGraphicsPipeline(
 		GpuShader& vertex_shader,
 		GpuShader& fragment_shader,
 		SDL_GPUPrimitiveType primitive_type,
-		std::optional<std::vector<SDL_GPUVertexBufferDescription>> vertex_buffer_descriptions,
-		std::optional<const std::vector<SDL_GPUVertexAttribute>> vertex_attributes)
+		const std::optional<std::vector<SDL_GPUVertexBufferDescription>>& vertex_buffer_descriptions,
+		const std::optional<const std::vector<SDL_GPUVertexAttribute>>& vertex_attributes)
 	: device{device}
 {
 	// Graphics pipeline
