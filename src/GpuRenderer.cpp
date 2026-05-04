@@ -66,7 +66,7 @@ graphics::GpuRenderer::GpuRenderer(Window& window)
 
 	// TileMap graphics pipeline
 	{
-		tilemap_graphics_pipeline = std::make_unique<GpuGraphicsPipeline>(device, window, *tilemap_vertex_shader, *texture_fragment_shader, SDL_GPU_PRIMITIVETYPE_TRIANGLELIST);
+		tilemap_graphics_pipeline = std::make_shared<GpuGraphicsPipeline>(device, window, *tilemap_vertex_shader, *texture_fragment_shader, SDL_GPU_PRIMITIVETYPE_TRIANGLELIST);
 	}
 
 	// Line graphics pipeline
@@ -108,7 +108,7 @@ graphics::GpuRenderer::GpuRenderer(Window& window)
 	ui_line_batch = std::make_unique<LineBatch>(device, line_graphics_pipeline);
 	*/
 	
-	batcher = std::make_unique<Batcher>(device, texture_graphics_pipeline, vertex_graphics_pipeline, line_graphics_pipeline);
+	batcher = std::make_unique<Batcher>(device, texture_graphics_pipeline, vertex_graphics_pipeline, line_graphics_pipeline, tilemap_graphics_pipeline);
 }
 
 
@@ -267,8 +267,6 @@ void graphics::GpuRenderer::render()
 			.cycle = false
 		};
 		
-		//std::cout << std::format("Width: {}, Height: {}", width, height) << std::endl;
-
 		batcher->setWorldMatrix(world_matrix);
 		
 		for (const auto& draw_object : draw_buffer)
@@ -285,7 +283,6 @@ void graphics::GpuRenderer::render()
 		SDL_GPURenderPass* render_pass = SDL_BeginGPURenderPass(command_buffer.get(), &target_info, 1, nullptr);
 		batcher->renderAll(render_pass, command_buffer);
 		SDL_EndGPURenderPass(render_pass);
-		batcher->clearAll();
 		
 		//render(command_buffer, target_info, world_matrix, draw_buffer, *sprite_batch, *rectangle_batch, *line_batch);
 		//render(command_buffer, target_info, base_matrix, ui_draw_buffer, *ui_sprite_batch, *ui_rectangle_batch, *ui_line_batch);

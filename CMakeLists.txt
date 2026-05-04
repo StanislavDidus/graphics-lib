@@ -51,6 +51,7 @@ set(HEADER_FILES
     "inc/graphics/CommandBuffer.hpp"
     "inc/graphics/RenderBatch.hpp"
     "inc/graphics/Chunk.hpp"
+    "inc/graphics/BatchHelpers.hpp"
     )
 
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})

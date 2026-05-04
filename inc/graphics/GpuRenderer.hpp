@@ -113,7 +113,7 @@ namespace graphics
 		*/
 
 		std::unique_ptr<WindowClaimer> window_claimer;
-		std::unique_ptr<GpuGraphicsPipeline> tilemap_graphics_pipeline;
+		std::shared_ptr<GpuGraphicsPipeline> tilemap_graphics_pipeline;
 		std::shared_ptr<GpuGraphicsPipeline> line_graphics_pipeline;
 		std::shared_ptr<GpuGraphicsPipeline> vertex_graphics_pipeline;
 		std::shared_ptr<GpuGraphicsPipeline> texture_graphics_pipeline;

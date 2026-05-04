@@ -63,6 +63,7 @@ int main()
             tick = 0;
         }
         
+        /*
         int i = 0;
         for (const auto& position : positions)
         {
@@ -72,7 +73,14 @@ int main()
                 drawScaledSprite(renderer, sprite1, position.x, position.y, 50.0f, 50.0f);
             ++i;    
         }
+        */
         
+        drawRectangle(renderer, 0.0f, 0.0f, 50.0f, 50.0f, RenderType::NONE, Color::RED);
+        /*
+        drawRectangle(renderer, 0.0f, 0.0f, 50.0f, 50.0f, RenderType::FILL, Color::RED);
+        drawScaledSprite(renderer, sprite1, 100.0f, 100.0f, 50.0f, 50.0f);
+        drawRectangle(renderer, 0.0f, 200.0f, 50.0f, 50.0f, RenderType::FILL, Color::GREEN);
+        */
         //drawScaledSprite(renderer, sprite, 0.0f, 0.0f, 50.0f, 50.0f);
         //drawScaledSprite(renderer, sprite1, 250.0f, 300.0f, 50.0f, 50.0f);
         
