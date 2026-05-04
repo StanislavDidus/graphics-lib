@@ -483,6 +483,10 @@ namespace graphics
 			{
 				batches.emplace_back(std::make_unique<LineBatch>());
 			}
+			else if constexpr(std::is_same_v<T, ChunkData>)
+			{
+				batches.emplace_back(std::make_unique<ChunkBatch>());
+			}
 		}, draw_object);
 	}
 }
