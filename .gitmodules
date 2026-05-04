@@ -11,5 +11,5 @@
 	path = extern/Cram
 	url = git@github.com:MoonsideGames/Cram.git
 [submodule "SDL_shadercross"]
-	path = SDL_shadercross
+	path = extern/SDL_shadercross
 	url = git@github.com:libsdl-org/SDL_shadercross.git
