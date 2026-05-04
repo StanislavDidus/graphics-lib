@@ -1,6 +1,5 @@
 #include <graphics/GpuRenderer.hpp>
 #include <graphics/Window.hpp>
-#include <graphics/GpuRenderFunctions.hpp>
 
 #include <iostream>
 
@@ -98,17 +97,9 @@ graphics::GpuRenderer::GpuRenderer(Window& window)
 	{
 		texture_graphics_pipeline = std::make_shared<GpuGraphicsPipeline>(device, window, *texture_vertex_shader, *texture_fragment_shader, SDL_GPU_PRIMITIVETYPE_TRIANGLELIST);
 	}
-
-	/*
-	sprite_batch = std::make_unique<SpriteBatch>(device, texture_graphics_pipeline);
-	ui_sprite_batch = std::make_unique<SpriteBatch>(device, texture_graphics_pipeline);
-	rectangle_batch = std::make_unique<RectangleBatch>(device, vertex_graphics_pipeline);
-	ui_rectangle_batch = std::make_unique<RectangleBatch>(device, vertex_graphics_pipeline);
-	line_batch = std::make_unique<LineBatch>(device, line_graphics_pipeline);
-	ui_line_batch = std::make_unique<LineBatch>(device, line_graphics_pipeline);
-	*/
 	
 	batcher = std::make_unique<Batcher>(device, texture_graphics_pipeline, vertex_graphics_pipeline, line_graphics_pipeline, tilemap_graphics_pipeline);
+	ui_batcher = std::make_unique<Batcher>(device, texture_graphics_pipeline, vertex_graphics_pipeline, line_graphics_pipeline, tilemap_graphics_pipeline);
 }
 
 
@@ -124,101 +115,24 @@ void graphics::GpuRenderer::initSamplers()
 	std::cout << "Samplers initialized." << std::endl;
 }
 
-/*void graphics::GpuRenderer::render
-(
-	CommandBuffer& command_buffer,
-	SDL_GPUColorTargetInfo& target_info,
-	glm::mat4& matrix,
-	const std::vector<DrawObject>& draw_buffer_,
-	SpriteBatch& sprite_batch_,
-	RectangleBatch& rectangle_batch_,
-	LineBatch& line_batch_
-)
+SDL_FRect graphics::GpuRenderer::getCameraRect() const
 {
-	sprite_batch_.setMatrix(matrix);
-	rectangle_batch_.setMatrix(matrix);
-	line_batch_.setMatrix(matrix);
-	for (const auto& draw_data : draw_buffer_)
-	{
-		std::visit([&](auto&& data)
-		{
-			using T = std::decay_t<decltype(data)>;
-			if constexpr (std::is_same_v<T, GpuSprite>)
-			{
-				//Flush the rest of the batches
-				rectangle_batch_.flushBatch(command_buffer, target_info);
-				line_batch_.flushBatch(command_buffer, target_info);
-				
-				// If objects cannot be put in a batch we flush it
-				if (!sprite_batch_.canBatch(data))
-				{
-					sprite_batch_.flushBatch(command_buffer, target_info);
-				}
-				// Add to batch in the end
-				sprite_batch_.addToBatch(data);
-			}
-			else if constexpr (std::is_same_v<T, RectangleData>)
-			{
-				sprite_batch_.flushBatch(command_buffer, target_info);
-				line_batch_.flushBatch(command_buffer, target_info);
-				
-				if (!rectangle_batch_.canBatch(data))
-				{
-					rectangle_batch_.flushBatch(command_buffer, target_info);
-				}
-				rectangle_batch_.addToBatch(data);
-			}
-			else if constexpr (std::is_same_v<T, LineData>)
-			{
-				rectangle_batch_.flushBatch(command_buffer, target_info)	;
-				sprite_batch_.flushBatch(command_buffer, target_info);
-				
-				if (!line_batch_.canBatch(data))
-				{
-					line_batch_.flushBatch(command_buffer, target_info);
-				}
-				line_batch_.addToBatch(data);
-			}
-			else if constexpr (std::is_same_v<T, ChunkData>)
-			{
-				sprite_batch_.flushBatch(command_buffer, target_info);
-				rectangle_batch_.flushBatch(command_buffer, target_info);
-				line_batch_.flushBatch(command_buffer, target_info);
-				
-				renderChunk(data, command_buffer, target_info, matrix);
-			}
-		}, draw_data);
-	}
-	sprite_batch_.flushBatch(command_buffer, target_info);
-	sprite_batch_.reset();
-	rectangle_batch_.flushBatch(command_buffer, target_info);
-	rectangle_batch_.reset();
-	line_batch_.flushBatch(command_buffer, target_info);
-	line_batch_.reset();
+	const auto& window_size = getStandardWindowSize();
+	const auto& view = getView();
+	auto zoom = getZoom();
+		
+	float world_width = window_size.x / zoom;
+	float world_height = window_size.y / zoom;
+		
+	float offset_x = (window_size.x - world_width) * 0.5f;
+	float offset_y = (window_size.y - world_height) * 0.5f;
+
+	return SDL_FRect{
+		view.x + offset_x,
+		view.y + offset_y,
+		world_width	,
+		world_height};
 }
-
-void graphics::GpuRenderer::renderChunk(const ChunkData& chunk_data, CommandBuffer& command_buffer,
-                                          SDL_GPUColorTargetInfo& target_info, const glm::mat4& matrix) const
-{
-	SDL_GPURenderPass* render_pass = SDL_BeginGPURenderPass(command_buffer.get(), &target_info, 1, nullptr);
-	target_info.load_op = SDL_GPU_LOADOP_LOAD;
-	const auto& chunk = chunk_data.chunk;
-	SDL_BindGPUGraphicsPipeline(render_pass, tilemap_graphics_pipeline->get());
-
-	SDL_GPUTextureSamplerBinding texture_sampler_binding = {};
-	texture_sampler_binding.texture = chunk->getTexture()->get();
-	texture_sampler_binding.sampler = chunk->getTexture()->getSampler()->get();
-	SDL_BindGPUFragmentSamplers(render_pass, 0, &texture_sampler_binding, 1);
-
-	SDL_GPUBuffer* buffer = chunk->getTileBuffer();
-	SDL_BindGPUVertexStorageBuffers(render_pass, 0, &buffer, 1);
-	SDL_GPUBuffer* sprite_buffer = chunk->getSpriteBuffer();
-	SDL_BindGPUVertexStorageBuffers(render_pass, 1, &sprite_buffer, 1);
-	SDL_PushGPUVertexUniformData(command_buffer.get(), 0, &matrix, sizeof(glm::mat4));
-	SDL_DrawGPUPrimitives(render_pass, 6, chunk->getSize(), 0, 0);
-
-	SDL_EndGPURenderPass(render_pass);
-}*/
 
 void graphics::GpuRenderer::render()
 {
@@ -276,19 +190,24 @@ void graphics::GpuRenderer::render()
 			batcher->addToBatch(draw_object);
 		}
 		
+		ui_batcher->setWorldMatrix(base_matrix);
+		
+		for (const auto& draw_object : ui_draw_buffer)
+		{
+			if (!ui_batcher->canBatch(draw_object))
+				ui_batcher->closeBatch();
+			ui_batcher->addToBatch(draw_object);
+		}
+		
 		SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(command_buffer.get());
 		batcher->pushAllToGPU(copy_pass);
+		ui_batcher->pushAllToGPU(copy_pass);
 		SDL_EndGPUCopyPass(copy_pass);
 		
 		SDL_GPURenderPass* render_pass = SDL_BeginGPURenderPass(command_buffer.get(), &target_info, 1, nullptr);
 		batcher->renderAll(render_pass, command_buffer);
+		ui_batcher->renderAll(render_pass, command_buffer);
 		SDL_EndGPURenderPass(render_pass);
-		
-		//render(command_buffer, target_info, world_matrix, draw_buffer, *sprite_batch, *rectangle_batch, *line_batch);
-		//render(command_buffer, target_info, base_matrix, ui_draw_buffer, *ui_sprite_batch, *ui_rectangle_batch, *ui_line_batch);
-
-		// Render ImGui
-		//SDL_EndGPURenderPass(render_pass);
 	}
 
 	//draw_buffer.clear();
@@ -390,53 +309,61 @@ void graphics::GpuRenderer::setAngle(float angle)
 	this->angle = angle;
 }
 
-
-void graphics::GpuRenderer::renderRectangle(float x, float y, float w, float h, RenderType render_type, glm::vec4 color, bool ignore_view_zoom)
+void graphics::GpuRenderer::setRenderMode(RenderMode render_mode)
 {
-	if (!ignore_view_zoom)
+	this->render_mode = render_mode;
+}
+
+void graphics::GpuRenderer::renderRectangle(float x, float y, float w, float h, RenderType render_type, const Color& color)
+{
+	if (render_mode == RenderMode::WORLD)
 	{
 		if (render_type == RenderType::FILL)
 		{
-			draw_buffer.push_back(RectangleData{ glm::vec2{x,y},glm::vec2{w,h}, color });
+			draw_buffer.push_back(RectangleData{ glm::vec2{x,y},glm::vec2{w,h}, glm::vec4{color.r,color.g,color.b,color.a} });
 		}
 		else if (render_type == RenderType::NONE)
 		{
-			draw_buffer.push_back(LineData{ x,y,x + w,y, color });
-			draw_buffer.push_back(LineData{ x + w,y,x + w,y + h, color });
-			draw_buffer.push_back(LineData{ x + w,y + h,x,y + h, color });
-			draw_buffer.push_back(LineData{ x,y + h,x,y, color });
+			draw_buffer.push_back(LineData{ x,y,x + w,y, glm::vec4{color.r,color.g,color.b,color.a} });
+			draw_buffer.push_back(LineData{ x + w,y,x + w,y + h, glm::vec4{color.r,color.g,color.b,color.a} });
+			draw_buffer.push_back(LineData{ x + w,y + h,x,y + h, glm::vec4{color.r,color.g,color.b,color.a} });
+			draw_buffer.push_back(LineData{ x,y + h,x,y, glm::vec4{color.r,color.g,color.b,color.a} });
 		}
 	}
-	else
+	else if (render_mode == RenderMode::UI)
 	{
 		if (render_type == RenderType::FILL)
 		{	
-			ui_draw_buffer.push_back(RectangleData{ glm::vec2{x,y},glm::vec2{w,h}, color });
+			ui_draw_buffer.push_back(RectangleData{ glm::vec2{x,y},glm::vec2{w,h}, glm::vec4{color.r,color.g,color.b,color.a} });
 		}
 		else if (render_type == RenderType::NONE)
 		{
-			ui_draw_buffer.push_back(LineData{ x,y,x + w,y, color });
-			ui_draw_buffer.push_back(LineData{ x + w,y,x + w,y + h, color });
-			ui_draw_buffer.push_back(LineData{ x + w,y + h,x,y + h, color });
-			ui_draw_buffer.push_back(LineData{ x,y + h,x,y, color });
+			ui_draw_buffer.push_back(LineData{ x,y,x + w,y, glm::vec4{color.r,color.g,color.b,color.a} });
+			ui_draw_buffer.push_back(LineData{ x + w,y,x + w,y + h, glm::vec4{color.r,color.g,color.b,color.a} });
+			ui_draw_buffer.push_back(LineData{ x + w,y + h,x,y + h, glm::vec4{color.r,color.g,color.b,color.a} });
+			ui_draw_buffer.push_back(LineData{ x,y + h,x,y, glm::vec4{color.r,color.g,color.b,color.a} });
 		
 		}
 	}
 }
 
-void graphics::GpuRenderer::renderSprite(const Sprite& sprite, float x, float y, float w, float h, float angle, SDL_FlipMode flip, bool ignore_view_zoom, graphics::Color color)
+void graphics::GpuRenderer::renderSprite(const Sprite& sprite, float x, float y, float w, float h, float angle, SDL_FlipMode flip, const Color& color)
 {
-	renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ x,y,w,h }, angle, flip, ignore_view_zoom, color);
+	renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ x,y,w,h }, angle, flip, color);
+}
+
+void graphics::GpuRenderer::renderText(const Text& text, float x, float y, float w, float h)
+{
+	renderTexture(text.getTexture(), std::nullopt, SDL_FRect{x, y, w, h});
 }
 
 void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, const std::optional<SDL_FRect>& source,
-                                          const std::optional<SDL_FRect>& destination, float angle, const SDL_FlipMode flip, bool ignore_view_zoom, graphics::Color color)
+                                          const std::optional<SDL_FRect>& destination, float angle, const SDL_FlipMode flip, const Color& color)
 {
-	//flip = SDL_FLIP_HORIZONTAL;
 	SDL_FRect src = source.value_or(SDL_FRect{ 0.0f, 0.0f, static_cast<float>(texture->w()), static_cast<float>(texture->h()) });
 	SDL_FRect dst = destination.value_or(SDL_FRect{ 0.0f, 0.0f, static_cast<float>(getStandardWindowSize().x), static_cast<float>(getStandardWindowSize().y) });
 
-	if (!ignore_view_zoom)
+	if (render_mode == RenderMode::WORLD)
 	{
 		draw_buffer.emplace_back(
 			std::in_place_type<GpuSprite>,
@@ -451,7 +378,7 @@ void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, c
 			}
 		);
 	}
-	else
+	else if (render_mode == RenderMode::UI)
 	{
 		ui_draw_buffer.emplace_back(
 			std::in_place_type<GpuSprite>,
@@ -470,13 +397,16 @@ void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, c
 
 void graphics::GpuRenderer::renderTileMap(std::shared_ptr<TileMap> tilemap, float x, float y)
 {
-	SDL_FRect camera_rect = graphics::getCameraRect(*this);
+	SDL_FRect camera_rect = getCameraRect();
 	
 	for (const auto& chunk : tilemap->getChunks())
 	{
 		if (SDL_HasRectIntersectionFloat(&chunk->getRect(), &camera_rect))
 		{
-			draw_buffer.emplace_back(ChunkData{chunk});
+			if (render_mode == RenderMode::WORLD)
+				draw_buffer.emplace_back(ChunkData{chunk});
+			else if (render_mode == RenderMode::UI)
+				ui_draw_buffer.emplace_back(ChunkData{chunk});
 		}
 	}
 }

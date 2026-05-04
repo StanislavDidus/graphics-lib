@@ -27,7 +27,7 @@ int main()
     
     Surface surface{"assets/ice-cream.bmp"};
     std::shared_ptr<GpuTexture> texture = renderer.loadTexture(surface, "PointClamp");
-    Sprite sprite{texture, SDL_FRect{0.0f, 0.0f, 100.0f, 100.0f}};
+    Sprite sprite{texture, SDL_FRect{0.0f, 0.0f, 1920.0f, 1920.0f}};
     
     Surface surface1{"assets/sky.png"};
     std::shared_ptr<GpuTexture> texture1 = renderer.loadTexture(surface1, "PointClamp");
@@ -63,25 +63,20 @@ int main()
             tick = 0;
         }
         
-        /*
         int i = 0;
         for (const auto& position : positions)
         {
-            if (i % 2 == 0)
-                drawScaledSprite(renderer, sprite, position.x, position.y, 50.0f, 50.0f);
-            else
-                drawScaledSprite(renderer, sprite1, position.x, position.y, 50.0f, 50.0f);
-            ++i;    
+            renderer.renderSprite(sprite, position.x, position.y, 100.0f, 100.0f);
         }
-        */
         
-        drawRectangle(renderer, 0.0f, 0.0f, 50.0f, 50.0f, RenderType::NONE, Color::RED);
+        
+        //renderer.renderRectangle(0.0f, 0.0f, 50.0f, 50.0f, RenderType::NONE, Color::RED);
         /*
         drawRectangle(renderer, 0.0f, 0.0f, 50.0f, 50.0f, RenderType::FILL, Color::RED);
         drawScaledSprite(renderer, sprite1, 100.0f, 100.0f, 50.0f, 50.0f);
         drawRectangle(renderer, 0.0f, 200.0f, 50.0f, 50.0f, RenderType::FILL, Color::GREEN);
         */
-        //drawScaledSprite(renderer, sprite, 0.0f, 0.0f, 50.0f, 50.0f);
+        //renderer.renderSprite(sprite, 0.0f, 0.0f, 200.0f, 200.0f);
         //drawScaledSprite(renderer, sprite1, 250.0f, 300.0f, 50.0f, 50.0f);
         
         renderer.render();

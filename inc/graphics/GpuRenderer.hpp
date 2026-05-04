@@ -11,6 +11,7 @@
 #include "GpuBuffer.hpp"
 #include "GpuTexture.hpp"
 #include "GpuTransferBuffer.hpp"
+#include "Text.hpp"
 #include "GpuSampler.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
@@ -46,6 +47,12 @@ namespace graphics
 	};
 	
 	static ScreenSize screen_size_uniform;
+	
+	enum class RenderMode
+	{
+		WORLD,
+		UI,
+	};
 
 	class GpuRenderer
 	{
@@ -70,25 +77,25 @@ namespace graphics
 		void setView(glm::vec2 view);
 		void setZoom(float zoom);
 		void setAngle(float angle);
+		void setRenderMode(RenderMode render_mode);
 
 		template<typename Self>
 		auto&& getDevice(this Self&& self);
 
-		//void renderTriangle(float x1, float y1, float x2, float y2, float x3, float y3, SDL_FColor color);
-		void renderRectangle(float x, float y, float w, float h, RenderType render_type, glm::vec4 color, bool ignore_view_zoom = false);
-		void renderSprite(const Sprite& sprite, float x, float y, float w, float h, float angle, SDL_FlipMode flip = SDL_FLIP_NONE, bool ignore_view_zoom = false, graphics::Color color = graphics::Color::WHITE);
-		void renderTexture(std::shared_ptr<GpuTexture> texture, const std::optional<SDL_FRect>& source, const std::optional<SDL_FRect>& destination, float angle, SDL_FlipMode flip = SDL_FLIP_NONE, bool ignore_view_zoom = false, graphics::Color color = graphics::Color::WHITE);
+		void renderRectangle(float x, float y, float w, float h, RenderType render_type, const Color& color);
+		void renderSprite(const Sprite& sprite, float x, float y, float w, float h, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = graphics::Color::WHITE);
+		void renderText(const Text& text, float x, float y, float w, float h);
+		void renderTexture(std::shared_ptr<GpuTexture> texture, const std::optional<SDL_FRect>& source, const std::optional<SDL_FRect>& destination, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const  Color& color = graphics::Color::WHITE);
 		void renderTileMap(std::shared_ptr<TileMap> tilemap, float x, float y);
 	private:
 		void initSamplers();
-
-		//void render(CommandBuffer& command_buffer, SDL_GPUColorTargetInfo& target_info, glm::mat4& matrix, const std::vector<DrawObject>&
-		            //draw_buffer_, SpriteBatch& sprite_batch_, RectangleBatch& rectangle_batch_, LineBatch& line_batch_);
-		//void renderChunk(const ChunkData& chunk_data, CommandBuffer& command_buffer, SDL_GPUColorTargetInfo& target_info, const glm::mat4&
-		                   //matrix) const;
+		
+		SDL_FRect getCameraRect() const;
 
 		Window& window;
 		std::shared_ptr<SDL_GPUDevice> device = nullptr;
+		
+		RenderMode render_mode = RenderMode::WORLD;
 
 		std::vector<DrawObject> draw_buffer;
 		std::vector<DrawObject> ui_draw_buffer;
@@ -102,15 +109,7 @@ namespace graphics
 		Uint32 render_resolution_height;
 		
 		std::unique_ptr<Batcher> batcher;
-
-		/*
-		std::unique_ptr<SpriteBatch> sprite_batch;
-		std::unique_ptr<SpriteBatch> ui_sprite_batch;
-		std::unique_ptr<RectangleBatch> rectangle_batch;
-		std::unique_ptr<RectangleBatch> ui_rectangle_batch;
-		std::unique_ptr<LineBatch> line_batch;
-		std::unique_ptr<LineBatch> ui_line_batch;
-		*/
+		std::unique_ptr<Batcher> ui_batcher;
 
 		std::unique_ptr<WindowClaimer> window_claimer;
 		std::shared_ptr<GpuGraphicsPipeline> tilemap_graphics_pipeline;

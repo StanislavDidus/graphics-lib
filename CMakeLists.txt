@@ -45,7 +45,6 @@ set(HEADER_FILES
     "inc/graphics/GpuBuffer.hpp"
     "inc/graphics/GpuTransferBuffer.hpp"
     "inc/graphics/GpuTexture.hpp"
-    "inc/graphics/GpuRenderFunctions.hpp"
     "inc/graphics/GpuSampler.hpp"
     "inc/graphics/TileMap.hpp"
     "inc/graphics/CommandBuffer.hpp"

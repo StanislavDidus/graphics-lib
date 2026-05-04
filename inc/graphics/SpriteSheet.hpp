@@ -4,7 +4,6 @@
 #include <vector>
 
 #include <graphics/GpuRenderer.hpp>
-#include <graphics/GpuRenderFunctions.hpp>
 #include <graphics/Sprite.hpp>
 #include "glm/glm.hpp"
 
