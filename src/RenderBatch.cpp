@@ -57,7 +57,7 @@ namespace graphics
 	}
 
 	void SpriteBatch::pushAllToGPU(SDL_GPUCopyPass* copy_pass, GpuBuffer& sprite_buffer,
-	                               GpuTransferBuffer& sprite_transfer_buffer, size_t sprite_offset)
+	                               GpuTransferBuffer& sprite_transfer_buffer, size_t& sprite_offset)
 	{
 		if (sprites.empty()) return;
 
@@ -76,12 +76,16 @@ namespace graphics
 		vertices_buffer_region.size = sprites.size() * sizeof(SpriteData);
 
 		SDL_UploadToGPUBuffer(copy_pass, &vertices_transfer_info, &vertices_buffer_region, false);
+		
+		sprite_offset += sprites.size();
 	}
 
 	void SpriteBatch::renderAllOnGPU(SDL_GPURenderPass* render_pass, CommandBuffer& command_buffer,
 	                                 const glm::mat4& world_matrix, std::shared_ptr<GpuGraphicsPipeline> sprite_graphics_pipeline,
 	                                 GpuBuffer& sprite_buffer, SpriteUniform& sprite_uniform, size_t& sprite_offset)
 	{
+		if (sprites.empty()) return;
+		
 		SDL_GPUTextureSamplerBinding texture_sampler_binding;
 		texture_sampler_binding.texture = texture->get();
 		texture_sampler_binding.sampler = texture->getSampler()->get();
@@ -134,10 +138,10 @@ namespace graphics
 			createNewBatch(draw_object);
 		const auto& last_batch = batches.back();
 			
-		if (!last_batch->canBatch(draw_object))
-			throw graphics_error{"Invalid add call to a batch. Ensure that canBatch is called beforehand."};
 		if (last_batch->isClosed())
 			createNewBatch(draw_object);
+		//if (!last_batch->canBatch(draw_object))
+			//throw graphics_error{"Invalid add call to a batch. Ensure that canBatch is called beforehand."};
 		const auto& new_last_batch = batches.back();
 		new_last_batch->addToBatch(draw_object);
 	}
@@ -152,6 +156,7 @@ namespace graphics
 
 	void Batcher::renderAll(SDL_GPURenderPass* render_pass, CommandBuffer& command_buffer)
 	{
+		sprite_offset = 0;
 		for (const auto& batch : batches)
 		{
 			batch->renderAllOnGPU(render_pass, command_buffer, world_matrix, sprite_graphics_pipeline, sprite_buffer, sprite_uniform, sprite_offset);

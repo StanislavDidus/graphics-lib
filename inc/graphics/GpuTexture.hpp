@@ -5,8 +5,8 @@
 
 #include "GpuSampler.hpp"
 #include "Surface.hpp"
+#include <graphics/CommandBuffer.hpp>
 #include "SDL3/SDL_gpu.h"
-#include "SDL3/SDL_log.h"
 
 namespace graphics
 {
@@ -72,8 +72,12 @@ namespace graphics
 		m_width = image_data->w;
 		m_height = image_data->h;
 		m_pitch = image_data->pitch;
-
-		//std::cout << std::format("Texture was successfully created.") << std::endl;
+		
+		CommandBuffer command_buffer{device};
+		
+		//SDL_GenerateMipmapsForGPUTexture(command_buffer.get(), texture);
+		
+		command_buffer.submit();
 	}
 
 	inline GpuTexture::~GpuTexture()

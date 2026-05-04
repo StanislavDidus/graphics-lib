@@ -25,7 +25,7 @@ namespace graphics
 		void closeBatch();
 		virtual void addToBatch(const DrawObject& draw_object) = 0;
 		
-		virtual void pushAllToGPU(SDL_GPUCopyPass* copy_pass, GpuBuffer& sprite_buffer, GpuTransferBuffer& sprite_transfer_buffer, size_t sprite_offset) = 0;
+		virtual void pushAllToGPU(SDL_GPUCopyPass* copy_pass, GpuBuffer& sprite_buffer, GpuTransferBuffer& sprite_transfer_buffer, size_t& sprite_offset) = 0;
 		virtual void renderAllOnGPU(SDL_GPURenderPass* render_pass, CommandBuffer& command_buffer, const glm::mat4& world_matrix, std::shared_ptr<
 		                            GpuGraphicsPipeline> sprite_graphics_pipeline, GpuBuffer& sprite_buffer, SpriteUniform
 		                            & sprite_uniform, size_t& sprite_offset) = 0;
@@ -44,7 +44,7 @@ namespace graphics
 		bool canBatch(const DrawObject& draw_object) const override;
 		void addToBatch(const DrawObject& draw_object) override;
 		
-		void pushAllToGPU(SDL_GPUCopyPass* copy_pass, GpuBuffer& sprite_buffer, GpuTransferBuffer& sprite_transfer_buffer, size_t sprite_offset) override;
+		void pushAllToGPU(SDL_GPUCopyPass* copy_pass, GpuBuffer& sprite_buffer, GpuTransferBuffer& sprite_transfer_buffer, size_t& sprite_offset) override;
 		void renderAllOnGPU(SDL_GPURenderPass* render_pass, CommandBuffer& command_buffer, const glm::mat4& world_matrix, std::shared_ptr<
 		                    GpuGraphicsPipeline> sprite_graphics_pipeline, GpuBuffer& sprite_buffer, SpriteUniform
 		                    & sprite_uniform, size_t& sprite_offset) override;	

@@ -9,7 +9,7 @@ using namespace graphics;
 
 namespace graphics
 {
-    int MAX_SPRITES_RENDERED = 1'000;
+    int MAX_SPRITES_RENDERED = 10'000;
     int MAX_RECTANGLES_RENDERED = 1000;
     int MAX_LINES_RENDERED = 1000;
 }
@@ -29,8 +29,12 @@ int main()
     std::shared_ptr<GpuTexture> texture = renderer.loadTexture(surface, "PointClamp");
     Sprite sprite{texture, SDL_FRect{0.0f, 0.0f, 100.0f, 100.0f}};
     
+    Surface surface1{"assets/sky.png"};
+    std::shared_ptr<GpuTexture> texture1 = renderer.loadTexture(surface1, "PointClamp");
+    Sprite sprite1{texture1, SDL_FRect{0.0f, 0.0f, 64.0f, 80.0f}};
+    
     // Test
-    int number_objects = 1'000;
+    int number_objects = 10'000;
     std::vector<glm::vec2> positions;
     positions.reserve(number_objects);
     for (int i = 0; i < number_objects; ++i)
@@ -59,10 +63,18 @@ int main()
             tick = 0;
         }
         
+        int i = 0;
         for (const auto& position : positions)
         {
-           drawScaledSprite(renderer, sprite, position.x, position.y, 50.0f, 50.0f);
+            if (i % 2 == 0)
+                drawScaledSprite(renderer, sprite, position.x, position.y, 50.0f, 50.0f);
+            else
+                drawScaledSprite(renderer, sprite1, position.x, position.y, 50.0f, 50.0f);
+            ++i;    
         }
+        
+        //drawScaledSprite(renderer, sprite, 0.0f, 0.0f, 50.0f, 50.0f);
+        //drawScaledSprite(renderer, sprite1, 250.0f, 300.0f, 50.0f, 50.0f);
         
         renderer.render();
         
