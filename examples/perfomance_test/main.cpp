@@ -20,6 +20,8 @@ int main()
 {
     std::cout << "Program started." << std::endl;
     
+    SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
+    
     init();
     
     Window window{"Performance Test Example", 960, 540, SDL_WINDOW_RESIZABLE};
@@ -63,12 +65,9 @@ int main()
             tick = 0;
         }
         
-        int i = 0;
-        for (const auto& position : positions)
-        {
-            renderer.renderSprite(sprite, position.x, position.y, 100.0f, 100.0f);
-        }
         
+        renderer.renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ 0.0f, 0.0f, 100.0f, 100.0f }, 0.0f, SDL_FLIP_NONE, Color::WHITE, 0.0f);
+        renderer.renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ 50.0f, 50.0f, 100.0f, 100.0f }, 0.0f, SDL_FLIP_NONE, Color::WHITE, 1.0f);
         
         //renderer.renderRectangle(0.0f, 0.0f, 50.0f, 50.0f, RenderType::NONE, Color::RED);
         /*

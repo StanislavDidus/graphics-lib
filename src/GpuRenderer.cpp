@@ -358,7 +358,7 @@ void graphics::GpuRenderer::renderText(const Text& text, float x, float y, float
 }
 
 void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, const std::optional<SDL_FRect>& source,
-                                          const std::optional<SDL_FRect>& destination, float angle, const SDL_FlipMode flip, const Color& color)
+                                          const std::optional<SDL_FRect>& destination, float angle, const SDL_FlipMode flip, const Color& color, float z)
 {
 	SDL_FRect src = source.value_or(SDL_FRect{ 0.0f, 0.0f, static_cast<float>(texture->w()), static_cast<float>(texture->h()) });
 	SDL_FRect dst = destination.value_or(SDL_FRect{ 0.0f, 0.0f, static_cast<float>(getStandardWindowSize().x), static_cast<float>(getStandardWindowSize().y) });
@@ -370,7 +370,7 @@ void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, c
 			std::move(texture),
 			SpriteData
 			{
-			.pos_rot{dst.x, dst.y, 0.0f, angle},
+			.pos_rot{dst.x, dst.y, z, angle},
 			.size{dst.w, dst.h, 0.0f, 0.0f},
 			.uv{src.x, src.y, src.w, src.h},
 			.color{color.r, color.g, color.b, color.a},

@@ -85,7 +85,8 @@ namespace graphics
 		void renderRectangle(float x, float y, float w, float h, RenderType render_type, const Color& color);
 		void renderSprite(const Sprite& sprite, float x, float y, float w, float h, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = graphics::Color::WHITE);
 		void renderText(const Text& text, float x, float y, float w, float h);
-		void renderTexture(std::shared_ptr<GpuTexture> texture, const std::optional<SDL_FRect>& source, const std::optional<SDL_FRect>& destination, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const  Color& color = graphics::Color::WHITE);
+		void renderTexture(std::shared_ptr<GpuTexture> texture, const std::optional<SDL_FRect>& source, const std::optional<SDL_FRect>& destination, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const  Color& color = graphics::Color::WHITE, float
+		                   z = 0.0f);
 		void renderTileMap(std::shared_ptr<TileMap> tilemap, float x, float y);
 	private:
 		void initSamplers();
