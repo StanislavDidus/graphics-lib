@@ -27,6 +27,7 @@ public:
 	bool isOpen() const;	
 private:
 	bool running = true;
+	bool fullscreen = false;
 
 	SDL_Window* window = nullptr;
 

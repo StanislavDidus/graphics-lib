@@ -308,7 +308,6 @@ namespace graphics
 	                               render_chunk_data)
 	{
 		SDL_BindGPUGraphicsPipeline(render_pass, render_line_data.graphics_pipeline->get());
-		
 
 		SDL_GPUBufferBinding buffer_binding{};
 		buffer_binding.offset = render_line_data.offset * sizeof(Vertex);

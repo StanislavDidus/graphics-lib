@@ -30,6 +30,13 @@ bool Window::pollEvent(SDL_Event& event)
 		case SDL_EVENT_QUIT:
 			running = false;
 			break;
+		case SDL_EVENT_KEY_DOWN:
+			if (event.key.scancode == SDL_SCANCODE_F11)
+			{
+				SDL_SetWindowFullscreen(window, fullscreen);
+				fullscreen = !fullscreen;
+			}
+			break;
 		}
 	}
 
