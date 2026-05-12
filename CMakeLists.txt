@@ -62,6 +62,18 @@ add_custom_target(copy_assets
 )
 add_dependencies(GRAPHICS_LIB copy_assets)
 
+function(COPY_DLLS PROJECT_BIN)
+    add_custom_command(TARGET ${PROJECT_BIN} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${PROJECT_SOURCE_DIR}/libs"
+    $<TARGET_FILE_DIR:${PROJECT_BIN}>
+    COMMENT "Copying runtime dependencies to build directory ${PROJECT_BIN}")
+endfunction()
+
+#Copy lib folder directly to bin folder
+COPY_DLLS(GRAPHICS_LIB)
+
+
 target_include_directories(GRAPHICS_LIB 
 		PUBLIC inc
 		PRIVATE src

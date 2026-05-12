@@ -24,13 +24,11 @@ graphics::GpuRenderer::GpuRenderer(Window& window)
 	screen_size_uniform.height = window.getWindowSize().y;
 	
 	//Create GPU
-	/*
 	bool debug = false;
-#if _DEBUG
+#ifndef NDEBUG
 	debug = true;
 #endif
-	*/
-	device = std::shared_ptr<SDL_GPUDevice>{ SDL_CreateGPUDevice(SDL_ShaderCross_GetHLSLShaderFormats(), false, nullptr), SDL_DestroyGPUDevice};
+	device = std::shared_ptr<SDL_GPUDevice>{ SDL_CreateGPUDevice(SDL_ShaderCross_GetHLSLShaderFormats(), debug, nullptr), SDL_DestroyGPUDevice};
 
 	if (!device)
 	{
@@ -209,6 +207,8 @@ void graphics::GpuRenderer::render()
 		ui_batcher->renderAll(render_pass, command_buffer);
 		SDL_EndGPURenderPass(render_pass);
 	}
+
+	command_buffer.submit();
 
 	//draw_buffer.clear();
 	draw_buffer.clear();

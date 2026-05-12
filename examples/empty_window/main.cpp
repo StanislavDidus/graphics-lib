@@ -16,6 +16,8 @@ float global_time = 0.0f;
 int main()
 {
     std::cout << "Program started." << std::endl;
+
+    SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
     
     init();
     

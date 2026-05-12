@@ -59,7 +59,7 @@ namespace graphics
 		texture_create_info.width = image_data->w;
 		texture_create_info.height = image_data->h;
 		texture_create_info.layer_count_or_depth = 1;
-		texture_create_info.num_levels = std::log2(std::max(image_data->w, image_data->h)) + 1;
+		texture_create_info.num_levels = 1;
 		texture_create_info.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER;
 		
 		texture = SDL_CreateGPUTexture(device.get(), &texture_create_info);
@@ -73,12 +73,6 @@ namespace graphics
 		m_width = image_data->w;
 		m_height = image_data->h;
 		m_pitch = image_data->pitch;
-		
-		CommandBuffer command_buffer{device};
-		
-		SDL_GenerateMipmapsForGPUTexture(command_buffer.get(), texture);
-		
-		command_buffer.submit();
 	}
 
 	inline GpuTexture::~GpuTexture()

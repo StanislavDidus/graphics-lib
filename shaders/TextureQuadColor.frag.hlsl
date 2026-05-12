@@ -32,5 +32,5 @@ float4 main(Input input) : SV_TARGET0
     float h;
     Texture.GetDimensions(w,h);
     float2 uv = float2(texcoord.x / w, texcoord.y / h);
-    return input.Color * Texture.Sample(Sampler, uv);
+    return input.Color / 255.0f * Texture.Sample(Sampler, uv);
 }
