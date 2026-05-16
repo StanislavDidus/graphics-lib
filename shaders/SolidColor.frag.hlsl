@@ -11,6 +11,6 @@ struct Output
 Output main(Input input)
 {
     Output output;
-    output.Color = input.Color;
+    output.Color = input.Color / 255.0f;
     return output;
 }
