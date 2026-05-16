@@ -19,8 +19,7 @@ namespace graphics
 		{
 			return { static_cast<uint8_t>(r + operand.r),
 					static_cast<uint8_t>(g + operand.g),
-					static_cast<uint8_t>(b + operand.b),
-					static_cast<uint8_t>(a + operand.a) };
+					static_cast<uint8_t>(b + operand.b)};
 		}
 		Color operator- (const Color& operand) const
 		{

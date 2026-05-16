@@ -24,11 +24,13 @@ graphics::GpuRenderer::GpuRenderer(Window& window)
 	screen_size_uniform.height = window.getWindowSize().y;
 	
 	//Create GPU
+	/*
 	bool debug = false;
 #if _DEBUG
 	debug = true;
 #endif
-	device = std::shared_ptr<SDL_GPUDevice>{ SDL_CreateGPUDevice(SDL_ShaderCross_GetHLSLShaderFormats(), debug, nullptr), SDL_DestroyGPUDevice};
+	*/
+	device = std::shared_ptr<SDL_GPUDevice>{ SDL_CreateGPUDevice(SDL_ShaderCross_GetHLSLShaderFormats(), false, nullptr), SDL_DestroyGPUDevice};
 
 	if (!device)
 	{
@@ -50,7 +52,7 @@ graphics::GpuRenderer::GpuRenderer(Window& window)
 	std::cout << "Window was successfully claimed for current GPU device." << std::endl;
 
 	// Disable VSync
-	SDL_SetGPUSwapchainParameters(device.get(), window.get(), SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
+	SDL_SetGPUSwapchainParameters(device.get(), window.get(), SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_IMMEDIATE);
 
 	// Init vertex shader
 	tilemap_vertex_shader = std::make_unique<GpuShader>(device, "shaders/TileMap.vert.hlsl", 0, 2, 2, 0);
@@ -182,7 +184,6 @@ void graphics::GpuRenderer::render()
 		};
 		
 		batcher->setWorldMatrix(world_matrix);
-		
 		for (const auto& draw_object : draw_buffer)
 		{
 			if (!batcher->canBatch(draw_object))
@@ -191,7 +192,6 @@ void graphics::GpuRenderer::render()
 		}
 		
 		ui_batcher->setWorldMatrix(base_matrix);
-		
 		for (const auto& draw_object : ui_draw_buffer)
 		{
 			if (!ui_batcher->canBatch(draw_object))
