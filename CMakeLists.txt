@@ -71,7 +71,9 @@ function(COPY_DLLS PROJECT_BIN)
 endfunction()
 
 #Copy lib folder directly to bin folder
+if(WIN32)
 COPY_DLLS(GRAPHICS_LIB)
+endif(WIN32)
 
 
 target_include_directories(GRAPHICS_LIB 
