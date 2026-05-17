@@ -35,7 +35,7 @@ namespace graphics
                 {   
                     .position = {offset_x + x * tile_width_world, offset_y + y * tile_height_world, 0.0f, 1.0f},
                     .size_uv = {static_cast<float>(tile_width_world), static_cast<float>(tile_height_world), 16.0f, 16.0f},
-                    .color = {1.0f, 1.0f, 1.0f, 1.0f}
+                    .color = {255.0f, 255.0f, 255.0f, 255.0f}
                 };
             }
         }
