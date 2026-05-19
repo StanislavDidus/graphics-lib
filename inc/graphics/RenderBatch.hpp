@@ -68,7 +68,7 @@ namespace graphics
 			const RenderLineData& render_line_data,
 			const RenderChunkData& render_chunk_data) override;	
 	private:
-		std::shared_ptr<GpuTexture> texture;	
+		std::shared_ptr<GpuTextureSDL> texture;
 		
 		std::vector<SpriteData> sprites;
 	};

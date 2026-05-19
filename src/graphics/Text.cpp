@@ -14,7 +14,7 @@ namespace graphics
 		generateTextTexture(renderer);
 	}
 
-	std::shared_ptr<GpuTexture> Text::getTexture() const
+	std::shared_ptr<GpuTextureSDL> Text::getTexture() const
 	{
 		return texture;
 	}
@@ -26,7 +26,7 @@ namespace graphics
 
 	glm::vec2 Text::getTextSize(const glm::vec2& scale) const
 	{
-		return {texture->w() * scale.x, texture->h() * scale.y};
+		return {texture->width() * scale.x, texture->height() * scale.y};
 	}
 
 	void Text::setFont(std::shared_ptr<Font> font)

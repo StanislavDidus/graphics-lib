@@ -215,12 +215,12 @@ void graphics::GpuRenderer::render()
 	ui_draw_buffer.clear();
 }
 
-std::shared_ptr<graphics::GpuTexture> graphics::GpuRenderer::loadTexture(const Surface& surface, const std::string& sampler_name)
+std::shared_ptr<graphics::GpuTextureSDL> graphics::GpuRenderer::loadTexture(const Surface& surface, const std::string& sampler_name)
 {
-	auto texture = std::make_shared<GpuTexture>(device, surface, samplers.at(sampler_name));
+	auto texture = std::make_shared<GpuTextureSDL>(device, surface, samplers.at(sampler_name));
 
 	// Upload texture on the GPU
-	GpuTransferBuffer texture_transfer_buffer{ device, static_cast<Uint32>(texture->w() * texture->h() * 4), SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD };
+	GpuTransferBuffer texture_transfer_buffer{ device, static_cast<Uint32>(texture->width() * texture->height() * 4), SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD };
 
 	CommandBuffer command_buffer{device};
 	
@@ -228,7 +228,7 @@ std::shared_ptr<graphics::GpuTexture> graphics::GpuRenderer::loadTexture(const S
 
 	Uint8* texture_data = texture_transfer_buffer.map<Uint8>(false);
 
-	SDL_memcpy(texture_data, texture->pixels(), texture->w() * texture->h() * 4);
+	SDL_memcpy(texture_data, texture->pixels(), texture->width() * texture->height() * 4);
 
 	texture_transfer_buffer.unmap();
 
@@ -240,8 +240,8 @@ std::shared_ptr<graphics::GpuTexture> graphics::GpuRenderer::loadTexture(const S
 	// Destination
 	SDL_GPUTextureRegion gpu_texture_region = {};
 	gpu_texture_region.texture = texture->get();
-	gpu_texture_region.w = texture->w();
-	gpu_texture_region.h = texture->h();
+	gpu_texture_region.w = texture->width();
+	gpu_texture_region.h = texture->height();
 	gpu_texture_region.d = 1;
 
 	SDL_UploadToGPUTexture(copy_pass, &gpu_texture_transfer_info, &gpu_texture_region, false);
@@ -357,10 +357,10 @@ void graphics::GpuRenderer::renderText(const Text& text, float x, float y, float
 	renderTexture(text.getTexture(), std::nullopt, SDL_FRect{x, y, w, h});
 }
 
-void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTexture> texture, const std::optional<SDL_FRect>& source,
+void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTextureSDL> texture, const std::optional<SDL_FRect>& source,
                                           const std::optional<SDL_FRect>& destination, float angle, const SDL_FlipMode flip, const Color& color, float z)
 {
-	SDL_FRect src = source.value_or(SDL_FRect{ 0.0f, 0.0f, static_cast<float>(texture->w()), static_cast<float>(texture->h()) });
+	SDL_FRect src = source.value_or(SDL_FRect{ 0.0f, 0.0f, static_cast<float>(texture->width()), static_cast<float>(texture->height()) });
 	SDL_FRect dst = destination.value_or(SDL_FRect{ 0.0f, 0.0f, static_cast<float>(getStandardWindowSize().x), static_cast<float>(getStandardWindowSize().y) });
 
 	if (render_mode == RenderMode::WORLD)

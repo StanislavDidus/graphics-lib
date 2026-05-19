@@ -1,61 +1,87 @@
 cmake_minimum_required(VERSION 3.15...4.2.1)
 
-project(GRAPHICS_LIB VERSION 1.0
-	DESCRIPTION "Graphics library that uses SDL3 GPU API for rendering."
+option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
+option(GRAPHICS_BUILD_SAMPLES "Build samples" ON)
+
+set(GRAPHICS_VERSION_MAJOR 0)
+set(GRAPHICS_VERSION_MINOR 0)
+set(GRAPHICS_VERSION_PATCH 1)
+set(GRAPHICS_VERSION
+	${GRAPHICS_VERSION_MAJOR}.${GRAPHICS_VERSION_MINOR}.${GRAPHICS_VERSION_PATCH})
+
+# Use solution folders.
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+project(GRAPHICS_LIB VERSION ${GRAPHICS_VERSION}
+	DESCRIPTION "Simple graphics library that uses SDL3 for rendering"
 	LANGUAGES C CXX)
 
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+# Enable multi-processor builds in MSVC.
+if(MSVC)
+	add_compile_options(/MP)
+endif(MSVC)
 
-add_subdirectory(extern)
+add_subdirectory(extern EXCLUDE_FROM_ALL)
 
 set(SOURCE_FILES 
-    "src/GpuRenderer.cpp"
-    "src/exception.cpp"
-    "src/Sprite.cpp"
-    "src/Surface.cpp"
-    "src/Window.cpp"
-    "src/SpriteSheet.cpp" 
-    "src/Color.cpp"
-    "src/Font.cpp"
-    "src/Text.cpp"
-    "src/SpriteAnimation.cpp"
-    "src/GpuShader.cpp"
-    "src/GpuGraphicsPipeline.cpp"
-    "src/GpuSampler.cpp"
-    "src/TileMap.cpp"
-    "src/RenderBatch.cpp"
-    "src/Chunk.cpp"
-    )
+    "src/graphics/GpuRenderer.cpp"
+    "src/graphics/exception.cpp"
+    "src/graphics/Sprite.cpp"
+    "src/graphics/Surface.cpp"
+    "src/graphics/Window.cpp"
+    "src/graphics/SpriteSheet.cpp"
+    "src/graphics/Color.cpp"
+    "src/graphics/Font.cpp"
+    "src/graphics/Text.cpp"
+    "src/graphics/SpriteAnimation.cpp"
+    "src/graphics/GpuShader.cpp"
+    "src/graphics/GpuGraphicsPipeline.cpp"
+    "src/graphics/GpuSampler.cpp"
+    "src/graphics/TileMap.cpp"
+    "src/graphics/RenderBatch.cpp"
+    "src/graphics/Chunk.cpp"
+        src/graphics/RendererImpl.cpp
+		src/graphics/Renderer.cpp
+		src/graphics/GPURenderer/RendererImplGPU.cpp
+		src/graphics/TextureSDL.cpp
+)
 
 set(HEADER_FILES
-	"inc/graphics/graphics.hpp"
-	"inc/graphics/exception.hpp"
-    "inc/graphics/GpuRenderer.hpp"
-    "inc/graphics/Sprite.hpp"
-    "inc/graphics/Surface.hpp"
-    "inc/graphics/Window.hpp"
-    "inc/graphics/SpriteSheet.hpp"
-    "inc/graphics/Color.hpp"
-    "inc/graphics/Font.hpp"
-    "inc/graphics/Text.hpp"
-    "inc/graphics/SpriteAnimation.hpp"
-    "inc/graphics/GpuShader.hpp"
-    "inc/graphics/GpuGraphicsPipeline.hpp"
-    "inc/graphics/Vertex.hpp"
-    "inc/graphics/GpuBuffer.hpp"
-    "inc/graphics/GpuTransferBuffer.hpp"
-    "inc/graphics/GpuTexture.hpp"
-    "inc/graphics/GpuSampler.hpp"
-    "inc/graphics/TileMap.hpp"
-    "inc/graphics/CommandBuffer.hpp"
-    "inc/graphics/RenderBatch.hpp"
-    "inc/graphics/Chunk.hpp"
-    "inc/graphics/BatchHelpers.hpp"
-    )
+		"inc/graphics/Renderer.hpp"
+		"inc/graphics/graphics.hpp"
+		"inc/graphics/exception.hpp"
+		"inc/graphics/GpuRenderer.hpp"
+		"inc/graphics/Sprite.hpp"
+		"inc/graphics/Surface.hpp"
+		"inc/graphics/Window.hpp"
+		"inc/graphics/SpriteSheet.hpp"
+		"inc/graphics/Color.hpp"
+		"inc/graphics/Font.hpp"
+		"inc/graphics/Text.hpp"
+		"inc/graphics/SpriteAnimation.hpp"
+		"inc/graphics/GpuShader.hpp"
+		"inc/graphics/GpuGraphicsPipeline.hpp"
+		"inc/graphics/Vertex.hpp"
+		"inc/graphics/GpuBuffer.hpp"
+		"inc/graphics/GpuTransferBuffer.hpp"
+		"inc/graphics/GpuTextureSDL.hpp"
+		"inc/graphics/GpuSampler.hpp"
+		"inc/graphics/TileMap.hpp"
+		"inc/graphics/CommandBuffer.hpp"
+		"inc/graphics/RenderBatch.hpp"
+		"inc/graphics/Chunk.hpp"
+		"inc/graphics/BatchHelpers.hpp"
+		"inc/graphics/Enums.hpp"
+		"src/graphics/RendererImpl.hpp"
+		"src/graphics/GPURenderer/RendererImplGPU.hpp"
+		inc/graphics/Texture.hpp
+		inc/graphics/TextureSDL.hpp
+)
 
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})
 
-add_library(GRAPHICS_LIB ${ALL_FILES})
+add_library(GRAPHICS_LIB STATIC ${ALL_FILES})
+add_library(GRAPHICS_LIB::graphics ALIAS GRAPHICS_LIB)
 
 add_custom_target(copy_assets
 		COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_LIST_DIR}/copy_assets.cmake
@@ -86,6 +112,8 @@ target_link_libraries(GRAPHICS_LIB PUBLIC
 		glm::glm
 )
 
-target_compile_features(GRAPHICS_LIB PUBLIC cxx_std_23)
+if(GRAPHICS_BUILD_SAMPLES)
+	add_subdirectory(examples)
+endif(GRAPHICS_BUILD_SAMPLES)
 
-add_subdirectory(examples)
+target_compile_features(GRAPHICS_LIB PUBLIC cxx_std_23)

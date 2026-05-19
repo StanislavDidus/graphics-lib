@@ -20,8 +20,9 @@ namespace graphics
 		void loadImage(const std::filesystem::path& path);
 		void loadText(std::shared_ptr<Font> font, const std::string& text, Color color, std::optional<int> wrapped_length);
 
-		//Getters	
-		SDL_Surface* getSurface() const;
+		//Getters
+		template<typename Self>
+		auto&& get(this Self&& self) {return self.surface;}
 	private:
 		SDL_Surface* surface = nullptr;
 	};

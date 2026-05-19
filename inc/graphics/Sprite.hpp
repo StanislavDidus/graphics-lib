@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "Color.hpp"
-#include "GpuTexture.hpp"
+#include "GpuTextureSDL.hpp"
 #include "SDL3/SDL_render.h"
 
 namespace graphics
@@ -11,18 +11,18 @@ namespace graphics
 	class Sprite
 	{
 	public:
-		explicit Sprite(std::shared_ptr<GpuTexture> texture = nullptr, const SDL_FRect& rect = {});
+		explicit Sprite(std::shared_ptr<GpuTextureSDL> texture = nullptr, const SDL_FRect& rect = {});
 
 		//Getters
 		const SDL_FRect& getRect() const;
-		std::shared_ptr<GpuTexture> getTexture() const;
+		std::shared_ptr<GpuTextureSDL> getTexture() const;
 		const Color& getColor() const;
 
 		//Setters
 		void setColor(const Color& color);
 
 	private:
-		std::shared_ptr<GpuTexture> texture = nullptr;
+		std::shared_ptr<GpuTextureSDL> texture = nullptr;
 		SDL_FRect rect;
 
 		Color color = Color::WHITE;

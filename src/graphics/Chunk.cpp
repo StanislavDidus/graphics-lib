@@ -6,7 +6,7 @@
 namespace graphics
 {
     Chunk::Chunk(
-        std::shared_ptr<SDL_GPUDevice> device, std::shared_ptr<GpuTexture> texture,
+        std::shared_ptr<SDL_GPUDevice> device, std::shared_ptr<GpuTextureSDL> texture,
         int width_tiles, int height_tiles,
         float tile_width_world, float tile_height_world,
         float offset_x, float offset_y,
@@ -68,7 +68,7 @@ namespace graphics
         return size;
     }
 
-    std::shared_ptr<GpuTexture> Chunk::getTexture() const
+    std::shared_ptr<GpuTextureSDL> Chunk::getTexture() const
     {
         return texture;
     }

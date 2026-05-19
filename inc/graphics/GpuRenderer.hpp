@@ -9,12 +9,13 @@
 #include "GpuShader.hpp"
 #include "GpuGraphicsPipeline.hpp"
 #include "GpuBuffer.hpp"
-#include "GpuTexture.hpp"
+#include "GpuTextureSDL.hpp"
 #include "GpuTransferBuffer.hpp"
 #include "Text.hpp"
 #include "GpuSampler.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
+#include "Enums.hpp"
 
 #include "Vertex.hpp"
 
@@ -25,12 +26,6 @@
 namespace graphics
 {
 	class TileMap;
-
-	enum class RenderType
-	{
-		NONE,
-		FILL,
-	};
 
 	struct WindowClaimer
 	{
@@ -47,12 +42,6 @@ namespace graphics
 	};
 	
 	static ScreenSize screen_size_uniform;
-	
-	enum class RenderMode
-	{
-		WORLD,
-		UI,
-	};
 
 	class GpuRenderer
 	{
@@ -62,7 +51,7 @@ namespace graphics
 
 		void render();
 
-		std::shared_ptr<GpuTexture> loadTexture(const Surface& surface, const std::string& sampler_name);
+		std::shared_ptr<GpuTextureSDL> loadTexture(const Surface& surface, const std::string& sampler_name);
 		void createNewSampler(const std::string& name, SDL_GPUFilter filter, SDL_GPUSamplerMipmapMode mipmap, SDL_GPUSamplerAddressMode address_mode, std::optional<int> anisotropy = std::nullopt);
 
 		//Getters
@@ -85,7 +74,7 @@ namespace graphics
 		void renderRectangle(float x, float y, float w, float h, RenderType render_type, const Color& color);
 		void renderSprite(const Sprite& sprite, float x, float y, float w, float h, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = graphics::Color::WHITE);
 		void renderText(const Text& text, float x, float y, float w, float h);
-		void renderTexture(std::shared_ptr<GpuTexture> texture, const std::optional<SDL_FRect>& source, const std::optional<SDL_FRect>& destination, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const  Color& color = graphics::Color::WHITE, float
+		void renderTexture(std::shared_ptr<GpuTextureSDL> texture, const std::optional<SDL_FRect>& source, const std::optional<SDL_FRect>& destination, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const  Color& color = graphics::Color::WHITE, float
 		                   z = 0.0f);
 		void renderTileMap(std::shared_ptr<TileMap> tilemap, float x, float y);
 	private:

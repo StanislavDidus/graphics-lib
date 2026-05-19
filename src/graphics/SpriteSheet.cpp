@@ -18,7 +18,7 @@ namespace graphics
 		}
 	}
 
-	std::shared_ptr<GpuTexture> SpriteSheet::getTexture() const
+	std::shared_ptr<GpuTextureSDL> SpriteSheet::getTexture() const
 	{
 		return texture;
 	}

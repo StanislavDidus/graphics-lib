@@ -5,7 +5,7 @@
 #include <variant>
 
 #include <graphics/TileMap.hpp>
-#include <graphics/GpuTexture.hpp>
+#include <graphics/GpuTextureSDL.hpp>
 #include "glm/vec4.hpp"
 #include "glm/vec2.hpp"
 
@@ -58,7 +58,7 @@ namespace graphics
 	};
 	struct alignas(16) GpuSprite
 	{
-		std::shared_ptr<GpuTexture> texture;
+		std::shared_ptr<GpuTextureSDL> texture;
 		SpriteData data;
 	};
 

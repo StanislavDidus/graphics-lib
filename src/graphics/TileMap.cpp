@@ -6,7 +6,7 @@
 #include <graphics/GpuTransferBuffer.hpp>
 #include <graphics/GpuRenderer.hpp>
 
-graphics::TileMap::TileMap(std::shared_ptr<SDL_GPUDevice> device, std::shared_ptr<GpuTexture> texture, int world_width_tiles, int world_height_tiles,
+graphics::TileMap::TileMap(std::shared_ptr<SDL_GPUDevice> device, std::shared_ptr<GpuTextureSDL> texture, int world_width_tiles, int world_height_tiles,
                            int tile_width_world, int tile_height_world, int chunk_width_tiles, int chunk_height_tiles)
 {
 	int world_width_chunks = world_width_tiles / chunk_width_tiles;
@@ -31,7 +31,7 @@ graphics::TileMap::TileMap(std::shared_ptr<SDL_GPUDevice> device, std::shared_pt
 	}
 }
 
-std::shared_ptr<graphics::GpuTexture> graphics::TileMap::getTexture() const
+std::shared_ptr<graphics::GpuTextureSDL> graphics::TileMap::getTexture() const
 {
 	return texture;
 }

@@ -80,9 +80,4 @@ namespace graphics
 		}
 
 	}
-
-	SDL_Surface* Surface::getSurface() const
-	{
-		return surface;
-	}
 } // namespace graphics

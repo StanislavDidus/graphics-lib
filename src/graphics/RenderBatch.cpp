@@ -2,7 +2,7 @@
 #include <graphics/RenderBatch.hpp>
 #include <graphics/exception.hpp>
 
-#include "../extern/SDL/src/video/khronos/vulkan/vulkan_core.h"
+#include "../../extern/SDL/src/video/khronos/vulkan/vulkan_core.h"
 
 namespace graphics
 {

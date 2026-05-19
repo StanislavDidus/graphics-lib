@@ -22,7 +22,7 @@ namespace graphics
 		SpriteSheet& operator=(const SpriteSheet& other) = delete;
 		SpriteSheet& operator=(SpriteSheet&& other) noexcept = delete;
 
-		std::shared_ptr<GpuTexture> getTexture() const;
+		std::shared_ptr<GpuTextureSDL> getTexture() const;
 
 		template<typename Self>
 		auto&& getSprite(this Self&& self, const std::string& name);
@@ -33,7 +33,7 @@ namespace graphics
 		auto&& operator[](this Self&& self, size_t index);
 
 	private:
-		std::shared_ptr<GpuTexture> texture = nullptr;
+		std::shared_ptr<GpuTextureSDL> texture = nullptr;
 
 		std::vector<Sprite> sprites;
 		std::unordered_map<std::string, size_t> nameToIndex;

@@ -1,20 +1,32 @@
-#SDL
-set(SDL_X11_XFIXES OFF CACHE BOOL "" FORCE)
-set(SDL_SHARED OFF CACHE BOOL "Don't build SDL shared" FORCE)
-set(SDL_STATIC ON CACHE BOOL "Build SDL static" FORCE)
-add_subdirectory(SDL EXCLUDE_FROM_ALL)
+cmake_minimum_required(VERSION 3.15...4.2.1)
 
-#SDL_ttf
 set(SDLTTF_VENDORED ON)
-add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)
-
-#SDL_shadercross
-set(SDLSHADERCROSS_SHARED OFF CACHE BOOL "Don't build SDL_shadecross shared" FORCE)
-set(SDLSHADERCROSS_STATIC ON CACHE BOOL "Build SDL_shadecross static" FORCE)
 set(SDLSHADERCROSS_SPIRVCROSS_SHARED OFF CACHE BOOL "Build Spirvcross shared" FORCE)
-set(SDLSHADERCROSS_DXC ON CACHE BOOL "Enable DXC compilation" FORCE)
 set(SDLSHADERCROSS_VENDORED ON)
-add_subdirectory(SDL_shadercross EXCLUDE_FROM_ALL)
 
-#glm
+add_subdirectory(SDL EXCLUDE_FROM_ALL)
+add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)
+add_subdirectory(SDL_shadercross EXCLUDE_FROM_ALL)
 add_subdirectory(glm EXCLUDE_FROM_ALL)
+
+set(SDL_TARGETS
+        SDL_uclibc SDL3-static SDL3-shared
+        SDL3_ttf SDL3_ttf-static
+        freetype harfbuzz plutosvg plutovg
+        SDL3_shadercross SDL3_shadercross-static
+)
+
+set(GLM_TARGETS
+        glm glm_shared
+)
+
+macro(set_targets_folder TARGETS FOLDER)
+    foreach (target ${TARGETS})
+        if(TARGET ${target})
+            set_target_properties(${target} PROPERTIES FOLDER ${FOLDER})
+        endif ()
+    endforeach ()
+endmacro()
+
+set_targets_folder("${GLM_TARGETS}" "extern/glm")
+set_targets_folder("${SDL_TARGETS}" "extern/SDL")

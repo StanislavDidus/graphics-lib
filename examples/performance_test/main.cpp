@@ -28,11 +28,11 @@ int main()
     GpuRenderer renderer{window};
     
     Surface surface{"assets/ice-cream.bmp"};
-    std::shared_ptr<GpuTexture> texture = renderer.loadTexture(surface, "PointClamp");
+    std::shared_ptr<GpuTextureSDL> texture = renderer.loadTexture(surface, "PointClamp");
     Sprite sprite{texture, SDL_FRect{0.0f, 0.0f, 1920.0f, 1920.0f}};
     
     Surface surface1{"assets/sky.png"};
-    std::shared_ptr<GpuTexture> texture1 = renderer.loadTexture(surface1, "PointClamp");
+    std::shared_ptr<GpuTextureSDL> texture1 = renderer.loadTexture(surface1, "PointClamp");
     Sprite sprite1{texture1, SDL_FRect{0.0f, 0.0f, 64.0f, 80.0f}};
     
     // Test

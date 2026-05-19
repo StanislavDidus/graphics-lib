@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GpuBuffer.hpp"
-#include "GpuTexture.hpp"
+#include "GpuTextureSDL.hpp"
 #include <glm/vec4.hpp>
 
 namespace graphics
@@ -16,7 +16,7 @@ namespace graphics
 	class Chunk
 	{
 	public:
-		Chunk(std::shared_ptr<SDL_GPUDevice> device, std::shared_ptr<GpuTexture> texture,
+		Chunk(std::shared_ptr<SDL_GPUDevice> device, std::shared_ptr<GpuTextureSDL> texture,
 			int width_tiles, int height_tiles,
 			float tile_width_world, float tile_height_world,
 			float offset_x, float offset_y,
@@ -32,7 +32,7 @@ namespace graphics
 		
 		// Getters
 		const SDL_FRect& getRect() const;
-		std::shared_ptr<GpuTexture> getTexture() const;
+		std::shared_ptr<GpuTextureSDL> getTexture() const;
 		int getIndex() const;
 		int getSize() const;
 		int getWidth() const;
@@ -46,7 +46,7 @@ namespace graphics
 		SDL_FRect rect;
 		
 		std::shared_ptr<SDL_GPUDevice> device;
-		std::shared_ptr<GpuTexture> texture;
+		std::shared_ptr<GpuTextureSDL> texture;
 		int width_tiles, height_tiles;
 		int size;
 		int index;

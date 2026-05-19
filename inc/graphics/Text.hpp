@@ -3,7 +3,7 @@
 #include <string>
 #include "Font.hpp"
 #include "Color.hpp"
-#include "GpuTexture.hpp"
+#include "GpuTextureSDL.hpp"
 #include "glm/vec2.hpp"
 
 struct SDL_Texture;
@@ -25,7 +25,7 @@ namespace graphics
 		Text& operator=(Text&& other) noexcept = delete;
 
 		//Getters
-		std::shared_ptr<GpuTexture> getTexture() const;
+		std::shared_ptr<GpuTextureSDL> getTexture() const;
 		const std::string& getText() const;
 		glm::vec2 getTextSize(const glm::vec2& scale) const;
 
@@ -40,7 +40,7 @@ namespace graphics
 		void generateTextTexture(graphics::GpuRenderer& renderer);
 
 		std::string text;
-		std::shared_ptr<GpuTexture> texture = nullptr;
+		std::shared_ptr<GpuTextureSDL> texture = nullptr;
 		std::shared_ptr<Font> font;
 		Color color;
 		std::optional<int> wrapped_width = std::nullopt;
