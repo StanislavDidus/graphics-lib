@@ -20,6 +20,20 @@ namespace graphics
 			SDL_DestroySurface(surface);
 	}
 
+	Surface::Surface(const Surface &other)
+	{
+		this->surface = SDL_DuplicateSurface(other.surface);
+	}
+
+	Surface & Surface::operator=(const Surface &other)
+	{
+		if (this == &other) return *this;
+
+		this->surface = SDL_DuplicateSurface(other.surface);
+
+		return *this;
+	}
+
 	void Surface::loadImage(const std::filesystem::path& path)
 	{
 		if (path.extension() == ".png")

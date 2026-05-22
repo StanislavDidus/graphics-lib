@@ -88,7 +88,7 @@ int main()
         //renderer.renderSprite(sprite, 0.0f, 0.0f, 200.0f, 200.0f);
         //drawScaledSprite(renderer, sprite1, 250.0f, 300.0f, 50.0f, 50.0f);
 
-        renderer.drawRectangle(0.0f, 0.0f, 100.0f, 100.0f, Color::RED, RenderType::FILL);
+        renderer.drawRectangle(0.0f, 0.0f, 100.0f, 100.0f, Color::RED, RenderType::NONE);
         renderer.drawSprite(sprite, 200.0f, 100.0f, 150.0f, 200.0f);
         renderer.draw();
         

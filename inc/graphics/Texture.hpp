@@ -19,9 +19,9 @@ namespace graphics
         virtual ~Texture() = default;
 
         virtual int width() const = 0;
-        virtual int height() const = 0;;
-        virtual int pitch() const = 0;;
-        virtual const void* pixels() const = 0;;
+        virtual int height() const = 0;
+        virtual int pitch() const = 0;
+        virtual const void* pixels() const = 0;
     private:
     };
 }

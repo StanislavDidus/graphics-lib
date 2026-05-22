@@ -11,7 +11,9 @@ namespace graphics
 	class Sprite
 	{
 	public:
-		explicit Sprite(std::shared_ptr<Texture> texture = nullptr, const SDL_FRect& rect = {});
+		Sprite() = default;
+		Sprite(std::shared_ptr<Texture> texture);
+		Sprite(std::shared_ptr<Texture> texture, const SDL_FRect& rect);
 
 		//Getters
 		const SDL_FRect& getRect() const;

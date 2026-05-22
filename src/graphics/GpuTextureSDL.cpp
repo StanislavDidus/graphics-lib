@@ -12,7 +12,7 @@ namespace graphics
 		, sampler{sampler}
 		, m_surface{surface}
 	{
-		SDL_Surface* image_data = surface.get();
+		SDL_Surface* image_data = m_surface.get();
 
 		SDL_GPUTextureCreateInfo texture_create_info = {};
 		texture_create_info.type = SDL_GPU_TEXTURETYPE_2D;

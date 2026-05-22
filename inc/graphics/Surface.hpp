@@ -17,6 +17,9 @@ namespace graphics
 		Surface(std::shared_ptr<Font> font, const std::string& text, Color color = Color::BLACK, std::optional<int> wrapped_width = std::nullopt);
 		~Surface();
 
+		Surface(const Surface &other);
+		Surface& operator=(const Surface &other);
+
 		void loadImage(const std::filesystem::path& path);
 		void loadText(std::shared_ptr<Font> font, const std::string& text, Color color, std::optional<int> wrapped_length);
 

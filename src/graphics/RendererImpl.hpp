@@ -11,7 +11,7 @@
 
 namespace graphics
 {
-    class Color;
+    struct Color;
 
     class RendererImpl
     {
