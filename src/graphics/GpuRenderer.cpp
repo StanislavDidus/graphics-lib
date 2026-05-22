@@ -349,7 +349,7 @@ void graphics::GpuRenderer::renderRectangle(float x, float y, float w, float h, 
 
 void graphics::GpuRenderer::renderSprite(const Sprite& sprite, float x, float y, float w, float h, float angle, SDL_FlipMode flip, const Color& color)
 {
-	renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ x,y,w,h }, angle, flip, color);
+	//renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ x,y,w,h }, angle, flip, color);
 }
 
 void graphics::GpuRenderer::renderText(const Text& text, float x, float y, float w, float h)

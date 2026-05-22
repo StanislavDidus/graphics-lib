@@ -7,10 +7,10 @@
 
 namespace graphics
 {
-    TextureSDL::TextureSDL(SDL_Renderer &renderer, const Surface &surface)
+    TextureSDL::TextureSDL(SDLRenderer &renderer, const Surface &surface)
         : m_surface{surface}
     {
-        m_texture = SDL_CreateTextureFromSurface(&renderer, surface.get());
+        m_texture = SDL_CreateTextureFromSurface(renderer.get(), surface.get());
     }
 
     graphics::TextureSDL::~TextureSDL()

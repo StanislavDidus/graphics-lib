@@ -1,8 +1,15 @@
 #include "RendererImpl.hpp"
 
 #include "GPURenderer/RendererImplGPU.hpp"
+#include "SDLRenderer/RendererImplSDL.hpp"
 
+//#define __EMSCRIPTEN__
+
+#ifndef __EMSCRIPTEN__
 using RendererType = graphics::RendererImplGPU;
+#else
+using RendererType = graphics::RendererImplSDL;
+#endif
 
 namespace graphics
 {

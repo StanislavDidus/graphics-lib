@@ -4,6 +4,8 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_shadercross/SDL_shadercross.h>
 
+#include "graphics/Renderer.hpp"
+
 #include <graphics/exception.hpp>
 #include <graphics/Window.hpp>
 #include <graphics/GpuRenderer.hpp>

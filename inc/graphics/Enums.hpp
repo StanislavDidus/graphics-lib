@@ -13,4 +13,17 @@ namespace graphics
         WORLD,
         UI,
     };
+
+    enum class TextureScaleMode
+    {
+        NEAREST,
+        LINEAR,
+        ANISOTROPIC,
+    };
+
+    enum class TextureAddressMode
+    {
+        CLAMP,
+        WRAP,
+    };
 }

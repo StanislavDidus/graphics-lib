@@ -4,21 +4,31 @@
 
 #include "glm/vec2.hpp"
 #include "Enums.hpp"
+#include "Sprite.hpp"
+#include "Surface.hpp"
+#include "Texture.hpp"
 #include "Window.hpp"
 
 namespace graphics
 {
-    class Color;
+    struct Color;
     class RendererImpl;
 
     class Renderer
     {
     public:
-        Renderer() = default;
+        Renderer();
         Renderer(Window& window);
-        ~Renderer() = default;
+        ~Renderer();
 
         void create(Window& window);
+
+        std::shared_ptr<Texture> loadTexture
+            (
+                const Surface &surface,
+                TextureScaleMode scale_mode = TextureScaleMode::LINEAR,
+                TextureAddressMode address_mode = TextureAddressMode::CLAMP
+            );
 
         // Getters
         [[nodiscard]] float getZoom() const;
@@ -30,8 +40,9 @@ namespace graphics
         void setRenderMove(RenderMode render_mode);
 
         void drawRectangle(float x, float y, float width, float height, const Color& color, RenderType render_type);
+        void drawSprite(const Sprite& sprite, float x, float y, float width, float height, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = Color::WHITE);
 
-        void render();
+        void draw();
     private:
         std::unique_ptr<RendererImpl> m_impl;
     };

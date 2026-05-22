@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "../RendererImpl.hpp"
+#include <graphics/RendererImpl.hpp>
 #include <SDL3/SDL_gpu.h>
 
 #include "glm/fwd.hpp"
@@ -11,10 +11,14 @@
 #include "graphics/Vertex.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
+#include <map>
+
 #include "glm/gtx/transform.hpp"
 
 namespace graphics
 {
+    using TextureSampler = std::pair<TextureScaleMode, TextureAddressMode>;
+
     class RendererImplGPU : public RendererImpl
     {
     public:
@@ -24,8 +28,12 @@ namespace graphics
 
         void create(Window& window);
 
-
-        void createNewSampler(const std::string& name, SDL_GPUFilter filter, SDL_GPUSamplerMipmapMode mipmap, SDL_GPUSamplerAddressMode address_mode, std::optional<int> anisotropy = std::nullopt);
+        std::shared_ptr<Texture> loadTexture
+            (
+                const Surface &surface,
+                TextureScaleMode scale_mode = TextureScaleMode::LINEAR,
+                TextureAddressMode address_mode = TextureAddressMode::CLAMP
+            ) override;
 
         // Getter
         [[nodiscard]] float getZoom() const override;
@@ -34,14 +42,16 @@ namespace graphics
         // Setter
         void setZoom(float zoom) override;
         void setView(const glm::vec2 &view) override;
-        void setRenderMove(RenderMode render_mode) override;
+        void setRenderMode(RenderMode render_mode) override;
 
         void drawRectangle(float x, float y, float width, float height, const Color &color, RenderType render_type) override;
+        void drawSprite(const Sprite& sprite, float x, float y, float width, float height, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = Color::WHITE) override;
 
         void draw() override;
 
     private:
         void initSamplers();
+        void createNewSampler(TextureScaleMode scale_mode, TextureAddressMode address_mode);
 
         SDL_FRect getCameraRect() const;
 
@@ -76,6 +86,6 @@ namespace graphics
         std::unique_ptr<GpuShader> texture_vertex_shader;
         std::unique_ptr<GpuShader> texture_fragment_shader;
 
-        std::unordered_map<std::string, std::shared_ptr<GpuSampler>> samplers;
+        std::map<TextureSampler, std::shared_ptr<GpuSampler>> samplers;
     };
 }

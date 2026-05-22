@@ -2,8 +2,8 @@
 
 #include <graphics/graphics.hpp>
 
-#include "glm/gtc/random.hpp"
-#include <graphics/SpriteSheet.hpp>
+//#include "glm/gtc/random.hpp"
+//#include <graphics/SpriteSheet.hpp>
 
 using namespace graphics;
 
@@ -20,22 +20,28 @@ int main()
 {
     std::cout << "Program started." << std::endl;
     
-    SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
+    //SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
     
     init();
     
     Window window{"Performance Test Example", 960, 540, SDL_WINDOW_RESIZABLE};
-    GpuRenderer renderer{window};
+    //GpuRenderer renderer{window};
+    Renderer renderer{window};
     
+    /*
     Surface surface{"assets/ice-cream.bmp"};
     std::shared_ptr<GpuTextureSDL> texture = renderer.loadTexture(surface, "PointClamp");
     Sprite sprite{texture, SDL_FRect{0.0f, 0.0f, 1920.0f, 1920.0f}};
-    
+    */
+
+    /*
     Surface surface1{"assets/sky.png"};
     std::shared_ptr<GpuTextureSDL> texture1 = renderer.loadTexture(surface1, "PointClamp");
     Sprite sprite1{texture1, SDL_FRect{0.0f, 0.0f, 64.0f, 80.0f}};
-    
+    */
+
     // Test
+    /*
     int number_objects = 10'000;
     std::vector<glm::vec2> positions;
     positions.reserve(number_objects);
@@ -43,7 +49,11 @@ int main()
     {
         positions.emplace_back(glm::linearRand(0.0f,910.0f), glm::linearRand(0.0f, 490.0f));
     }
-    
+    */
+
+    auto texture = renderer.loadTexture(Surface{"assets/ice-cream.bmp"});
+    auto sprite = Sprite{texture};
+
     double dt  = 0.0;
     int tick = 0;
     SDL_Event event{};
@@ -66,8 +76,8 @@ int main()
         }
         
         
-        renderer.renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ 0.0f, 0.0f, 100.0f, 100.0f }, 0.0f, SDL_FLIP_NONE, Color::WHITE, 0.0f);
-        renderer.renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ 50.0f, 50.0f, 100.0f, 100.0f }, 0.0f, SDL_FLIP_NONE, Color::WHITE, 1.0f);
+        //renderer.renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ 0.0f, 0.0f, 100.0f, 100.0f }, 0.0f, SDL_FLIP_NONE, Color::WHITE, 0.0f);
+        //renderer.renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ 50.0f, 50.0f, 100.0f, 100.0f }, 0.0f, SDL_FLIP_NONE, Color::WHITE, 1.0f);
         
         //renderer.renderRectangle(0.0f, 0.0f, 50.0f, 50.0f, RenderType::NONE, Color::RED);
         /*
@@ -77,8 +87,10 @@ int main()
         */
         //renderer.renderSprite(sprite, 0.0f, 0.0f, 200.0f, 200.0f);
         //drawScaledSprite(renderer, sprite1, 250.0f, 300.0f, 50.0f, 50.0f);
-        
-        renderer.render();
+
+        renderer.drawRectangle(0.0f, 0.0f, 100.0f, 100.0f, Color::RED, RenderType::FILL);
+        renderer.drawSprite(sprite, 200.0f, 100.0f, 150.0f, 200.0f);
+        renderer.draw();
         
         double end_time = SDL_GetTicks();
         dt = (end_time - start_time) / 1000.0;

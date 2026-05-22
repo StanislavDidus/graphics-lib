@@ -9,6 +9,8 @@ set(GRAPHICS_VERSION_PATCH 1)
 set(GRAPHICS_VERSION
 	${GRAPHICS_VERSION_MAJOR}.${GRAPHICS_VERSION_MINOR}.${GRAPHICS_VERSION_PATCH})
 
+add_compile_definitions(WEB)
+
 # Use solution folders.
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -40,10 +42,13 @@ set(SOURCE_FILES
     "src/graphics/TileMap.cpp"
     "src/graphics/RenderBatch.cpp"
     "src/graphics/Chunk.cpp"
-        src/graphics/RendererImpl.cpp
-		src/graphics/Renderer.cpp
-		src/graphics/GPURenderer/RendererImplGPU.cpp
-		src/graphics/TextureSDL.cpp
+	"src/graphics/RendererImpl.cpp"
+	"src/graphics/Renderer.cpp"
+	"src/graphics/GPURenderer/RendererImplGPU.cpp"
+	"src/graphics/TextureSDL.cpp"
+	"src/graphics/GpuTextureSDL.cpp"
+		src/graphics/SDLRenderer/RendererImplSDL.cpp
+		src/graphics/SDLRenderer/SDLRenderer.cpp
 )
 
 set(HEADER_FILES
@@ -74,8 +79,10 @@ set(HEADER_FILES
 		"inc/graphics/Enums.hpp"
 		"src/graphics/RendererImpl.hpp"
 		"src/graphics/GPURenderer/RendererImplGPU.hpp"
-		inc/graphics/Texture.hpp
-		inc/graphics/TextureSDL.hpp
+		"inc/graphics/Texture.hpp"
+		"inc/graphics/TextureSDL.hpp"
+		src/graphics/SDLRenderer/RendererImplSDL.hpp
+		src/graphics/SDLRenderer/SDLRenderer.hpp
 )
 
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})

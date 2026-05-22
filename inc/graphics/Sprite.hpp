@@ -11,18 +11,18 @@ namespace graphics
 	class Sprite
 	{
 	public:
-		explicit Sprite(std::shared_ptr<GpuTextureSDL> texture = nullptr, const SDL_FRect& rect = {});
+		explicit Sprite(std::shared_ptr<Texture> texture = nullptr, const SDL_FRect& rect = {});
 
 		//Getters
 		const SDL_FRect& getRect() const;
-		std::shared_ptr<GpuTextureSDL> getTexture() const;
+		std::shared_ptr<Texture> getTexture() const;
 		const Color& getColor() const;
 
 		//Setters
 		void setColor(const Color& color);
 
 	private:
-		std::shared_ptr<GpuTextureSDL> texture = nullptr;
+		std::shared_ptr<Texture> texture = nullptr;
 		SDL_FRect rect;
 
 		Color color = Color::WHITE;
