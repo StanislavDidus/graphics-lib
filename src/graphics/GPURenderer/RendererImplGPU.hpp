@@ -14,6 +14,7 @@
 #include <map>
 
 #include "glm/gtx/transform.hpp"
+#include "graphics/TextEngine.hpp"
 
 namespace graphics
 {
@@ -46,6 +47,7 @@ namespace graphics
 
         void drawRectangle(float x, float y, float width, float height, const Color &color, RenderType render_type) override;
         void drawSprite(const Sprite& sprite, float x, float y, float width, float height, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = Color::WHITE) override;
+        void drawText(const Text& text, float x, float y, float width, float height, float angle, SDL_FlipMode flip) override;
 
         void draw() override;
 
@@ -62,6 +64,9 @@ namespace graphics
 
         std::vector<DrawObject> draw_buffer;
         std::vector<DrawObject> ui_draw_buffer;
+
+        // Text
+        std::unique_ptr<TextEngine> text_engine;
 
         // <Render Parameters> //
         glm::vec2 view = {0.0f, 0.0f};

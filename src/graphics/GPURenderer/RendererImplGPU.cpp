@@ -49,6 +49,9 @@ namespace graphics
 		// Disable VSync
 		SDL_SetGPUSwapchainParameters(device.get(), window.get(), SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_IMMEDIATE);
 
+    	// Init Text Engine
+    	text_engine = std::make_unique<TextEngine>(device);
+
 		// Init vertex shader
 		tilemap_vertex_shader = std::make_unique<GpuShader>(device, "shaders/TileMap.vert.hlsl", 0, 2, 2, 0);
 		vertex_shader = std::make_unique<GpuShader>(device, "shaders/VertexPositionMatrix.vert.hlsl", 0, 1, 0, 0);
@@ -217,6 +220,46 @@ namespace graphics
     	SDL_FRect src = sprite.getRect();
     	SDL_FRect dst{ x, y, width, height };
     	std::shared_ptr<GpuTextureSDL> texture = std::static_pointer_cast<GpuTextureSDL>(sprite.getTexture());
+
+    	if (render_mode == RenderMode::WORLD)
+    	{
+    		draw_buffer.emplace_back(
+				std::in_place_type<GpuSprite>,
+				texture,
+				SpriteData
+				{
+				.pos_rot{dst.x, dst.y, 0.0f, angle},
+				.size{dst.w, dst.h, 0.0f, 0.0f},
+				.uv{src.x, src.y, src.w, src.h},
+				.color{color.r, color.g, color.b, color.a},
+				.flip{static_cast<float>(static_cast<unsigned int>(flip)), 0.0f, 0.0f, 0.0f}
+				}
+			);
+    	}
+    	else if (render_mode == RenderMode::UI)
+    	{
+    		ui_draw_buffer.emplace_back(
+				std::in_place_type<GpuSprite>,
+				texture,
+				SpriteData
+				{
+				.pos_rot{dst.x, dst.y, 0.0f, angle},
+				.size{dst.w, dst.h, 0.0f, 0.0f},
+				.uv{src.x, src.y, src.w, src.h},
+				.color{color.r, color.g, color.b, color.a},
+				.flip{static_cast<float>(static_cast<unsigned int>(flip)), 0.0f, 0.0f, 0.0f}
+				}
+			);
+    	}
+    }
+
+    void RendererImplGPU::drawText(const Text& text, float x, float y, float width, float height, float angle,
+                                   SDL_FlipMode flip)
+    {
+    	SDL_FRect src = {0.0f, 0.0f, static_cast<float>(text.getTexture()->width()), static_cast<float>(text.getTexture()->height())};
+    	SDL_FRect dst{ x, y, width, height };
+    	std::shared_ptr<GpuTextureSDL> texture = std::static_pointer_cast<GpuTextureSDL>(text.getTexture());
+    	const Color color = Color::WHITE;
 
     	if (render_mode == RenderMode::WORLD)
     	{

@@ -15,7 +15,7 @@ namespace graphics
 		TileMap(std::shared_ptr<SDL_GPUDevice> device, std::shared_ptr<GpuTextureSDL> texture,
 			int world_width_tiles, int world_height_tiles,
 			int tile_width_world, int tile_height_world,
-			int chunk_width_tile, int chunk_height_tile);
+			int chunk_width_tile = 1, int chunk_height_tile = 1);
 		~TileMap() = default;
 
 		// Getters

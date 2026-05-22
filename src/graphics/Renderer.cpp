@@ -64,6 +64,12 @@ namespace graphics
         m_impl->drawSprite(sprite, x, y, width, height, angle, flip, color);
     }
 
+    void Renderer::drawText(const Text& text, float x, float y, float width, float height, float angle,
+        SDL_FlipMode flip_mode)
+    {
+        m_impl->drawText(text, x, y, width, height, angle, flip_mode);
+    }
+
     void Renderer::draw()
     {
         m_impl->draw();

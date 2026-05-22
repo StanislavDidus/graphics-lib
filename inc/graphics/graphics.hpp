@@ -9,6 +9,7 @@
 #include <graphics/exception.hpp>
 #include <graphics/Window.hpp>
 #include <graphics/GpuRenderer.hpp>
+#include "Text.hpp"
 
 #include <format>
 

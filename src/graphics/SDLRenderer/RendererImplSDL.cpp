@@ -92,6 +92,15 @@ namespace graphics
         // TODO: Apply texture address mode before drawing it
     }
 
+    void RendererImplSDL::drawText(const Text& text, float x, float y, float width, float height, float angle,
+                                   SDL_FlipMode flip)
+    {
+        SDL_FRect src{0.0f, 0.0f, static_cast<float>(text.getTexture()->width()), static_cast<float>(text.getTexture()->height())};
+        SDL_FRect dst{x, y, width, height};
+        SDL_Texture* texture = std::static_pointer_cast<TextureSDL>(text.getTexture())->get();
+        SDL_RenderTexture(renderer.get(), texture, &src, &dst);
+    }
+
     void RendererImplSDL::draw()
     {
         SDL_RenderPresent(renderer.get());

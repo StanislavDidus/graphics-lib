@@ -54,6 +54,9 @@ int main()
     auto texture = renderer.loadTexture(Surface{"assets/ice-cream.bmp"});
     auto sprite = Sprite{texture};
 
+    std::shared_ptr<Font> font = std::make_shared<Font>("assets/Fonts/main.ttf", 32);
+    //Text text{renderer, font, "Portable text.", Color::WHITE};
+
     double dt  = 0.0;
     int tick = 0;
     SDL_Event event{};
@@ -90,6 +93,7 @@ int main()
 
         renderer.drawRectangle(0.0f, 0.0f, 100.0f, 100.0f, Color::RED, RenderType::NONE);
         renderer.drawSprite(sprite, 200.0f, 100.0f, 150.0f, 200.0f);
+        //renderer.drawText(text, 500.0f, 250.0f, 300.0f, 100.0f);
         renderer.draw();
         
         double end_time = SDL_GetTicks();

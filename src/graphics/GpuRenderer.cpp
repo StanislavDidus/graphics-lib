@@ -354,7 +354,7 @@ void graphics::GpuRenderer::renderSprite(const Sprite& sprite, float x, float y,
 
 void graphics::GpuRenderer::renderText(const Text& text, float x, float y, float w, float h)
 {
-	renderTexture(text.getTexture(), std::nullopt, SDL_FRect{x, y, w, h});
+	//renderTexture(text.getTexture(), std::nullopt, SDL_FRect{x, y, w, h});
 }
 
 void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTextureSDL> texture, const std::optional<SDL_FRect>& source,

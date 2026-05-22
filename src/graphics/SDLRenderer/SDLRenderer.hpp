@@ -14,6 +14,11 @@ namespace graphics
         SDLRenderer(Window& window);
         ~SDLRenderer();
 
+        SDLRenderer(const SDLRenderer &other) = delete;
+        SDLRenderer(SDLRenderer &&other) noexcept = delete;
+        SDLRenderer& operator=(const SDLRenderer& other) = delete;
+        SDLRenderer& operator=(SDLRenderer&& other) noexcept = delete;
+
         void create(Window& window);
 
         glm::ivec2 getWindowSize() const;

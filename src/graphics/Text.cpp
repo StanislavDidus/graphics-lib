@@ -3,20 +3,22 @@
 #include <graphics/Text.hpp>
 
 #include <graphics/Color.hpp>
-#include <graphics/GpuRenderer.hpp>
+#include <graphics/Renderer.hpp>
 #include <graphics/Surface.hpp>
+
+#include "graphics/TextEngine.hpp"
 
 namespace graphics
 {
-
-	Text::Text(GpuRenderer& renderer, std::shared_ptr<Font> font, const std::string& text, Color color, std::optional<int> wrapped_width) : text(text), font(font), color(color), wrapped_width(wrapped_width)
+	Text::Text(TextEngine& text_engine, std::shared_ptr<Font> font, const std::string& text, Color color)
 	{
-		generateTextTexture(renderer);
+		m_text = TTF_CreateText(text_engine.get(), font->getFont(), text.c_str(), text.length());
+		TTF_SetTextColor(m_text, color.r, color.g, color.b, color.a);
 	}
 
-	std::shared_ptr<GpuTextureSDL> Text::getTexture() const
+	std::shared_ptr<Texture> Text::getTexture() const
 	{
-		return texture;
+		return nullptr;
 	}
 
 	const std::string& Text::getText() const
@@ -54,19 +56,19 @@ namespace graphics
 		is_dirty = true;
 	}
 
-	void Text::updateText(graphics::GpuRenderer& renderer)
+	void Text::updateText(graphics::Renderer& renderer)
 	{
 		if (is_dirty)
 		{
-			generateTextTexture(renderer);
+			//generateTextTexture(renderer);
 			is_dirty = false;
 		}
 	}
 
-	void Text::generateTextTexture(graphics::GpuRenderer& renderer)
+	void Text::generateTextTexture(graphics::Renderer& renderer)
 	{
 		Surface surface{ font, text, color, wrapped_width };
 
-		texture = renderer.loadTexture(surface, "PointClamp");
+		//texture = renderer.loadTexture(surface, TextureScaleMode::LINEAR);
 	}
 } // namespace graphics

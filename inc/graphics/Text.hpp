@@ -10,13 +10,14 @@ struct SDL_Texture;
 
 namespace graphics
 {
-	class GpuRenderer;
+	class TextEngine;
+	class Renderer;
 	class Surface;
 
 	class  Text
 	{
 	public:
-		Text(graphics::GpuRenderer& renderer, std::shared_ptr<Font> font, const std::string& text, Color color = Color::BLACK, std::optional<int> wrapped_width = std::nullopt);
+		Text(TextEngine& text_engine, std::shared_ptr<Font> font, const std::string& text, Color color = Color::WHITE);
 		~Text() = default;
 
 		Text(const Text& other) = delete;
@@ -25,7 +26,7 @@ namespace graphics
 		Text& operator=(Text&& other) noexcept = delete;
 
 		//Getters
-		std::shared_ptr<GpuTextureSDL> getTexture() const;
+		std::shared_ptr<Texture> getTexture() const;
 		const std::string& getText() const;
 		glm::vec2 getTextSize(const glm::vec2& scale) const;
 
@@ -35,17 +36,19 @@ namespace graphics
 		void setText(const std::string& text);
 		void setWrappedWidth(int wrapped_width);
 
-		void updateText(graphics::GpuRenderer& renderer);
+		void updateText(graphics::Renderer& renderer);
 	private:
-		void generateTextTexture(graphics::GpuRenderer& renderer);
+		void generateTextTexture(graphics::Renderer& renderer);
 
 		std::string text;
-		std::shared_ptr<GpuTextureSDL> texture = nullptr;
+		std::shared_ptr<Texture> texture = nullptr;
 		std::shared_ptr<Font> font;
 		Color color;
 		std::optional<int> wrapped_width = std::nullopt;
 
 		bool is_dirty = false;
+
+		TTF_Text* m_text = nullptr;
 	};
 
 } // namespace graphics
