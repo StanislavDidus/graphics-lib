@@ -138,6 +138,13 @@ namespace graphics
 		return texture;
     }
 
+    void RendererImplGPU::shutdown()
+    {
+		draw_buffer.clear();
+    	ui_draw_buffer.clear();
+    	SDL_WaitForGPUIdle(device.get());
+    }
+
     float RendererImplGPU::getZoom() const
     {
     	return zoom;
@@ -225,7 +232,8 @@ namespace graphics
     	{
     		draw_buffer.emplace_back(
 				std::in_place_type<GpuSprite>,
-				texture,
+				texture->get(),
+				texture->getSampler()->get(),
 				SpriteData
 				{
 				.pos_rot{dst.x, dst.y, 0.0f, angle},
@@ -240,7 +248,8 @@ namespace graphics
     	{
     		ui_draw_buffer.emplace_back(
 				std::in_place_type<GpuSprite>,
-				texture,
+				texture->get(),
+				texture->getSampler()->get(),
 				SpriteData
 				{
 				.pos_rot{dst.x, dst.y, 0.0f, angle},
@@ -253,44 +262,95 @@ namespace graphics
     	}
     }
 
-    void RendererImplGPU::drawText(const Text& text, float x, float y, float width, float height, float angle,
-                                   SDL_FlipMode flip)
+    void RendererImplGPU::drawText(const Text& text, float x, float y)
     {
-    	SDL_FRect src = {0.0f, 0.0f, static_cast<float>(text.getTexture()->width()), static_cast<float>(text.getTexture()->height())};
-    	SDL_FRect dst{ x, y, width, height };
-    	std::shared_ptr<GpuTextureSDL> texture = std::static_pointer_cast<GpuTextureSDL>(text.getTexture());
-    	const Color color = Color::WHITE;
+    	TTF_GPUAtlasDrawSequence* sequence = text.getGPUDrawData();
+		for (; sequence; sequence = sequence->next)
+		{
+			for (int gliph_num = 0; gliph_num < sequence->num_vertices / 4; ++gliph_num)
+			{
+				int gliph_base = gliph_num * 4;
+				float minU = sequence->uv[gliph_base].x;
+				float minV = sequence->uv[gliph_base].y;
+				float maxU = sequence->uv[gliph_base].x;
+				float maxV = sequence->uv[gliph_base].y;
 
-    	if (render_mode == RenderMode::WORLD)
-    	{
-    		draw_buffer.emplace_back(
-				std::in_place_type<GpuSprite>,
-				texture,
-				SpriteData
+				for (int i = 1; i < 4; ++i)
 				{
-				.pos_rot{dst.x, dst.y, 0.0f, angle},
-				.size{dst.w, dst.h, 0.0f, 0.0f},
-				.uv{src.x, src.y, src.w, src.h},
-				.color{color.r, color.g, color.b, color.a},
-				.flip{static_cast<float>(static_cast<unsigned int>(flip)), 0.0f, 0.0f, 0.0f}
+					minU = std::min(minU, sequence->uv[gliph_base + i].x);
+					minV = std::min(minV, sequence->uv[gliph_base + i].y);
+
+					maxU = std::max(maxU, sequence->uv[gliph_base + i].x);
+					maxV = std::max(maxV, sequence->uv[gliph_base + i].y);
 				}
-			);
-    	}
-    	else if (render_mode == RenderMode::UI)
-    	{
-    		ui_draw_buffer.emplace_back(
-				std::in_place_type<GpuSprite>,
-				texture,
-				SpriteData
+
+				SDL_FRect src = {
+					minU,
+					minV,
+					maxU - minU,
+					maxV - minV
+				};
+
+				float minX = sequence->xy[gliph_base].x;
+				float minY = sequence->xy[gliph_base].y;
+				float maxX = sequence->xy[gliph_base].x;
+				float maxY = sequence->xy[gliph_base].y;
+
+				for (int i = 1; i < 4; ++i)
 				{
-				.pos_rot{dst.x, dst.y, 0.0f, angle},
-				.size{dst.w, dst.h, 0.0f, 0.0f},
-				.uv{src.x, src.y, src.w, src.h},
-				.color{color.r, color.g, color.b, color.a},
-				.flip{static_cast<float>(static_cast<unsigned int>(flip)), 0.0f, 0.0f, 0.0f}
+					minX = std::min(minX, sequence->xy[gliph_base + i].x);
+					minY = std::min(minY, sequence->xy[gliph_base + i].y);
+
+					maxX = std::max(maxX, sequence->xy[gliph_base + i].x);
+					maxY = std::max(maxY, sequence->xy[gliph_base + i].y);
 				}
-			);
-    	}
+
+				SDL_FRect dst = {
+					x + minX,
+					y - maxY,
+					maxX - minX,
+					maxY - minY
+				};
+
+				auto* texture = sequence->atlas_texture;
+
+				auto* sampler =
+					samplers.at(TextureSampler{
+						TextureScaleMode::LINEAR,
+						TextureAddressMode::CLAMP
+					})->get();
+
+				const Color color = Color::WHITE;
+
+				SpriteData sprite
+				{
+					.pos_rot{dst.x, dst.y, 0.0f, angle},
+					.size{dst.w, dst.h, 0.0f, 0.0f},
+					.uv{src.x, src.y, src.w, src.h},
+					.color{color.r, color.g, color.b, color.a},
+					.flip{0.0f, 0.0f, 0.0f, 0.0f}
+				};
+
+				if (render_mode == RenderMode::WORLD)
+				{
+					draw_buffer.emplace_back(
+						std::in_place_type<GpuSprite>,
+						texture,
+						sampler,
+						sprite
+					);
+				}
+				else if (render_mode == RenderMode::UI)
+				{
+					ui_draw_buffer.emplace_back(
+						std::in_place_type<GpuSprite>,
+						texture,
+						sampler,
+						sprite
+					);
+				}
+			}
+		}
     }
 
     void RendererImplGPU::draw()

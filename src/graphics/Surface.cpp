@@ -69,9 +69,9 @@ namespace graphics
 	void Surface::loadText(std::shared_ptr<Font> font, const std::string& text, Color color, std::optional<int> wrapped_length)
 	{
 		if (wrapped_length.has_value())
-			surface = TTF_RenderText_Blended_Wrapped(font->getFont(), text.c_str(), text.size(), static_cast<SDL_Color>(color), wrapped_length.value());
+			surface = TTF_RenderText_Blended_Wrapped(font->get(), text.c_str(), text.size(), static_cast<SDL_Color>(color), wrapped_length.value());
 		else 
-			surface = TTF_RenderText_Blended(font->getFont(), text.c_str(), text.size(), static_cast<SDL_Color>(color));
+			surface = TTF_RenderText_Blended(font->get(), text.c_str(), text.size(), static_cast<SDL_Color>(color));
 
 		if (!surface)
 		{

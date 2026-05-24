@@ -25,10 +25,4 @@ namespace graphics
 		}
 		return true;
 	}
-
-	TTF_Font* Font::getFont() const
-	{
-		return ttf_font;
-	}
-
 } // namespace graphics

@@ -24,7 +24,7 @@ namespace graphics
 			
 			if constexpr (std::is_same_v<T, GpuSprite>)
 			{
-				return object.texture == texture || sprites.empty();
+				return (object.texture == texture && object.sampler == sampler) || sprites.empty();
 			}
 			else
 			{
@@ -45,6 +45,7 @@ namespace graphics
 				{
 					sprites.emplace_back(object.data);
 					texture = object.texture;
+					sampler = object.sampler;
 				}
 				else
 				{
@@ -89,8 +90,8 @@ namespace graphics
 		if (sprites.empty()) return;
 		
 		SDL_GPUTextureSamplerBinding texture_sampler_binding;
-		texture_sampler_binding.texture = texture->get();
-		texture_sampler_binding.sampler = texture->getSampler()->get();
+		texture_sampler_binding.texture = texture;
+		texture_sampler_binding.sampler = sampler;
 		SDL_BindGPUFragmentSamplers(render_pass, 0, &texture_sampler_binding, 1);
 
 		SDL_BindGPUGraphicsPipeline(render_pass, render_sprite_data.graphics_pipeline->get());

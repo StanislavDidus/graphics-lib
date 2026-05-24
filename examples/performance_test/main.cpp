@@ -20,7 +20,7 @@ int main()
 {
     std::cout << "Program started." << std::endl;
     
-    //SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
+    SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
     
     init();
     
@@ -56,6 +56,7 @@ int main()
 
     std::shared_ptr<Font> font = std::make_shared<Font>("assets/Fonts/main.ttf", 32);
     //Text text{renderer, font, "Portable text.", Color::WHITE};
+    Text text{renderer.getTextEngine(), font, "Portable text"};
 
     double dt  = 0.0;
     int tick = 0;
@@ -93,12 +94,14 @@ int main()
 
         renderer.drawRectangle(0.0f, 0.0f, 100.0f, 100.0f, Color::RED, RenderType::NONE);
         renderer.drawSprite(sprite, 200.0f, 100.0f, 150.0f, 200.0f);
-        //renderer.drawText(text, 500.0f, 250.0f, 300.0f, 100.0f);
+        renderer.drawText(text, 500.0f, 250.f);
         renderer.draw();
         
         double end_time = SDL_GetTicks();
         dt = (end_time - start_time) / 1000.0;
     }
+
+    renderer.shutdown();
     
     return 0;
 }

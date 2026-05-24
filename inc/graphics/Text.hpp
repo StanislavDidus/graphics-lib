@@ -17,8 +17,8 @@ namespace graphics
 	class  Text
 	{
 	public:
-		Text(TextEngine& text_engine, std::shared_ptr<Font> font, const std::string& text, Color color = Color::WHITE);
-		~Text() = default;
+		Text(const TextEngine& text_engine, std::shared_ptr<Font> font, const std::string& text, Color color = Color::WHITE);
+		~Text();
 
 		Text(const Text& other) = delete;
 		Text(Text&& other) noexcept = delete;
@@ -28,11 +28,14 @@ namespace graphics
 		//Getters
 		std::shared_ptr<Texture> getTexture() const;
 		const std::string& getText() const;
-		glm::vec2 getTextSize(const glm::vec2& scale) const;
+		glm::vec2 getSize() const;
+
+		TTF_GPUAtlasDrawSequence* getGPUDrawData() const;
+		TTF_Text* getRendererDrawData() const;
 
 		//Setters
-		void setFont(std::shared_ptr<Font> font);
-		void setColor(Color color);
+		void setFont(const std::shared_ptr<Font>& font);
+		void setColor(const Color& color);
 		void setText(const std::string& text);
 		void setWrappedWidth(int wrapped_width);
 
@@ -41,13 +44,6 @@ namespace graphics
 		void generateTextTexture(graphics::Renderer& renderer);
 
 		std::string text;
-		std::shared_ptr<Texture> texture = nullptr;
-		std::shared_ptr<Font> font;
-		Color color;
-		std::optional<int> wrapped_width = std::nullopt;
-
-		bool is_dirty = false;
-
 		TTF_Text* m_text = nullptr;
 	};
 

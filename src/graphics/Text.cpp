@@ -10,10 +10,17 @@
 
 namespace graphics
 {
-	Text::Text(TextEngine& text_engine, std::shared_ptr<Font> font, const std::string& text, Color color)
+	Text::Text(const TextEngine& text_engine, std::shared_ptr<Font> font, const std::string& text, Color color)
+		: text{text}
 	{
-		m_text = TTF_CreateText(text_engine.get(), font->getFont(), text.c_str(), text.length());
-		TTF_SetTextColor(m_text, color.r, color.g, color.b, color.a);
+		m_text = TTF_CreateText(text_engine.get(), font->get(), text.data(), text.length());
+		setColor(color);
+	}
+
+	Text::~Text()
+	{
+		if (m_text)
+			TTF_DestroyText(m_text);
 	}
 
 	std::shared_ptr<Texture> Text::getTexture() const
@@ -26,49 +33,42 @@ namespace graphics
 		return text;
 	}
 
-	glm::vec2 Text::getTextSize(const glm::vec2& scale) const
+	glm::vec2 Text::getSize() const
 	{
-		return {texture->width() * scale.x, texture->height() * scale.y};
+		int w = 0;
+		int h = 0;
+		TTF_GetTextSize(m_text, &w, &h);
+		return {static_cast<float>(w), static_cast<float>(h)};
 	}
 
-	void Text::setFont(std::shared_ptr<Font> font)
+	TTF_GPUAtlasDrawSequence* Text::getGPUDrawData() const
 	{
-		this->font = font;
-		is_dirty = true;
+		return TTF_GetGPUTextDrawData(m_text);
+	}
+
+	TTF_Text* Text::getRendererDrawData() const
+	{
+		return m_text;
+	}
+
+	void Text::setFont(const std::shared_ptr<Font>& font)
+	{
+		TTF_SetTextFont(m_text, font->get());
 	}
 
 
-	void Text::setColor(Color color)
+	void Text::setColor(const Color& color)
 	{
-		this->color = color;
-		is_dirty = true;
+		TTF_SetTextColor(m_text, color.r, color.g, color.b, color.a);
 	}
 
 	void Text::setText(const std::string& text)
 	{
-		this->text = text;
-		is_dirty = true;
+		TTF_SetTextString(m_text, text.c_str(), text.length());
 	}
 
 	void Text::setWrappedWidth(int wrapped_width)
 	{
-		this->wrapped_width = wrapped_width;
-		is_dirty = true;
-	}
-
-	void Text::updateText(graphics::Renderer& renderer)
-	{
-		if (is_dirty)
-		{
-			//generateTextTexture(renderer);
-			is_dirty = false;
-		}
-	}
-
-	void Text::generateTextTexture(graphics::Renderer& renderer)
-	{
-		Surface surface{ font, text, color, wrapped_width };
-
-		//texture = renderer.loadTexture(surface, TextureScaleMode::LINEAR);
+		TTF_SetTextWrapWidth(m_text, wrapped_width);
 	}
 } // namespace graphics

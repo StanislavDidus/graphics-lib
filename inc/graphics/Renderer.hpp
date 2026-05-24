@@ -31,9 +31,12 @@ namespace graphics
                 TextureAddressMode address_mode = TextureAddressMode::CLAMP
             );
 
+        void shutdown();
+
         // Getters
         [[nodiscard]] float getZoom() const;
         [[nodiscard]] glm::vec2 getView() const;
+        [[nodiscard]] const TextEngine& getTextEngine() const;
 
         // Setters
         void setZoom(float zoom);
@@ -42,7 +45,7 @@ namespace graphics
 
         void drawRectangle(float x, float y, float width, float height, const Color& color, RenderType render_type);
         void drawSprite(const Sprite& sprite, float x, float y, float width, float height, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = Color::WHITE);
-        void drawText(const Text& text, float x, float y, float width, float height, float angle = 0.0f, SDL_FlipMode flip_mode = SDL_FLIP_NONE);
+        void drawText(const Text& text, float x, float y);
 
         void draw();
     private:

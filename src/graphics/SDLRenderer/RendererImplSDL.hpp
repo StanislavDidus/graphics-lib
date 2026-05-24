@@ -19,6 +19,8 @@ namespace graphics
 
         std::shared_ptr<Texture> loadTexture(const Surface &surface, TextureScaleMode scale_mode, TextureAddressMode address_mode) override;
 
+        void shutdown() override;
+
         float getZoom() const override;
         glm::vec2 getView() const override;
 
@@ -28,7 +30,7 @@ namespace graphics
 
         void drawRectangle(float x, float y, float width, float height, const Color &color, RenderType render_type) override;
         void drawSprite(const Sprite& sprite, float x, float y, float width, float height, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = Color::WHITE) override;
-        void drawText(const Text& text, float x, float y, float width, float height, float angle, SDL_FlipMode flip) override;
+        void drawText(const Text& text, float x, float y) override;
 
         void draw() override;
     private:

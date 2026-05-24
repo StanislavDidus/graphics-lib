@@ -68,7 +68,8 @@ namespace graphics
 			const RenderLineData& render_line_data,
 			const RenderChunkData& render_chunk_data) override;	
 	private:
-		std::shared_ptr<GpuTextureSDL> texture;
+		SDL_GPUTexture* texture;
+		SDL_GPUSampler* sampler;
 		
 		std::vector<SpriteData> sprites;
 	};

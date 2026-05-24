@@ -58,7 +58,8 @@ namespace graphics
 	};
 	struct alignas(16) GpuSprite
 	{
-		std::shared_ptr<GpuTextureSDL> texture;
+		SDL_GPUTexture* texture;
+		SDL_GPUSampler* sampler;
 		SpriteData data;
 	};
 

@@ -13,8 +13,8 @@ namespace graphics
 
 		bool loadFont(const std::filesystem::path& path, int size);
 
-		TTF_Font* getFont() const;
-
+		template<typename Self>
+		auto&& get(this Self&& self) { return self.ttf_font; }
 	private:
 		TTF_Font* ttf_font;
 	};

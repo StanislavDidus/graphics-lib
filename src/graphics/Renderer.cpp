@@ -27,6 +27,11 @@ namespace graphics
         return m_impl->loadTexture(surface, scale_mode, address_mode);
     }
 
+    void Renderer::shutdown()
+    {
+        m_impl->shutdown();
+    }
+
     float Renderer::getZoom() const
     {
         return m_impl->getZoom();
@@ -35,6 +40,11 @@ namespace graphics
     glm::vec2 Renderer::getView() const
     {
         return m_impl->getView();
+    }
+
+    const TextEngine& Renderer::getTextEngine() const
+    {
+        return m_impl->getTextEngine();
     }
 
     void Renderer::setZoom(float zoom)
@@ -64,10 +74,9 @@ namespace graphics
         m_impl->drawSprite(sprite, x, y, width, height, angle, flip, color);
     }
 
-    void Renderer::drawText(const Text& text, float x, float y, float width, float height, float angle,
-        SDL_FlipMode flip_mode)
+    void Renderer::drawText(const Text& text, float x, float y)
     {
-        m_impl->drawText(text, x, y, width, height, angle, flip_mode);
+        m_impl->drawText(text, x, y);
     }
 
     void Renderer::draw()

@@ -6,13 +6,19 @@ namespace graphics
 {
 	Sprite::Sprite(std::shared_ptr<Texture> texture)
 	: texture(texture)
-	, rect{SDL_FRect{0.0f, 0.0f, static_cast<float>(texture->width()), static_cast<float>(texture->height())}}
+	, rect{ 0.0f, 0.0f, 1.0f, 1.0f}
 	{
-		std::cout << texture->width() << std::endl;
-		std::cout << texture->height() << std::endl;
 	}
 
-	Sprite::Sprite(std::shared_ptr<Texture> texture, const SDL_FRect& rect) : texture(std::move(texture)), rect(rect), color{Color::WHITE}
+	Sprite::Sprite(std::shared_ptr<Texture> texture, const SDL_FRect& rect)
+	: texture(std::move(texture))
+	, color{Color::WHITE}
+	, rect(
+		rect.x / texture->width(),
+		rect.y / texture->height(),
+		rect.w / texture->width(),
+		rect.h / texture->height()
+		  )
 	{
 
 	}

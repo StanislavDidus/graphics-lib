@@ -365,7 +365,7 @@ void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTextureSDL> texture
 
 	if (render_mode == RenderMode::WORLD)
 	{
-		draw_buffer.emplace_back(
+		/*draw_buffer.emplace_back(
 			std::in_place_type<GpuSprite>,
 			std::move(texture),
 			SpriteData
@@ -376,11 +376,11 @@ void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTextureSDL> texture
 			.color{color.r, color.g, color.b, color.a},
 			.flip{static_cast<float>(static_cast<unsigned int>(flip)), 0.0f, 0.0f, 0.0f}
 			}
-		);
+		);*/
 	}
 	else if (render_mode == RenderMode::UI)
 	{
-		ui_draw_buffer.emplace_back(
+		/*ui_draw_buffer.emplace_back(
 			std::in_place_type<GpuSprite>,
 			std::move(texture),
 			SpriteData
@@ -391,7 +391,7 @@ void graphics::GpuRenderer::renderTexture(std::shared_ptr<GpuTextureSDL> texture
 			.color{color.r, color.g, color.b, color.a},
 			.flip{static_cast<float>(static_cast<unsigned int>(flip)), 0.0f, 0.0f, 0.0f}
 			}
-		);
+		);*/
 	}
 }
 

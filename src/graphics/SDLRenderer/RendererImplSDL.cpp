@@ -6,6 +6,7 @@
 
 #include <cmath>
 
+#include "graphics/TextEngine.hpp"
 #include "graphics/TextureSDL.hpp"
 
 namespace graphics
@@ -13,6 +14,7 @@ namespace graphics
     RendererImplSDL::RendererImplSDL(Window &window)
         : renderer(window)
     {
+        text_engine = std::make_unique<TextEngine>(renderer.get());
     }
 
     std::shared_ptr<Texture> RendererImplSDL::loadTexture(const Surface &surface, TextureScaleMode scale_mode,
@@ -30,6 +32,10 @@ namespace graphics
         texture->setAddressMove(address_mode_);
 
         return texture;
+    }
+
+    void RendererImplSDL::shutdown()
+    {
     }
 
     float RendererImplSDL::getZoom() const
@@ -87,18 +93,15 @@ namespace graphics
         SDL_FRect src = sprite.getRect();
         SDL_FRect dst{x, y, width, height};
         SDL_Texture* texture = std::static_pointer_cast<TextureSDL>(sprite.getTexture())->get();
-        SDL_RenderTexture(renderer.get(), texture, &src, &dst);
+        SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
+        SDL_RenderTextureRotated(renderer.get(), texture, &src, &dst, angle, nullptr, flip);
 
         // TODO: Apply texture address mode before drawing it
     }
 
-    void RendererImplSDL::drawText(const Text& text, float x, float y, float width, float height, float angle,
-                                   SDL_FlipMode flip)
+    void RendererImplSDL::drawText(const Text& text, float x, float y)
     {
-        SDL_FRect src{0.0f, 0.0f, static_cast<float>(text.getTexture()->width()), static_cast<float>(text.getTexture()->height())};
-        SDL_FRect dst{x, y, width, height};
-        SDL_Texture* texture = std::static_pointer_cast<TextureSDL>(text.getTexture())->get();
-        SDL_RenderTexture(renderer.get(), texture, &src, &dst);
+        TTF_DrawRendererText(text.getRendererDrawData(), x, y);
     }
 
     void RendererImplSDL::draw()
