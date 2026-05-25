@@ -2,6 +2,8 @@
 
 #include <graphics/graphics.hpp>
 
+#include "glm/gtc/random.hpp"
+
 //#include "glm/gtc/random.hpp"
 //#include <graphics/SpriteSheet.hpp>
 
@@ -18,90 +20,70 @@ float global_time = 0.0f;
 
 int main()
 {
-    std::cout << "Program started." << std::endl;
-    
-    SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
-    
-    init();
-    
-    Window window{"Performance Test Example", 960, 540, SDL_WINDOW_RESIZABLE};
-    //GpuRenderer renderer{window};
-    Renderer renderer{window};
-    
-    /*
-    Surface surface{"assets/ice-cream.bmp"};
-    std::shared_ptr<GpuTextureSDL> texture = renderer.loadTexture(surface, "PointClamp");
-    Sprite sprite{texture, SDL_FRect{0.0f, 0.0f, 1920.0f, 1920.0f}};
-    */
+    { // Game scope
+        std::cout << "Program started." << std::endl;
 
-    /*
-    Surface surface1{"assets/sky.png"};
-    std::shared_ptr<GpuTextureSDL> texture1 = renderer.loadTexture(surface1, "PointClamp");
-    Sprite sprite1{texture1, SDL_FRect{0.0f, 0.0f, 64.0f, 80.0f}};
-    */
+        // Required for renderdoc on linux
+        SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11");
 
-    // Test
-    /*
-    int number_objects = 10'000;
-    std::vector<glm::vec2> positions;
-    positions.reserve(number_objects);
-    for (int i = 0; i < number_objects; ++i)
-    {
-        positions.emplace_back(glm::linearRand(0.0f,910.0f), glm::linearRand(0.0f, 490.0f));
-    }
-    */
+        init();
 
-    auto texture = renderer.loadTexture(Surface{"assets/ice-cream.bmp"});
-    auto sprite = Sprite{texture};
+        Window window{"Performance Test Example", 960, 540, SDL_WINDOW_RESIZABLE};
+        //GpuRenderer renderer{window};
+        Renderer renderer{window};
 
-    std::shared_ptr<Font> font = std::make_shared<Font>("assets/Fonts/main.ttf", 32);
-    //Text text{renderer, font, "Portable text.", Color::WHITE};
-    Text text{renderer.getTextEngine(), font, "Portable text"};
+        // Test
 
-    double dt  = 0.0;
-    int tick = 0;
-    SDL_Event event{};
-    while (window.isOpen())
-    {
-        double start_time = SDL_GetTicks();
-        window.pollEvent(event);
-        
-        // Calculate FPS
-        ++tick;
-        global_time += dt;
-        if (global_time >= 1.0f)
+        int number_objects = 10'000;
+        std::vector<glm::vec2> positions;
+        positions.reserve(number_objects);
+        for (int i = 0; i < number_objects; ++i)
         {
-            tick /= global_time;
-            global_time = 0.0f;
-            
-            std::cout << "FPS: " << tick << std::endl;
-            
-            tick = 0;
+            positions.emplace_back(glm::linearRand(0.0f,910.0f), glm::linearRand(0.0f, 490.0f));
         }
-        
-        
-        //renderer.renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ 0.0f, 0.0f, 100.0f, 100.0f }, 0.0f, SDL_FLIP_NONE, Color::WHITE, 0.0f);
-        //renderer.renderTexture(sprite.getTexture(), sprite.getRect(), SDL_FRect{ 50.0f, 50.0f, 100.0f, 100.0f }, 0.0f, SDL_FLIP_NONE, Color::WHITE, 1.0f);
-        
-        //renderer.renderRectangle(0.0f, 0.0f, 50.0f, 50.0f, RenderType::NONE, Color::RED);
-        /*
-        drawRectangle(renderer, 0.0f, 0.0f, 50.0f, 50.0f, RenderType::FILL, Color::RED);
-        drawScaledSprite(renderer, sprite1, 100.0f, 100.0f, 50.0f, 50.0f);
-        drawRectangle(renderer, 0.0f, 200.0f, 50.0f, 50.0f, RenderType::FILL, Color::GREEN);
-        */
-        //renderer.renderSprite(sprite, 0.0f, 0.0f, 200.0f, 200.0f);
-        //drawScaledSprite(renderer, sprite1, 250.0f, 300.0f, 50.0f, 50.0f);
 
-        renderer.drawRectangle(0.0f, 0.0f, 100.0f, 100.0f, Color::RED, RenderType::NONE);
-        renderer.drawSprite(sprite, 200.0f, 100.0f, 150.0f, 200.0f);
-        renderer.drawText(text, 500.0f, 250.f);
-        renderer.draw();
-        
-        double end_time = SDL_GetTicks();
-        dt = (end_time - start_time) / 1000.0;
+        auto texture = renderer.loadTexture(Surface{"assets/entities.png"});
+        auto sprite = Sprite{texture};
+        auto texture1 = renderer.loadTexture(Surface{"assets/sky.png"});
+        auto sprite1 = Sprite{texture1};
+
+        double dt  = 0.0;
+        int tick = 0;
+        SDL_Event event{};
+        while (window.isOpen())
+        {
+            double start_time = SDL_GetTicks();
+            window.pollEvent(event);
+
+            // Calculate FPS
+            ++tick;
+            global_time += dt;
+            if (global_time >= 1.0f)
+            {
+                tick /= global_time;
+                global_time = 0.0f;
+
+                std::cout << "FPS: " << tick << std::endl;
+
+                tick = 0;
+            }
+
+            for (const auto& position : positions)
+            {
+                renderer.drawSprite(sprite, position.x, position.y, 50.0f, 50.0f);
+            }
+
+            renderer.draw();
+
+            double end_time = SDL_GetTicks();
+            dt = (end_time - start_time) / 1000.0;
+        }
     }
 
-    renderer.shutdown();
+    TTF_Quit();
+    SDL_Quit();
+
+    std::cout << "Program stopped." << std::endl;
     
     return 0;
 }

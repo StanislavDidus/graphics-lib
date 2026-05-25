@@ -6,6 +6,7 @@
 #include <graphics/Renderer.hpp>
 #include <graphics/Surface.hpp>
 
+#include "graphics/exception.hpp"
 #include "graphics/TextEngine.hpp"
 
 namespace graphics
@@ -43,7 +44,12 @@ namespace graphics
 
 	TTF_GPUAtlasDrawSequence* Text::getGPUDrawData() const
 	{
-		return TTF_GetGPUTextDrawData(m_text);
+		TTF_GPUAtlasDrawSequence* result = TTF_GetGPUTextDrawData(m_text);
+		if (!result)
+		{
+			throw graphics_error{std::format("Error getting GPUDrawData: {}", SDL_GetError())};
+		}
+		return result;
 	}
 
 	TTF_Text* Text::getRendererDrawData() const

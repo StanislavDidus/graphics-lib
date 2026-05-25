@@ -10,7 +10,6 @@ namespace graphics
     class SDLRenderer
     {
     public:
-        SDLRenderer() = default;
         SDLRenderer(Window& window);
         ~SDLRenderer();
 

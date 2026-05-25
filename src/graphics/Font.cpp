@@ -6,15 +6,15 @@ namespace graphics
 
 	Font::Font(const std::filesystem::path& path, int size)
 	{
-		loadFont(path, size);
+		load(path, size);
 	}
 
 	Font::~Font()
 	{
-		TTF_CloseFont(ttf_font);
+		close();
 	}
 
-	bool Font::loadFont(const std::filesystem::path& path, int size)
+	bool Font::load(const std::filesystem::path& path, int size)
 	{
 		ttf_font = TTF_OpenFont(path.string().c_str(), size);
 
@@ -24,5 +24,19 @@ namespace graphics
 			return false;
 		}
 		return true;
+	}
+
+	void Font::close()
+	{
+		if (ttf_font)
+		{
+			TTF_CloseFont(ttf_font);
+			ttf_font = nullptr;
+		}
+	}
+
+	void Font::setSize(float size)
+	{
+		TTF_SetFontSize(ttf_font, size);
 	}
 } // namespace graphics

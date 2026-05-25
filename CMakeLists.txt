@@ -48,7 +48,7 @@ set(SOURCE_FILES
 	"src/graphics/TextureSDL.cpp"
 	"src/graphics/GpuTextureSDL.cpp"
 		src/graphics/SDLRenderer/RendererImplSDL.cpp
-		src/graphics/SDLRenderer/SDLRenderer.cpp
+        src/graphics/SDLRenderer.cpp
 		src/graphics/TextEngine.cpp
 )
 
@@ -83,7 +83,7 @@ set(HEADER_FILES
 		"inc/graphics/Texture.hpp"
 		"inc/graphics/TextureSDL.hpp"
 		src/graphics/SDLRenderer/RendererImplSDL.hpp
-		src/graphics/SDLRenderer/SDLRenderer.hpp
+		src/graphics/SDLRenderer.hpp
 		inc/graphics/TextEngine.hpp
 )
 

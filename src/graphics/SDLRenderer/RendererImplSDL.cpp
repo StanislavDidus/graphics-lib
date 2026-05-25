@@ -48,6 +48,11 @@ namespace graphics
         return view;
     }
 
+    const TextEngine& RendererImplSDL::getTextEngine() const
+    {
+        return *text_engine;
+    }
+
     void RendererImplSDL::setZoom(float zoom)
     {
         this->zoom = zoom;
@@ -90,7 +95,12 @@ namespace graphics
     void RendererImplSDL::drawSprite(const Sprite &sprite, float x, float y, float width, float height, float angle,
         SDL_FlipMode flip, const Color &color)
     {
+        // Get unormalized texture coordinates
+        float texture_width = static_cast<float>(sprite.getTexture()->width());
+        float texture_height = static_cast<float>(sprite.getTexture()->height());
         SDL_FRect src = sprite.getRect();
+        src = {src.x * texture_width, src.y * texture_height, src.w * texture_width, src.h * texture_height };
+
         SDL_FRect dst{x, y, width, height};
         SDL_Texture* texture = std::static_pointer_cast<TextureSDL>(sprite.getTexture())->get();
         SDL_SetTextureColorMod(texture, color.r, color.g, color.b);

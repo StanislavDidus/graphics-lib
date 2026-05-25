@@ -25,7 +25,7 @@ namespace graphics
     public:
         //RendererImplGPU() = default;
         RendererImplGPU(Window& window);
-        ~RendererImplGPU() override = default;
+        ~RendererImplGPU() override;
 
         void create(Window& window);
 
@@ -41,6 +41,7 @@ namespace graphics
         // Getter
         [[nodiscard]] float getZoom() const override;
         [[nodiscard]] glm::vec2 getView() const override;
+        [[nodiscard]] const TextEngine& getTextEngine() const override;
 
         // Setter
         void setZoom(float zoom) override;
@@ -61,6 +62,7 @@ namespace graphics
 
         Window& window;
         std::shared_ptr<SDL_GPUDevice> device = nullptr;
+        std::unique_ptr<TextEngine> text_engine = nullptr;
 
         RenderMode render_mode = RenderMode::WORLD;
 

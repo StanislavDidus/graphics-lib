@@ -14,6 +14,10 @@ namespace graphics
         create(window);
     }
 
+    RendererImplGPU::~RendererImplGPU()
+    {
+    }
+
     void RendererImplGPU::create(Window &window)
     {
 		// Initialize ScreenSize uniform
@@ -140,8 +144,6 @@ namespace graphics
 
     void RendererImplGPU::shutdown()
     {
-		draw_buffer.clear();
-    	ui_draw_buffer.clear();
     	SDL_WaitForGPUIdle(device.get());
     }
 
@@ -153,6 +155,11 @@ namespace graphics
     glm::vec2 RendererImplGPU::getView() const
     {
     	return view;
+    }
+
+    const TextEngine& RendererImplGPU::getTextEngine() const
+    {
+    	return *text_engine;
     }
 
     void RendererImplGPU::setZoom(float zoom)
@@ -330,6 +337,7 @@ namespace graphics
 					.color{color.r, color.g, color.b, color.a},
 					.flip{0.0f, 0.0f, 0.0f, 0.0f}
 				};
+
 
 				if (render_mode == RenderMode::WORLD)
 				{

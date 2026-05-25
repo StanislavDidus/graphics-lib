@@ -11,7 +11,12 @@ namespace graphics
 		Font(const std::filesystem::path& path, int size);
 		~Font();
 
-		bool loadFont(const std::filesystem::path& path, int size);
+		bool load(const std::filesystem::path& path, int size);
+
+		void close();
+
+		// Setters
+		void setSize(float size);
 
 		template<typename Self>
 		auto&& get(this Self&& self) { return self.ttf_font; }

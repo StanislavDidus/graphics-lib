@@ -6,7 +6,7 @@
 
 #include "Surface.hpp"
 #include "Texture.hpp"
-#include "graphics/SDLRenderer/SDLRenderer.hpp"
+#include "../../src/graphics/SDLRenderer.hpp"
 #include "SDL3/SDL_render.h"
 
 namespace graphics

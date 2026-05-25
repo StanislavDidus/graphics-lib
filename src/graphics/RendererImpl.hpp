@@ -35,7 +35,7 @@ namespace graphics
         // Getters
         [[nodiscard]] virtual float getZoom() const = 0;
         [[nodiscard]] virtual glm::vec2 getView() const = 0;
-        [[nodiscard]] const TextEngine& getTextEngine() const { return *text_engine; }
+        [[nodiscard]] virtual const TextEngine& getTextEngine() const = 0;
 
         // Setters
         virtual void setZoom(float zoom) = 0;
@@ -47,9 +47,5 @@ namespace graphics
         virtual void drawText(const Text& text, float x, float y) = 0;
 
         virtual void draw() = 0;
-
-    protected:
-        std::unique_ptr<TextEngine> text_engine;
-    private:
     };
 }

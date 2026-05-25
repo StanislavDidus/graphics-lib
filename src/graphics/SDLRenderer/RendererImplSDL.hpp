@@ -5,7 +5,7 @@
 #pragma once
 
 #include "../RendererImpl.hpp"
-#include "SDLRenderer.hpp"
+#include "../SDLRenderer.hpp"
 
 namespace graphics
 {
@@ -21,8 +21,9 @@ namespace graphics
 
         void shutdown() override;
 
-        float getZoom() const override;
-        glm::vec2 getView() const override;
+        [[nodiscard]] float getZoom() const override;
+        [[nodiscard]] glm::vec2 getView() const override;
+        [[nodiscard]] const TextEngine& getTextEngine() const override;
 
         void setZoom(float zoom) override;
         void setView(const glm::vec2 &view) override;
@@ -38,6 +39,7 @@ namespace graphics
         void zoomRect(SDL_FRect& rect);
 
         SDLRenderer renderer;
+        std::unique_ptr<TextEngine> text_engine;
         float zoom = 1.0f;
         glm::vec2 view = {0.0f, 0.0f};
         RenderMode render_mode = RenderMode::WORLD;
