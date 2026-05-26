@@ -10,6 +10,7 @@
 #include "graphics/Texture.hpp"
 #include "graphics/Window.hpp"
 #include "graphics/TextEngine.hpp"
+#include "graphics/TileMap.hpp"
 
 namespace graphics
 {
@@ -45,6 +46,7 @@ namespace graphics
         virtual void drawRectangle(float x, float y, float width, float height, const Color& color, RenderType render_type) = 0;
         virtual void drawSprite(const Sprite& sprite, float x, float y, float width, float height, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = Color::WHITE) = 0;
         virtual void drawText(const Text& text, float x, float y) = 0;
+        virtual void drawTileMap(const TileMap& tile_map, float x, float y) = 0;
 
         virtual void draw() = 0;
     };

@@ -399,6 +399,7 @@ void graphics::GpuRenderer::renderTileMap(std::shared_ptr<TileMap> tilemap, floa
 {
 	SDL_FRect camera_rect = getCameraRect();
 	
+	/*
 	for (const auto& chunk : tilemap->getChunks())
 	{
 		if (SDL_HasRectIntersectionFloat(&chunk->getRect(), &camera_rect))
@@ -409,5 +410,6 @@ void graphics::GpuRenderer::renderTileMap(std::shared_ptr<TileMap> tilemap, floa
 				ui_draw_buffer.emplace_back(ChunkData{chunk});
 		}
 	}
+*/
 }
 

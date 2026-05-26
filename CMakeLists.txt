@@ -50,6 +50,7 @@ set(SOURCE_FILES
 		src/graphics/SDLRenderer/RendererImplSDL.cpp
         src/graphics/SDLRenderer.cpp
 		src/graphics/TextEngine.cpp
+		src/graphics/TileMapImpl.cpp
 )
 
 set(HEADER_FILES
@@ -85,6 +86,7 @@ set(HEADER_FILES
 		src/graphics/SDLRenderer/RendererImplSDL.hpp
 		src/graphics/SDLRenderer.hpp
 		inc/graphics/TextEngine.hpp
+		src/graphics/TileMapImpl.hpp
 )
 
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})

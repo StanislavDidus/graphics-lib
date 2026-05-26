@@ -8,6 +8,7 @@
 #include "Surface.hpp"
 #include "Text.hpp"
 #include "Texture.hpp"
+#include "TileMap.hpp"
 #include "Window.hpp"
 
 namespace graphics
@@ -46,6 +47,7 @@ namespace graphics
         void drawRectangle(float x, float y, float width, float height, const Color& color, RenderType render_type);
         void drawSprite(const Sprite& sprite, float x, float y, float width, float height, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = Color::WHITE);
         void drawText(const Text& text, float x, float y);
+        void drawTileMap(const TileMap& tile_map, float x, float y);
 
         void draw();
     private:

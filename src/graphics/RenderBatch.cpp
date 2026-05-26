@@ -367,7 +367,7 @@ namespace graphics
 	{
 		for (const auto& chunkp : chunks)
 		{
-			SDL_BindGPUGraphicsPipeline(render_pass, render_chunk_data.graphics_pipeline->get());
+			/*SDL_BindGPUGraphicsPipeline(render_pass, render_chunk_data.graphics_pipeline->get());
 
 			auto& chunk = chunkp.chunk;
 			
@@ -381,7 +381,7 @@ namespace graphics
 			SDL_GPUBuffer* sprite_buffer = chunk->getSpriteBuffer();
 			SDL_BindGPUVertexStorageBuffers(render_pass, 1, &sprite_buffer, 1);
 			SDL_PushGPUVertexUniformData(command_buffer.get(), 0, &world_matrix, sizeof(glm::mat4));
-			SDL_DrawGPUPrimitives(render_pass, 6, chunk->getSize(), 0, 0);
+			SDL_DrawGPUPrimitives(render_pass, 6, chunk->getSize(), 0, 0);*/
 		}
 	}
 

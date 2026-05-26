@@ -79,6 +79,11 @@ namespace graphics
         m_impl->drawText(text, x, y);
     }
 
+    void Renderer::drawTileMap(const TileMap& tile_map, float x, float y)
+    {
+        m_impl->drawTileMap(tile_map, x, y);
+    }
+
     void Renderer::draw()
     {
         m_impl->draw();

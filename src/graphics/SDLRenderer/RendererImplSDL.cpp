@@ -102,16 +102,75 @@ namespace graphics
         src = {src.x * texture_width, src.y * texture_height, src.w * texture_width, src.h * texture_height };
 
         SDL_FRect dst{x, y, width, height};
-        SDL_Texture* texture = std::static_pointer_cast<TextureSDL>(sprite.getTexture())->get();
-        SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
-        SDL_RenderTextureRotated(renderer.get(), texture, &src, &dst, angle, nullptr, flip);
-
-        // TODO: Apply texture address mode before drawing it
+        std::shared_ptr<Texture> texture = sprite.getTexture();
+        drawTexture(texture, src, dst, angle, flip, color);
     }
 
     void RendererImplSDL::drawText(const Text& text, float x, float y)
     {
         TTF_DrawRendererText(text.getRendererDrawData(), x, y);
+    }
+
+    void RendererImplSDL::drawTexture(std::shared_ptr<Texture> texture, const SDL_FRect& src, const SDL_FRect& dst,
+                                      float angle, SDL_FlipMode flip, const Color& color)
+    {
+        SDL_Texture* texture_ = std::static_pointer_cast<TextureSDL>(texture)->get();
+        SDL_SetTextureColorMod(texture_, color.r, color.g, color.b);
+        SDL_RenderTextureRotated(renderer.get(), texture_, &src, &dst, angle, nullptr, flip);
+        SDL_SetTextureColorMod(texture_, 255, 255, 255);
+
+        // TODO: Apply texture address mode before drawing it
+    }
+    
+    void RendererImplSDL::drawTileMap(const TileMap& tile_map, float x, float y)
+    {
+        float tile_width_world = tile_map.getTileWidthWorld();
+        float tile_height_world = tile_map.getTileHeightWorld();
+        
+        float chunk_width_world = tile_map.getChunkWidthTiles() * tile_width_world;
+        float chunk_height_world = tile_map.getChunkHeightTiles() * tile_height_world;
+        
+        float tile_width_pixels = static_cast<float>(tile_map.getTileWidthPixels());
+        float tile_height_pixels = static_cast<float>(tile_map.getTileHeightPixels());
+        
+        std::shared_ptr<Texture> texture = tile_map.getTexture();
+        for (int i = 0; const auto& chunk : tile_map.getChunks())
+        {
+            int world_height_chunks = tile_map.getWorldHeightChunks();
+            int chunk_x = i % world_height_chunks;
+            int chunk_y = i / world_height_chunks;
+            
+            float offset_x = x + chunk_x * chunk_width_world;
+            float offset_y = y + chunk_y * chunk_height_world;
+            
+            for (int j = 0; j < tile_map.getChunkWidthTiles(); ++j)
+            {
+                for (int k = 0; k < tile_map.getChunkHeightTiles(); ++k)
+                {
+                    int sprite_id = chunk.getGrid()[j * tile_map.getChunkHeightTiles() + k];
+                    float tile_x = j * tile_width_world;
+                    float tile_y = k * tile_height_world;
+                    
+                    SDL_FRect src 
+                    {
+                       sprite_id * tile_width_pixels,
+                        0.0f,
+                        tile_width_pixels,
+                        tile_height_pixels
+                    };
+                    SDL_FRect dst
+                    {
+                        tile_x + offset_x,
+                        tile_y + offset_y,
+                        tile_width_world,
+                        tile_height_world
+                    };
+                    drawTexture(texture, src, dst);
+                }
+            }
+            
+           ++i; 
+        }
     }
 
     void RendererImplSDL::draw()

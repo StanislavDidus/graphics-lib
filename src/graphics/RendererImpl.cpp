@@ -3,7 +3,7 @@
 #include "GPURenderer/RendererImplGPU.hpp"
 #include "SDLRenderer/RendererImplSDL.hpp"
 
-//#define __EMSCRIPTEN__
+#define __EMSCRIPTEN__
 
 #ifndef __EMSCRIPTEN__
 using RendererType = graphics::RendererImplGPU;

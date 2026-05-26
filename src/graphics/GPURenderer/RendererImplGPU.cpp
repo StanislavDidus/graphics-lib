@@ -361,6 +361,11 @@ namespace graphics
 		}
     }
 
+    void RendererImplGPU::drawTileMap(const TileMap& tile_map, float x, float y)
+    {
+    	
+    }
+
     void RendererImplGPU::draw()
     {
 		CommandBuffer command_buffer{ device };

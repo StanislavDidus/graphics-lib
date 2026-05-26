@@ -1,42 +1,66 @@
 
 #include <graphics/TileMap.hpp>
+#include "graphics/Texture.hpp"
 
-#include <utility>
-
-#include <graphics/GpuTransferBuffer.hpp>
-#include <graphics/GpuRenderer.hpp>
-
-graphics::TileMap::TileMap(std::shared_ptr<SDL_GPUDevice> device, std::shared_ptr<GpuTextureSDL> texture, int world_width_tiles, int world_height_tiles,
-                           int tile_width_world, int tile_height_world, int chunk_width_tiles, int chunk_height_tiles)
+graphics::TileMap::TileMap
+    (
+    std::shared_ptr<Texture> texture,
+    int world_width_tiles, int world_height_tiles,
+    int tile_width_world, int tile_height_world,
+    int tile_width_pixels, int tile_height_pixels
+    )
+    : texture(texture)
+    , world_width_tiles(world_width_tiles)
+    , world_height_tiles(world_height_tiles)
+    , tile_width_world(tile_width_world)
+    , tile_height_world(tile_height_world)
+    , tile_width_pixels(tile_width_pixels)
+    , tile_height_pixels(tile_height_world)
+    , chunk_width_tiles(world_width_tiles)
+    , chunk_height_tiles(world_height_tiles)
 {
-	int world_width_chunks = world_width_tiles / chunk_width_tiles;
-	int world_height_chunks = world_height_tiles / chunk_height_tiles;
-	
-	int index = 0;
-	chunks.reserve(world_width_chunks * world_height_chunks);
-	for (int y = 0; y < world_height_chunks; ++y)
-	{
-		float offset_y = y * chunk_height_tiles * tile_height_world;
-		for (int x = 0; x < world_width_chunks; ++x)
-		{
-			float offset_x = x * chunk_width_tiles * tile_width_world;
-			chunks.emplace_back(std::make_unique<Chunk>(
-				device, texture,
-				chunk_width_tiles, chunk_height_tiles,
-				tile_width_world, tile_height_world,
-				offset_x, offset_y,
-				index++
-				));
-		}
-	}
+    create();
 }
 
-std::shared_ptr<graphics::GpuTextureSDL> graphics::TileMap::getTexture() const
+graphics::TileMap::TileMap
+    (
+    std::shared_ptr<Texture> texture,
+    int world_width_tiles, int world_height_tiles,
+    int tile_width_world, int tile_height_world,
+    int tile_width_pixels, int tile_height_pixels,
+    int chunk_width_tiles, int chunk_height_tiles
+    )
+    : texture(texture)
+    , world_width_tiles(world_width_tiles)
+    , world_height_tiles(world_height_tiles)
+    , tile_width_world(tile_width_world)
+    , tile_height_world(tile_height_world)
+    , tile_width_pixels(tile_width_pixels)
+    , tile_height_pixels(tile_height_world)
+    , chunk_width_tiles(world_width_tiles)
+    , chunk_height_tiles(world_height_tiles)
 {
-	return texture;
+    create();
 }
 
-const std::vector<std::shared_ptr<graphics::Chunk>>& graphics::TileMap::getChunks() const
+
+void graphics::TileMap::create()
 {
-	return chunks;
+    // Empty grid
+    std::vector<int> grid;
+    int chunk_size_tiles = chunk_width_tiles * chunk_height_tiles;
+    grid.reserve(chunk_size_tiles);
+    for (int i = 0; i < chunk_size_tiles; ++i) grid.emplace_back(0);
+    
+    int world_width_chunks = world_width_tiles / chunk_height_tiles;
+    int world_height_chunks = world_height_tiles / chunk_height_tiles;
+    
+    // Column major order
+    for (int x = 0; x < world_width_chunks; ++x)
+    {
+        for (int y = 0; y < world_height_chunks; ++y)
+        {
+            chunks.emplace_back(grid);
+        }
+    }
 }

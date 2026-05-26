@@ -15,9 +15,6 @@
 
 namespace graphics
 {
-
-	constexpr bool IGNORE_VIEW_ZOOM = true;
-    
     /// Function initializes all necessary dependencies, including:
     /// SDL3, SDL_ttf, and SDL_shadercross
     /// Don't call if you want to initiliaze it yourself
