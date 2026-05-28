@@ -22,7 +22,7 @@ int main()
     init();
     
     Window window{"Empty Window Example", 960, 540, SDL_WINDOW_RESIZABLE};
-    GpuRenderer renderer{window};
+    Renderer renderer{window};
     
     double dt  = 0.0;
     int tick = 0;
@@ -45,7 +45,9 @@ int main()
             tick = 0;
         }
         
-        renderer.render();
+        renderer.startDrawing();
+        // Draw here 
+        renderer.endDrawing();
         
         double end_time = SDL_GetTicks();
         dt = (end_time - start_time) / 1000.0;

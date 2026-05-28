@@ -67,6 +67,8 @@ int main()
 
                 tick = 0;
             }
+            
+            renderer.startDrawing();
 
             for (const auto& position : positions)
             {
