@@ -8,6 +8,7 @@
 #include <graphics/GpuTextureSDL.hpp>
 #include "glm/vec4.hpp"
 #include "glm/vec2.hpp"
+#include "graphics/GPURenderer/Chunk.hpp"
 
 namespace graphics
 {

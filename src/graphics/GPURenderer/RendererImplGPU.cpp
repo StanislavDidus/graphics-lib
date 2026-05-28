@@ -4,6 +4,7 @@
 
 #include "RendererImplGPU.hpp"
 
+#include "GpuTilemapSDL.hpp"
 #include "graphics/TextureSDL.hpp"
 #include "SDL3_shadercross/SDL_shadercross.h"
 
@@ -140,6 +141,22 @@ namespace graphics
     	SDL_EndGPUCopyPass(copy_pass);
 
 		return texture;
+    }
+
+    std::shared_ptr<TileMap> RendererImplGPU::loadTileMap(std::shared_ptr<Texture> texture,
+	    WorldSize world_size, TileSize tile_size, TileSizePixels tile_size_pixels,
+	    ChunkSize chunk_size)
+    {
+		std::shared_ptr<GpuTilemapSDL> tilemap = std::make_shared<GpuTilemapSDL>
+    	(
+    		device,
+    		texture,
+    		world_size,
+    		tile_size,
+    		tile_size_pixels,
+    		chunk_size
+    	);
+    	return tilemap;
     }
 
     void RendererImplGPU::shutdown()
@@ -361,12 +378,27 @@ namespace graphics
 		}
     }
 
-    void RendererImplGPU::drawTileMap(const TileMap& tile_map, float x, float y)
+    void RendererImplGPU::drawTileMap(std::shared_ptr<TileMap> tile_map, float x, float y)
     {
-    	
+    	SDL_FRect camera_rect = getCameraRect();
+	
+    	for (const auto& chunk : std::static_pointer_cast<GpuTilemapSDL>(tile_map)->getChunks())
+    	{
+    		//if (SDL_HasRectIntersectionFloat(&chunk->getRect(), &camera_rect))
+    		{
+    			if (render_mode == RenderMode::WORLD)
+    				draw_buffer.emplace_back(ChunkData{chunk});
+    			else if (render_mode == RenderMode::UI)
+    				ui_draw_buffer.emplace_back(ChunkData{chunk});
+    		}
+    	}
     }
 
-    void RendererImplGPU::draw()
+    void RendererImplGPU::startDrawing()
+    {
+    }
+
+    void RendererImplGPU::endDrawing()
     {
 		CommandBuffer command_buffer{ device };
 

@@ -41,7 +41,6 @@ set(SOURCE_FILES
     "src/graphics/GpuSampler.cpp"
     "src/graphics/TileMap.cpp"
     "src/graphics/RenderBatch.cpp"
-    "src/graphics/Chunk.cpp"
 	"src/graphics/RendererImpl.cpp"
 	"src/graphics/Renderer.cpp"
 	"src/graphics/GPURenderer/RendererImplGPU.cpp"
@@ -50,7 +49,10 @@ set(SOURCE_FILES
 		src/graphics/SDLRenderer/RendererImplSDL.cpp
         src/graphics/SDLRenderer.cpp
 		src/graphics/TextEngine.cpp
-		src/graphics/TileMapImpl.cpp
+		src/graphics/SDLRenderer/TilemapSDL.cpp
+		src/graphics/GPURenderer/GpuTilemapSDL.cpp
+		src/graphics/SDLRenderer/Chunk.cpp
+		src/graphics/GPURenderer/Chunk.cpp
 )
 
 set(HEADER_FILES
@@ -76,7 +78,6 @@ set(HEADER_FILES
 		"inc/graphics/TileMap.hpp"
 		"inc/graphics/CommandBuffer.hpp"
 		"inc/graphics/RenderBatch.hpp"
-		"inc/graphics/Chunk.hpp"
 		"inc/graphics/BatchHelpers.hpp"
 		"inc/graphics/Enums.hpp"
 		"src/graphics/RendererImpl.hpp"
@@ -86,7 +87,11 @@ set(HEADER_FILES
 		src/graphics/SDLRenderer/RendererImplSDL.hpp
 		src/graphics/SDLRenderer.hpp
 		inc/graphics/TextEngine.hpp
-		src/graphics/TileMapImpl.hpp
+		src/graphics/SDLRenderer/TilemapSDL.hpp
+		src/graphics/GPURenderer/GpuTilemapSDL.hpp
+		src/graphics/SDLRenderer/Chunk.hpp
+		src/graphics/GPURenderer/Chunk.hpp
+		inc/graphics/TileMapData.hpp
 )
 
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})

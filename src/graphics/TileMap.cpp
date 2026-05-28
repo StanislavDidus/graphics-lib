@@ -2,7 +2,7 @@
 #include <graphics/TileMap.hpp>
 #include "graphics/Texture.hpp"
 
-graphics::TileMap::TileMap
+/*graphics::TileMap::TileMap
     (
     std::shared_ptr<Texture> texture,
     int world_width_tiles, int world_height_tiles,
@@ -19,7 +19,6 @@ graphics::TileMap::TileMap
     , chunk_width_tiles(world_width_tiles)
     , chunk_height_tiles(world_height_tiles)
 {
-    create();
 }
 
 graphics::TileMap::TileMap
@@ -40,10 +39,10 @@ graphics::TileMap::TileMap
     , chunk_width_tiles(world_width_tiles)
     , chunk_height_tiles(world_height_tiles)
 {
-    create();
-}
+}*/
 
 
+/*
 void graphics::TileMap::create()
 {
     // Empty grid
@@ -64,3 +63,16 @@ void graphics::TileMap::create()
         }
     }
 }
+*/
+
+graphics::TileMap::TileMap(std::shared_ptr<Texture> texture, WorldSize world_size, TileSize tile_size,
+    TileSizePixels tile_size_pixels, ChunkSize chunk_size)
+    : texture(texture)
+    , world_size(world_size)
+    , tile_size(tile_size)
+    , tile_size_pixels(tile_size_pixels)
+    , chunk_size(chunk_size)
+{
+}
+
+graphics::TileMap::~TileMap() = default;

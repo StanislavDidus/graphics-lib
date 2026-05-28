@@ -9,6 +9,7 @@
 #include "graphics/GpuRenderer.hpp"
 #include "graphics/RenderBatch.hpp"
 #include "graphics/Vertex.hpp"
+#include "graphics/TileMapData.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <map>
@@ -35,6 +36,15 @@ namespace graphics
                 TextureScaleMode scale_mode = TextureScaleMode::LINEAR,
                 TextureAddressMode address_mode = TextureAddressMode::CLAMP
             ) override;
+        
+        std::shared_ptr<TileMap> loadTileMap
+            (
+                std::shared_ptr<Texture> texture,
+                WorldSize world_size,
+                TileSize tile_size,
+                TileSizePixels tile_size_pixels,
+                ChunkSize chunk_size
+            ) override;
 
         void shutdown() override;
 
@@ -51,9 +61,10 @@ namespace graphics
         void drawRectangle(float x, float y, float width, float height, const Color &color, RenderType render_type) override;
         void drawSprite(const Sprite& sprite, float x, float y, float width, float height, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = Color::WHITE) override;
         void drawText(const Text& text, float x, float y) override;
-        void drawTileMap(const TileMap& tile_map, float x, float y) override;
+        void drawTileMap(std::shared_ptr<TileMap> tile_map, float x, float y) override;
 
-        void draw() override;
+        void startDrawing() override;
+        void endDrawing() override;
 
     private:
         void initSamplers();

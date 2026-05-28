@@ -73,7 +73,7 @@ int main()
                 renderer.drawSprite(sprite, position.x, position.y, 50.0f, 50.0f);
             }
 
-            renderer.draw();
+            renderer.endDrawing();
 
             double end_time = SDL_GetTicks();
             dt = (end_time - start_time) / 1000.0;

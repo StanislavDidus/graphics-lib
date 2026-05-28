@@ -27,6 +27,12 @@ namespace graphics
         return m_impl->loadTexture(surface, scale_mode, address_mode);
     }
 
+    std::shared_ptr<TileMap> Renderer::loadTileMap(std::shared_ptr<Texture> texture, WorldSize world_size,
+                                                    TileSize tile_size, TileSizePixels tile_size_pixels, ChunkSize chunk_size)
+    {
+        return m_impl->loadTileMap(texture, world_size, tile_size, tile_size_pixels, chunk_size);
+    }
+
     void Renderer::shutdown()
     {
         m_impl->shutdown();
@@ -79,13 +85,18 @@ namespace graphics
         m_impl->drawText(text, x, y);
     }
 
-    void Renderer::drawTileMap(const TileMap& tile_map, float x, float y)
+    void Renderer::drawTileMap(std::shared_ptr<TileMap> tile_map, float x, float y)
     {
         m_impl->drawTileMap(tile_map, x, y);
     }
 
-    void Renderer::draw()
+    void Renderer::startDrawing()
     {
-        m_impl->draw();
+        m_impl->startDrawing();
+    }
+
+    void Renderer::endDrawing()
+    {
+        m_impl->endDrawing();
     }
 }

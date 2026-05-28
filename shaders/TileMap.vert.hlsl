@@ -1,7 +1,8 @@
 struct TileData
 {
     float4 Position;
-    float4 Size_UV;
+    float2 Size;
+    float2 UV;
     float4 Color;
 };
 
@@ -37,14 +38,14 @@ Output main(uint id : SV_VertexID, uint instance_id : SV_InstanceID)
     uint sprite_id = SpriteMap[instance_id];
 
     float2 texcoord[4] = {
-        {tile.Size_UV.z * sprite_id + 1.0f,                 0.0f                                     },
-        {tile.Size_UV.z * sprite_id + 1.0f,                 tile.Size_UV.z                           },
-        {tile.Size_UV.z * (sprite_id + 1) - 1.0f,           tile.Size_UV.z                           },
-        {tile.Size_UV.z * (sprite_id + 1) - 1.0f,           0.0f                                     }
+        {tile.UV.x * sprite_id,                 0.0f                                     },
+        {tile.UV.x * sprite_id,                 tile.UV.y                           },
+        {tile.UV.x * (sprite_id + 1),           tile.UV.y                           },
+        {tile.UV.x * (sprite_id + 1),           0.0f                                     }
     };
 
     float2 coord = vertexPos[vert];
-    coord *= tile.Size_UV.xy;
+    coord *= tile.Size.xy;
     float3 coordWithDepth = float3(coord + tile.Position.xy, 0.0f);
 
     Output output;
@@ -53,7 +54,7 @@ Output main(uint id : SV_VertexID, uint instance_id : SV_InstanceID)
     output.Texcoord = texcoord[vert];
     output.Color = tile.Color;
     output.Flip = 0;
-    output.UV = float4(0.0f, 0.0f, tile.Size_UV.x, tile.Size_UV.y);
+    output.UV = float4(0.0f, 0.0f, tile.Size.x, tile.Size.y);
 
     return output;
 }

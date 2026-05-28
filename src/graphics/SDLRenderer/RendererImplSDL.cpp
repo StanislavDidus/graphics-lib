@@ -6,6 +6,7 @@
 
 #include <cmath>
 
+#include "TilemapSDL.hpp"
 #include "graphics/TextEngine.hpp"
 #include "graphics/TextureSDL.hpp"
 
@@ -32,6 +33,13 @@ namespace graphics
         texture->setAddressMove(address_mode_);
 
         return texture;
+    }
+
+    std::shared_ptr<TileMap> RendererImplSDL::loadTileMap(std::shared_ptr<Texture> texture, WorldSize world_size,
+                                                          TileSize tile_size, TileSizePixels tile_size_pixels, ChunkSize chunk_size)
+    {
+        std::shared_ptr<TileMap> tile_map = std::make_shared<TileMapSDL>(texture, world_size, tile_size, tile_size_pixels, chunk_size);
+        return tile_map;
     }
 
     void RendererImplSDL::shutdown()
@@ -122,34 +130,36 @@ namespace graphics
         // TODO: Apply texture address mode before drawing it
     }
     
-    void RendererImplSDL::drawTileMap(const TileMap& tile_map, float x, float y)
+    void RendererImplSDL::drawTileMap(std::shared_ptr<TileMap> tile_map, float x, float y)
     {
-        float tile_width_world = tile_map.getTileWidthWorld();
-        float tile_height_world = tile_map.getTileHeightWorld();
+        WorldSize world_size = tile_map->getWorldSize();
+        TileSize tile_size = tile_map->getTilesize();
+        TileSizePixels tile_size_pixels = tile_map->getTileSizePixels();
+        ChunkSize chunk_size = tile_map->getChunkSize();
         
-        float chunk_width_world = tile_map.getChunkWidthTiles() * tile_width_world;
-        float chunk_height_world = tile_map.getChunkHeightTiles() * tile_height_world;
+        float chunk_width_world = chunk_size.width * tile_size.width;
+        float chunk_height_world = chunk_size.height * tile_size.height;
         
-        float tile_width_pixels = static_cast<float>(tile_map.getTileWidthPixels());
-        float tile_height_pixels = static_cast<float>(tile_map.getTileHeightPixels());
+        float tile_width_pixels = static_cast<float>(tile_size_pixels.width);
+        float tile_height_pixels = static_cast<float>(tile_size_pixels.height);
         
-        std::shared_ptr<Texture> texture = tile_map.getTexture();
-        for (int i = 0; const auto& chunk : tile_map.getChunks())
+        std::shared_ptr<Texture> texture = tile_map->getTexture();
+        for (int i = 0; const auto& chunk : std::static_pointer_cast<TileMapSDL>(tile_map)->getChunks())
         {
-            int world_height_chunks = tile_map.getWorldHeightChunks();
-            int chunk_x = i % world_height_chunks;
-            int chunk_y = i / world_height_chunks;
+            int world_height_chunks = world_size.height / chunk_size.height;
+            int chunk_x = i / world_height_chunks;
+            int chunk_y = i % world_height_chunks;
             
             float offset_x = x + chunk_x * chunk_width_world;
             float offset_y = y + chunk_y * chunk_height_world;
             
-            for (int j = 0; j < tile_map.getChunkWidthTiles(); ++j)
+            for (int j = 0; j < chunk_size.width; ++j)
             {
-                for (int k = 0; k < tile_map.getChunkHeightTiles(); ++k)
+                for (int k = 0; k < chunk_size.height; ++k)
                 {
-                    int sprite_id = chunk.getGrid()[j * tile_map.getChunkHeightTiles() + k];
-                    float tile_x = j * tile_width_world;
-                    float tile_y = k * tile_height_world;
+                    int sprite_id = chunk.getGrid()[k * chunk_size.width + j];
+                    float tile_x = j * tile_size.width;
+                    float tile_y = k * tile_size.height;
                     
                     SDL_FRect src 
                     {
@@ -162,8 +172,8 @@ namespace graphics
                     {
                         tile_x + offset_x,
                         tile_y + offset_y,
-                        tile_width_world,
-                        tile_height_world
+                        static_cast<float>(tile_size.width),
+                        static_cast<float>(tile_size.height)
                     };
                     drawTexture(texture, src, dst);
                 }
@@ -173,7 +183,13 @@ namespace graphics
         }
     }
 
-    void RendererImplSDL::draw()
+    void RendererImplSDL::startDrawing()
+    {
+        setColor(Color::BLACK);
+        SDL_RenderClear(renderer.get());
+    }
+
+    void RendererImplSDL::endDrawing()
     {
         SDL_RenderPresent(renderer.get());
     }

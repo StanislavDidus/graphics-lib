@@ -23,11 +23,18 @@ int main()
 
         init();
 
-        Window window{"TileMp Example", 960, 540, SDL_WINDOW_RESIZABLE};
+        Window window{"TileMap Example", 960, 540, SDL_WINDOW_RESIZABLE};
         Renderer renderer{window};
         
         const auto& texture = renderer.loadTexture(Surface{"assets/tileset.png"});
-        TileMap tile_map{texture, 24, 13, 20, 20, 16, 16};
+        std::shared_ptr<TileMap> tile_map = renderer.loadTileMap(
+            texture,
+            WorldSize(24, 14),
+            TileSize(20, 20),
+            TileSizePixels(16,16),
+            ChunkSize(24, 14));
+        //tile_map->setTile(2,3,1);
+        tile_map->update();
 
         double dt  = 0.0;
         int tick = 0;
@@ -50,8 +57,9 @@ int main()
                 tick = 0;
             }
 
+            renderer.startDrawing();
             renderer.drawTileMap(tile_map, 0.0f, 0.0f);
-            renderer.draw(); 
+            renderer.endDrawing(); 
 
             double end_time = SDL_GetTicks();
             dt = (end_time - start_time) / 1000.0;
