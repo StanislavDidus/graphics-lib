@@ -8,6 +8,7 @@
 #include <graphics/GpuTextureSDL.hpp>
 #include "glm/vec4.hpp"
 #include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 #include "graphics/GPURenderer/Chunk.hpp"
 
 namespace graphics
@@ -48,6 +49,7 @@ namespace graphics
 	struct ChunkData
 	{
 		std::shared_ptr<Chunk> chunk;
+		glm::vec3 position;
 	};
 	struct alignas(16) SpriteData
 	{

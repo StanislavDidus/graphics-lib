@@ -23,6 +23,11 @@ cbuffer Projection : register(b0, space1)
     float4x4 ViewProjectionMatrix;
 }
 
+cbuffer UniformPosition : register(b1, space1)
+{
+    float3 PositionOffset;
+};
+
 static const uint triangleIndices[6] = {0, 1, 2, 2, 3, 0};
 static const float2 vertexPos[4] = {
     {0.0f, 0.0f},
@@ -50,7 +55,7 @@ Output main(uint id : SV_VertexID, uint instance_id : SV_InstanceID)
 
     Output output;
 
-    output.Position = mul(float4(coordWithDepth, 1.0f), ViewProjectionMatrix);
+    output.Position = mul(float4(coordWithDepth, 1.0f) + float4(PositionOffset.x, PositionOffset.y, PositionOffset.z), ViewProjectionMatrix);
     output.Texcoord = texcoord[vert];
     output.Color = tile.Color;
     output.Flip = 0;

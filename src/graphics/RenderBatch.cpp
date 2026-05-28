@@ -381,6 +381,7 @@ namespace graphics
 			SDL_GPUBuffer* sprite_buffer = chunk->getSpriteBuffer();
 			SDL_BindGPUVertexStorageBuffers(render_pass, 1, &sprite_buffer, 1);
 			SDL_PushGPUVertexUniformData(command_buffer.get(), 0, &world_matrix, sizeof(glm::mat4));
+			SDL_PushGPUVertexUniformData(command_buffer.get(), 1, &chunkp.position, sizeof(glm::vec3));
 			SDL_DrawGPUPrimitives(render_pass, 6, chunk->getSize(), 0, 0);
 		}
 	}

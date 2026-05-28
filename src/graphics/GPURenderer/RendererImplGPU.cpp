@@ -387,9 +387,9 @@ namespace graphics
     		//if (SDL_HasRectIntersectionFloat(&chunk->getRect(), &camera_rect))
     		{
     			if (render_mode == RenderMode::WORLD)
-    				draw_buffer.emplace_back(ChunkData{chunk});
+    				draw_buffer.emplace_back(ChunkData{chunk, glm::vec3{x, y, 0.0f}});
     			else if (render_mode == RenderMode::UI)
-    				ui_draw_buffer.emplace_back(ChunkData{chunk});
+    				ui_draw_buffer.emplace_back(ChunkData{chunk, glm::vec3{x, y, 0.0f}});
     		}
     	}
     }
