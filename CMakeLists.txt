@@ -45,7 +45,7 @@ set(SOURCE_FILES
 	"src/graphics/Renderer.cpp"
 	"src/graphics/GPURenderer/RendererImplGPU.cpp"
 	"src/graphics/TextureSDL.cpp"
-	"src/graphics/GpuTextureSDL.cpp"
+	"src/graphics/GpuTextureSDL.cpp" 
 		src/graphics/SDLRenderer/RendererImplSDL.cpp
         src/graphics/SDLRenderer.cpp
 		src/graphics/TextEngine.cpp
@@ -104,17 +104,21 @@ add_custom_target(copy_assets
 )
 add_dependencies(GRAPHICS_LIB copy_assets)
 
-function(COPY_DLLS PROJECT_BIN)
+function(graphics_setup_runtime_dependencies PROJECT_BIN)
     add_custom_command(TARGET ${PROJECT_BIN} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     "${PROJECT_SOURCE_DIR}/libs"
     $<TARGET_FILE_DIR:${PROJECT_BIN}>
-    COMMENT "Copying runtime dependencies to build directory ${PROJECT_BIN}")
+    COMMENT "Copying dlls to build directory ${PROJECT_BIN}")
+	
+	add_custom_command(TARGET ${PROJECT_BIN} POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_directory
+			"${PROJECT_SOURCE_DIR}/shaders/"
+			$<TARGET_FILE_DIR:${PROJECT_BIN}>
+			COMMENT "Copying shaders to build directory ${PROJECT_BIN}")
 endfunction()
 
 #Copy lib folder directly to bin folder
-COPY_DLLS(GRAPHICS_LIB)
-
 
 target_include_directories(GRAPHICS_LIB 
 		PUBLIC inc

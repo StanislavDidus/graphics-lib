@@ -4,4 +4,4 @@ add_executable(tilemap main.cpp)
 
 target_link_libraries(tilemap PRIVATE GRAPHICS_LIB)
 
-COPY_DLLS(tilemap)
+graphics_setup_runtime_dependencies(tilemap)

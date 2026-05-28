@@ -4,4 +4,4 @@ add_executable(performance_test main.cpp)
 
 target_link_libraries(performance_test PRIVATE GRAPHICS_LIB)
 
-COPY_DLLS(performance_test)
+graphics_setup_runtime_dependencies(performance_test)

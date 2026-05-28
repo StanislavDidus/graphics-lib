@@ -55,7 +55,7 @@ Output main(uint id : SV_VertexID, uint instance_id : SV_InstanceID)
 
     Output output;
 
-    output.Position = mul(float4(coordWithDepth, 1.0f) + float4(PositionOffset.x, PositionOffset.y, PositionOffset.z), ViewProjectionMatrix);
+    output.Position = mul(float4(coordWithDepth, 1.0f) + float4(PositionOffset.x, PositionOffset.y, PositionOffset.z, 0.0f), ViewProjectionMatrix);
     output.Texcoord = texcoord[vert];
     output.Color = tile.Color;
     output.Flip = 0;
