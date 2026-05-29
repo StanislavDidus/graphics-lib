@@ -54,6 +54,7 @@ namespace graphics
         [[nodiscard]] float getZoom() const override;
         [[nodiscard]] glm::vec2 getView() const override;
         [[nodiscard]] const TextEngine& getTextEngine() const override;
+        [[nodiscard]] glm::ivec2 getRenderResolution() const override;
 
         // Setter
         void setZoom(float zoom) override;

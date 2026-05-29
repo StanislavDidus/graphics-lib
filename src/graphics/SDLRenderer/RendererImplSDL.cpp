@@ -16,6 +16,7 @@ namespace graphics
         : renderer(window)
     {
         text_engine = std::make_unique<TextEngine>(renderer.get());
+        SDL_SetRenderLogicalPresentation(renderer.get(), window.getWindowSize().x, window.getWindowSize().y, SDL_LOGICAL_PRESENTATION_OVERSCAN);
     }
 
     std::shared_ptr<Texture> RendererImplSDL::loadTexture(const Surface &surface, TextureScaleMode scale_mode,
@@ -59,6 +60,11 @@ namespace graphics
     const TextEngine& RendererImplSDL::getTextEngine() const
     {
         return *text_engine;
+    }
+
+    glm::ivec2 RendererImplSDL::getRenderResolution() const
+    {
+        return render_resolution;
     }
 
     void RendererImplSDL::setZoom(float zoom)

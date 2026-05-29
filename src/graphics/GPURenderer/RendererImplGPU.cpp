@@ -182,6 +182,11 @@ namespace graphics
     	return *text_engine;
     }
 
+    glm::ivec2 RendererImplGPU::getRenderResolution() const
+    {
+	    return {render_resolution_width, render_resolution_height};
+    }
+
     void RendererImplGPU::setZoom(float zoom)
     {
     	this->zoom = zoom;

@@ -53,6 +53,11 @@ namespace graphics
         return m_impl->getTextEngine();
     }
 
+    glm::ivec2 Renderer::getRenderResolution() const
+    {
+        return m_impl->getRenderResolution();
+    }
+
     void Renderer::setZoom(float zoom)
     {
         m_impl->setZoom(zoom);
@@ -63,7 +68,7 @@ namespace graphics
         m_impl->setView(view);
     }
 
-    void Renderer::setRenderMove(RenderMode render_mode)
+    void Renderer::setRenderMode(RenderMode render_mode)
     {
         m_impl->setRenderMode(render_mode);
     }

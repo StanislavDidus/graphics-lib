@@ -27,6 +27,7 @@ namespace graphics
         [[nodiscard]] float getZoom() const override;
         [[nodiscard]] glm::vec2 getView() const override;
         [[nodiscard]] const TextEngine& getTextEngine() const override;
+        [[nodiscard]] glm::ivec2 getRenderResolution() const override;
 
         void setZoom(float zoom) override;
         void setView(const glm::vec2 &view) override;
@@ -49,6 +50,7 @@ namespace graphics
         std::unique_ptr<TextEngine> text_engine;
         float zoom = 1.0f;
         glm::vec2 view = {0.0f, 0.0f};
+        glm::ivec2 render_resolution;
         RenderMode render_mode = RenderMode::WORLD;
     };
 }

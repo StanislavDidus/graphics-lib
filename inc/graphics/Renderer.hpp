@@ -45,11 +45,12 @@ namespace graphics
         [[nodiscard]] float getZoom() const;
         [[nodiscard]] glm::vec2 getView() const;
         [[nodiscard]] const TextEngine& getTextEngine() const;
+        [[nodiscard]] glm::ivec2 getRenderResolution() const;
 
         // Setters
         void setZoom(float zoom);
         void setView(const glm::vec2& view);
-        void setRenderMove(RenderMode render_mode);
+        void setRenderMode(RenderMode render_mode);
 
         void drawRectangle(float x, float y, float width, float height, const Color& color, RenderType render_type);
         void drawSprite(const Sprite& sprite, float x, float y, float width, float height, float angle = 0.0f, SDL_FlipMode flip = SDL_FLIP_NONE, const Color& color = Color::WHITE);

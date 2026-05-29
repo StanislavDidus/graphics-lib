@@ -45,6 +45,7 @@ namespace graphics
         [[nodiscard]] virtual float getZoom() const = 0;
         [[nodiscard]] virtual glm::vec2 getView() const = 0;
         [[nodiscard]] virtual const TextEngine& getTextEngine() const = 0;
+        [[nodiscard]] virtual glm::ivec2 getRenderResolution() const = 0;
 
         // Setters
         virtual void setZoom(float zoom) = 0;
