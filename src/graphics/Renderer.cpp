@@ -58,6 +58,11 @@ namespace graphics
         return m_impl->getRenderResolution();
     }
 
+    glm::ivec2 Renderer::getStandardWindowSize() const
+    {
+        return m_impl->getStandardWindowSize();
+    }
+
     void Renderer::setZoom(float zoom)
     {
         m_impl->setZoom(zoom);

@@ -67,6 +67,11 @@ namespace graphics
         return render_resolution;
     }
 
+    glm::ivec2 RendererImplSDL::getStandardWindowSize() const
+    {
+        return renderer.getWindowSize();
+    }
+
     void RendererImplSDL::setZoom(float zoom)
     {
         this->zoom = zoom;

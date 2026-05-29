@@ -187,6 +187,11 @@ namespace graphics
 	    return {render_resolution_width, render_resolution_height};
     }
 
+    glm::ivec2 RendererImplGPU::getStandardWindowSize() const
+    {
+    	return window.getWindowSize();
+    }
+
     void RendererImplGPU::setZoom(float zoom)
     {
     	this->zoom = zoom;
