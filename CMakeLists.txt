@@ -108,15 +108,15 @@ add_dependencies(GRAPHICS_LIB copy_assets)
 function(graphics_setup_runtime_dependencies PROJECT_BIN)
     add_custom_command(TARGET ${PROJECT_BIN} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-    "${PROJECT_SOURCE_DIR}/libs"
+    "${CMAKE_CURRENT_LIST_DIR}/libs"
     $<TARGET_FILE_DIR:${PROJECT_BIN}>
     COMMENT "Copying dlls to build directory ${PROJECT_BIN}")
 	
 	add_custom_command(TARGET ${PROJECT_BIN} POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_directory
-			"${PROJECT_SOURCE_DIR}/shaders/"
-			$<TARGET_FILE_DIR:${PROJECT_BIN}>
-			COMMENT "Copying shaders to build directory ${PROJECT_BIN}")
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	"${CMAKE_CURRENT_LIST_DIR}/shaders/"
+	$<TARGET_FILE_DIR:${PROJECT_BIN}>
+	COMMENT "Copying shaders to build directory ${PROJECT_BIN}")
 endfunction()
 
 #Copy lib folder directly to bin folder
