@@ -11,7 +11,7 @@ namespace graphics
 	}
 
 	Sprite::Sprite(std::shared_ptr<Texture> texture, const SDL_FRect& rect)
-	: texture(std::move(texture))
+	: texture(texture)
 	, color{Color::WHITE}
 	, rect(
 		rect.x / texture->width(),
