@@ -9,6 +9,9 @@ set(GRAPHICS_VERSION_PATCH 1)
 set(GRAPHICS_VERSION
 	${GRAPHICS_VERSION_MAJOR}.${GRAPHICS_VERSION_MINOR}.${GRAPHICS_VERSION_PATCH})
 
+set(GRAPHICS_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
+message(STATUS "Graphics assets path: ${GRAPHICS_ROOT_DIR}")
+
 add_compile_definitions(WEB)
 
 # Use solution folders.
@@ -104,9 +107,6 @@ add_custom_target(copy_assets
 		COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_LIST_DIR}/copy_assets.cmake
 )
 add_dependencies(GRAPHICS_LIB copy_assets)
-
-set(GRAPHICS_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
-message(STATUS "Graphics assets path: ${GRAPHICS_ROOT_DIR}")
 
 function(graphics_setup_runtime_dependencies PROJECT_BIN)
     add_custom_command(TARGET ${PROJECT_BIN} POST_BUILD
