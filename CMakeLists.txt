@@ -115,7 +115,7 @@ function(graphics_setup_runtime_dependencies PROJECT_BIN)
 	add_custom_command(TARGET ${PROJECT_BIN} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
 	"${CMAKE_CURRENT_LIST_DIR}/shaders/"
-	$<TARGET_FILE_DIR:${PROJECT_BIN}>
+	$<TARGET_FILE_DIR:${PROJECT_BIN}>/shaders
 	COMMENT "Copying shaders to build directory ${PROJECT_BIN}")
 endfunction()
 
