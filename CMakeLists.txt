@@ -92,6 +92,7 @@ set(HEADER_FILES
 		src/graphics/GPURenderer/Chunk.hpp
 		inc/graphics/TileMapData.hpp
 		src/graphics/GPURenderer/WindowClaimer.hpp
+		inc/graphics/config.hpp
 )
 
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})

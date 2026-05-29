@@ -1,6 +1,7 @@
 #include <iostream>
 #include <graphics/RenderBatch.hpp>
 #include <graphics/exception.hpp>
+#include "graphics/config.hpp"
 
 #include "../../extern/SDL/src/video/khronos/vulkan/vulkan_core.h"
 
