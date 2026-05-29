@@ -1,5 +1,6 @@
 #include <graphics/GpuShader.hpp>
 #include <SDL3_shadercross/SDL_shadercross.h>
+#include <format>
 
 graphics::GpuShader::GpuShader(std::shared_ptr<SDL_GPUDevice> device, const std::filesystem::path& path, int sampler_count, int uniform_count, int storage_buffer_count, int storage_texture_count)
 	: device{ device }
