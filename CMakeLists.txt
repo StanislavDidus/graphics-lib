@@ -26,7 +26,6 @@ endif(MSVC)
 add_subdirectory(extern EXCLUDE_FROM_ALL)
 
 set(SOURCE_FILES 
-    "src/graphics/GpuRenderer.cpp"
     "src/graphics/exception.cpp"
     "src/graphics/Sprite.cpp"
     "src/graphics/Surface.cpp"
@@ -59,7 +58,6 @@ set(HEADER_FILES
 		"inc/graphics/Renderer.hpp"
 		"inc/graphics/graphics.hpp"
 		"inc/graphics/exception.hpp"
-		"inc/graphics/GpuRenderer.hpp"
 		"inc/graphics/Sprite.hpp"
 		"inc/graphics/Surface.hpp"
 		"inc/graphics/Window.hpp"
