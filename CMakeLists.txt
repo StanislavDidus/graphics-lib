@@ -106,6 +106,7 @@ add_custom_target(copy_assets
 add_dependencies(GRAPHICS_LIB copy_assets)
 
 set(GRAPHICS_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
+message(STATUS "Graphics assets path: ${GRAPHICS_ROOT_DIR})
 
 function(graphics_setup_runtime_dependencies PROJECT_BIN)
     add_custom_command(TARGET ${PROJECT_BIN} POST_BUILD
