@@ -6,7 +6,6 @@
 #include <SDL3/SDL_gpu.h>
 
 #include "glm/fwd.hpp"
-#include "graphics/GpuRenderer.hpp"
 #include "graphics/RenderBatch.hpp"
 #include "graphics/Vertex.hpp"
 #include "graphics/TileMapData.hpp"
@@ -16,11 +15,14 @@
 
 #include "glm/gtx/transform.hpp"
 #include "graphics/TextEngine.hpp"
+#include "WindowClaimer.hpp"
 
 namespace graphics
 {
     using TextureSampler = std::pair<TextureScaleMode, TextureAddressMode>;
-
+    
+    static ScreenSize screen_size_uniform;
+    
     class RendererImplGPU : public RendererImpl
     {
     public:

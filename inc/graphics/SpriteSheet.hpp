@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include <graphics/GpuRenderer.hpp>
+#include <graphics/Renderer.hpp>
 #include <graphics/Sprite.hpp>
 #include "glm/glm.hpp"
 
@@ -14,15 +14,15 @@ namespace graphics
 	class SpriteSheet
 	{
 	public:
-		SpriteSheet(graphics::GpuRenderer& renderer, const std::filesystem::path& path, const SpriteList& sprite_list, SDL_ScaleMode scale_mode = SDL_SCALEMODE_LINEAR);
-		SpriteSheet(graphics::GpuRenderer& renderer, const Surface& surface, const SpriteList& sprite_list, SDL_ScaleMode scale_mode = SDL_SCALEMODE_LINEAR);
+		SpriteSheet(graphics::Renderer& renderer, const std::filesystem::path& path, const SpriteList& sprite_list, TextureScaleMode scale_mode = TextureScaleMode::LINEAR, TextureAddressMode address_mode = TextureAddressMode::CLAMP);
+		SpriteSheet(graphics::Renderer& renderer, const Surface& surface, const SpriteList& sprite_list, TextureScaleMode scale_mode = TextureScaleMode::LINEAR, TextureAddressMode address_mode = TextureAddressMode::CLAMP);
 
 		SpriteSheet(const SpriteSheet& other) = delete;
 		SpriteSheet(SpriteSheet&& other) noexcept = delete;
 		SpriteSheet& operator=(const SpriteSheet& other) = delete;
 		SpriteSheet& operator=(SpriteSheet&& other) noexcept = delete;
 
-		std::shared_ptr<GpuTextureSDL> getTexture() const;
+		std::shared_ptr<Texture> getTexture() const { return texture; }
 
 		template<typename Self>
 		auto&& getSprite(this Self&& self, const std::string& name);
@@ -33,7 +33,7 @@ namespace graphics
 		auto&& operator[](this Self&& self, size_t index);
 
 	private:
-		std::shared_ptr<GpuTextureSDL> texture = nullptr;
+		std::shared_ptr<Texture> texture = nullptr;
 
 		std::vector<Sprite> sprites;
 		std::unordered_map<std::string, size_t> nameToIndex;

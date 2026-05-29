@@ -52,6 +52,7 @@ set(SOURCE_FILES
 		src/graphics/GPURenderer/GpuTilemapSDL.cpp
 		src/graphics/SDLRenderer/Chunk.cpp
 		src/graphics/GPURenderer/Chunk.cpp
+		src/graphics/GPURenderer/WindowClaimer.cpp
 )
 
 set(HEADER_FILES
@@ -90,6 +91,7 @@ set(HEADER_FILES
 		src/graphics/SDLRenderer/Chunk.hpp
 		src/graphics/GPURenderer/Chunk.hpp
 		inc/graphics/TileMapData.hpp
+		src/graphics/GPURenderer/WindowClaimer.hpp
 )
 
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})

@@ -4,7 +4,10 @@
 
 #include "RendererImplGPU.hpp"
 
+#include <iostream>
+
 #include "GpuTilemapSDL.hpp"
+#include "graphics/GpuShader.hpp"
 #include "graphics/TextureSDL.hpp"
 #include "SDL3_shadercross/SDL_shadercross.h"
 
