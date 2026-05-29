@@ -9,9 +9,6 @@ set(GRAPHICS_VERSION_PATCH 1)
 set(GRAPHICS_VERSION
 	${GRAPHICS_VERSION_MAJOR}.${GRAPHICS_VERSION_MINOR}.${GRAPHICS_VERSION_PATCH})
 
-set(GRAPHICS_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
-message(STATUS "Graphics assets path: ${GRAPHICS_ROOT_DIR}")
-
 add_compile_definitions(WEB)
 
 # Use solution folders.
@@ -108,16 +105,16 @@ add_custom_target(copy_assets
 )
 add_dependencies(GRAPHICS_LIB copy_assets)
 
-function(graphics_setup_runtime_dependencies PROJECT_BIN)
+function(graphics_setup_runtime_dependencies PROJECT_BIN ASSET_ROOT)
     add_custom_command(TARGET ${PROJECT_BIN} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-    "${GRAPHICS_ROOT_DIR}/libs"
+    "${ASSET_ROOT}/libs"
     $<TARGET_FILE_DIR:${PROJECT_BIN}>
     COMMENT "Copying dlls to build directory ${PROJECT_BIN}")
 	
 	add_custom_command(TARGET ${PROJECT_BIN} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
-	"${GRAPHICS_ROOT_DIR}/shaders/"
+	"${ASSET_ROOT}/shaders/"
 	$<TARGET_FILE_DIR:${PROJECT_BIN}>/shaders
 	COMMENT "Copying shaders to build directory ${PROJECT_BIN}")
 endfunction()
