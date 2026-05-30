@@ -5,7 +5,7 @@
 
 //#define __EMSCRIPTEN__
 
-#ifndef __EMSCRIPTEN__
+#ifndef WEB
 using RendererType = graphics::RendererImplGPU;
 #else
 using RendererType = graphics::RendererImplSDL;
