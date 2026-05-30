@@ -62,14 +62,16 @@ namespace graphics
         return *text_engine;
     }
 
-    glm::ivec2 RendererImplSDL::getRenderResolution() const
-    {
-        return render_resolution;
-    }
-
     glm::ivec2 RendererImplSDL::getStandardWindowSize() const
     {
         return renderer.getWindowSize();
+    }
+
+    glm::vec2 RendererImplSDL::getMouseScaledPosition(const glm::vec2& mouse_screen_position)
+    {
+        glm::vec2 new_position;
+        SDL_RenderCoordinatesFromWindow(renderer.get(), mouse_screen_position.x, mouse_screen_position.y, &new_position.x, &new_position.y);
+        return new_position;
     }
 
     void RendererImplSDL::setZoom(float zoom)

@@ -63,6 +63,11 @@ namespace graphics
         return m_impl->getStandardWindowSize();
     }
 
+    glm::vec2 Renderer::getMouseScaledPosition(const glm::vec2& mouse_screen_position) const
+    {
+        return m_impl->getMouseScaledPosition(mouse_screen_position);
+    }
+
     void Renderer::setZoom(float zoom)
     {
         m_impl->setZoom(zoom);

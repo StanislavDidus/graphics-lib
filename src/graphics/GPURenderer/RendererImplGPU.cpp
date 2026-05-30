@@ -182,14 +182,17 @@ namespace graphics
     	return *text_engine;
     }
 
-    glm::ivec2 RendererImplGPU::getRenderResolution() const
-    {
-	    return {render_resolution_width, render_resolution_height};
-    }
-
     glm::ivec2 RendererImplGPU::getStandardWindowSize() const
     {
     	return window.getWindowSize();
+    }
+
+    glm::vec2 RendererImplGPU::getMouseScaledPosition(const glm::vec2& mouse_screen_position)
+    {
+    	glm::vec2 render_resolution{static_cast<float>(render_resolution_height), static_cast<float>(render_resolution_height)};
+    	//glm::vec2 resolution_scale = render_resolution / static_cast<glm::vec2>(getStandardWindowSize());
+    	glm::vec2 resolution_scale = static_cast<glm::vec2>(getStandardWindowSize()) / render_resolution;
+    	return mouse_screen_position * resolution_scale;
     }
 
     void RendererImplGPU::setZoom(float zoom)
