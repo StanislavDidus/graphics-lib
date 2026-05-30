@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.15...4.2.1)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
 option(GRAPHICS_BUILD_SAMPLES "Build samples" ON)
+option(GRAPHICS_USE_SDL_RENDERER OFF)
 
 set(GRAPHICS_VERSION_MAJOR 0)
 set(GRAPHICS_VERSION_MINOR 0)
@@ -15,6 +16,10 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 project(GRAPHICS_LIB VERSION ${GRAPHICS_VERSION}
 	DESCRIPTION "Simple graphics library that uses SDL3 for rendering"
 	LANGUAGES C CXX)
+
+if(GRAPHICS_USE_SDL_RENDERER)
+	target_compile_definitions(GRAPHICS_LIB PRIVATE GRAPHICS_USE_SDL_RENDERER)
+endif ()
 
 # Enable multi-processor builds in MSVC.
 if(MSVC)

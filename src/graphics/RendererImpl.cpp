@@ -3,9 +3,8 @@
 #include "GPURenderer/RendererImplGPU.hpp"
 #include "SDLRenderer/RendererImplSDL.hpp"
 
-//#define __EMSCRIPTEN__
 
-#ifndef WEB
+#ifndef GRAPHICS_USE_SDL_RENDERER
 using RendererType = graphics::RendererImplGPU;
 #else
 using RendererType = graphics::RendererImplSDL;
