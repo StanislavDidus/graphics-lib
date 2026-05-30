@@ -50,25 +50,17 @@ namespace graphics
 
     void GpuTilemapSDL::create()
     {
-        // Empty grid
-        /*
-        std::vector<Uint32> grid;
-        int chunk_size_tiles = chunk_size.width * chunk_size.height;
-        grid.reserve(chunk_size_tiles);
-        for (int i = 0; i < chunk_size_tiles; ++i) grid.emplace_back(0);
-        */
-        
         int world_width_chunks = world_size.width / chunk_size.width;
         int world_height_chunks = world_size.height / chunk_size.height;
 	
         int index = 0;
         chunks.reserve(world_width_chunks * world_height_chunks);
-        for (int y = 0; y < world_height_chunks; ++y)
+        for (int x = 0; x < world_width_chunks; ++x)
         {
-            float offset_y = y * chunk_size.height * tile_size.height;
-            for (int x = 0; x < world_width_chunks; ++x)
+            float offset_x = x * chunk_size.width * tile_size.width;
+            for (int y = 0; y < world_height_chunks; ++y)
             {
-                float offset_x = x * chunk_size.width * tile_size.width;
+                float offset_y = y * chunk_size.height * tile_size.height;
                 std::shared_ptr<Chunk> chunk = std::make_shared<Chunk>(
                     device, 
                     texture,
