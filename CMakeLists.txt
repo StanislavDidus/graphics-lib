@@ -17,10 +17,6 @@ project(GRAPHICS_LIB VERSION ${GRAPHICS_VERSION}
 	DESCRIPTION "Simple graphics library that uses SDL3 for rendering"
 	LANGUAGES C CXX)
 
-if(GRAPHICS_USE_SDL_RENDERER)
-	target_compile_definitions(GRAPHICS_LIB PRIVATE GRAPHICS_USE_SDL_RENDERER)
-endif ()
-
 # Enable multi-processor builds in MSVC.
 if(MSVC)
 	add_compile_options(/MP)
@@ -102,6 +98,10 @@ set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})
 
 add_library(GRAPHICS_LIB STATIC ${ALL_FILES})
 add_library(GRAPHICS_LIB::graphics ALIAS GRAPHICS_LIB)
+
+if(GRAPHICS_USE_SDL_RENDERER)
+	target_compile_definitions(GRAPHICS_LIB PRIVATE GRAPHICS_USE_SDL_RENDERER)
+endif ()
 
 add_custom_target(copy_assets
 		COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_LIST_DIR}/copy_assets.cmake
