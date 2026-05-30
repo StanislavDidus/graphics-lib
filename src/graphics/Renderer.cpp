@@ -53,11 +53,6 @@ namespace graphics
         return m_impl->getTextEngine();
     }
 
-    glm::ivec2 Renderer::getRenderResolution() const
-    {
-        return m_impl->getRenderResolution();
-    }
-
     glm::ivec2 Renderer::getStandardWindowSize() const
     {
         return m_impl->getStandardWindowSize();
