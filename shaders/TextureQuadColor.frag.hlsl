@@ -27,5 +27,5 @@ float4 main(Input input) : SV_TARGET0
         texcoord.y = input.UV.w - (texcoord.y - input.UV.y) + input.UV.y;
     }
     
-    return input.Color / 255.0f * Texture.Sample(Sampler, uv);
+    return input.Color / 255.0f * Texture.Sample(Sampler, texcoord);
 }
