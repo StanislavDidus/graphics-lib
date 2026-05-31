@@ -14,5 +14,5 @@ namespace graphics
     /// Function initializes all necessary dependencies, including:
     /// SDL3, SDL_ttf, and SDL_shadercross
     /// Don't call if you want to initialize it yourself
-    static void init();
+    void init();
 }
