@@ -96,7 +96,7 @@ set(HEADER_FILES
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})
 
 if(NOT GRAPHICS_USE_SDL_RENDERER)
-	set(ALL_FILES 
+	list(APPEND ALL_FILES
 		src/graphics/GpuShader.cpp
 		src/graphics/GPURenderer/RendererImplGPU.cpp
 	)
