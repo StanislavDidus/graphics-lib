@@ -55,7 +55,7 @@ namespace graphics
 		std::cout << "Window was successfully claimed for current GPU device." << std::endl;
 
 		// Disable VSync
-		SDL_SetGPUSwapchainParameters(device.get(), window.get(), SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_IMMEDIATE);
+		SDL_SetGPUSwapchainParameters(device.get(), window.get(), SDL_GPU_SWAPCHAINCOMPOSITION_SDR, SDL_GPU_PRESENTMODE_MAILBOX);
 
     	// Init Text Engine
     	text_engine = std::make_unique<TextEngine>(device);
