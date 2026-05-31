@@ -2,7 +2,10 @@
 
 #include <SDL3/SDL_init.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include <SDL3_shadercross/SDL_shadercross.h>
+
+#ifndef GRAPHICS_USE_SDL_RENDERER
+    #include <SDL3_shadercross/SDL_shadercross.h>
+#endif
 
 #include "graphics/Renderer.hpp"
 
@@ -19,7 +22,7 @@ namespace graphics
     /// Don't call if you want to initiliaze it yourself
     static void init()
     {
-        if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
+        if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO))
         {
             throw graphics_error{std::format("Could not initialize SDL3: {}", SDL_GetError())};
         }
@@ -29,9 +32,11 @@ namespace graphics
             throw graphics_error{std::format("Could not initialize SDL_tff: {}", SDL_GetError())};
         }
         
+#ifndef GRAPHICS_USE_SDL_RENDERER
         if (!SDL_ShaderCross_Init())
         {
             throw graphics_error{std::format("Could not initialize SDL_shadercross: {}", SDL_GetError())};
         }
+#endif
     }
 }

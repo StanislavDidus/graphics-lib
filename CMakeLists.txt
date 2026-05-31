@@ -129,12 +129,17 @@ target_include_directories(GRAPHICS_LIB
 		PRIVATE src
 )
 
-target_link_libraries(GRAPHICS_LIB PUBLIC 
-		SDL3::SDL3-static 
-		SDL3_ttf::SDL3_ttf-static 
-		SDL3_shadercross::SDL3_shadercross-static 
+target_link_libraries(GRAPHICS_LIB PUBLIC
+		SDL3::SDL3-static
+		SDL3_ttf::SDL3_ttf-static
 		glm::glm
 )
+
+if(NOT GRAPHICS_USE_SDL_RENDERER)
+	target_link_libraries(GRAPHICS_LIB PUBLIC
+		SDL3_shadercross::SDL3_shadercross-static	
+	)
+endif()
 
 if(GRAPHICS_BUILD_SAMPLES)
 	add_subdirectory(examples)

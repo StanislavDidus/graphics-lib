@@ -6,7 +6,9 @@ set(SDLSHADERCROSS_VENDORED ON)
 
 add_subdirectory(SDL EXCLUDE_FROM_ALL)
 add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)
-add_subdirectory(SDL_shadercross EXCLUDE_FROM_ALL)
+if(NOT GRAPHICS_USE_SDL_RENDERER)
+    add_subdirectory(SDL_shadercross EXCLUDE_FROM_ALL)
+endif()
 add_subdirectory(glm EXCLUDE_FROM_ALL)
 
 set(SDL_TARGETS
@@ -15,6 +17,13 @@ set(SDL_TARGETS
         freetype harfbuzz plutosvg plutovg
         SDL3_shadercross SDL3_shadercross-static
 )
+
+if(NOT GRAPHICS_USE_SDL_RENDERER)
+    list(APPEND SDL_TARGETS
+        SDL3_shadercross 
+        SDL3_shadercross-static
+    )
+endif()
 
 set(GLM_TARGETS
         glm glm_shared
