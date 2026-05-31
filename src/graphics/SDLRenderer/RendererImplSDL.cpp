@@ -136,8 +136,18 @@ namespace graphics
                                       float angle, SDL_FlipMode flip, const Color& color)
     {
         SDL_Texture* texture_ = std::static_pointer_cast<TextureSDL>(texture)->get();
+        
+        SDL_FRect dst_ = dst;
+        if (render_mode == RenderMode::UI)
+        {
+            dst_.x -= view.x;
+            dst_.y -= view.y;
+        }
+
+        zoomRect(dst_);
+        
         SDL_SetTextureColorMod(texture_, color.r, color.g, color.b);
-        SDL_RenderTextureRotated(renderer.get(), texture_, &src, &dst, angle, nullptr, flip);
+        SDL_RenderTextureRotated(renderer.get(), texture_, &src, &dst_, angle, nullptr, flip);
         SDL_SetTextureColorMod(texture_, 255, 255, 255);
 
         // TODO: Apply texture address mode before drawing it
