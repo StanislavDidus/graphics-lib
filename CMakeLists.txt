@@ -41,7 +41,6 @@ set(SOURCE_FILES
     "src/graphics/RenderBatch.cpp"
 	"src/graphics/RendererImpl.cpp"
 	"src/graphics/Renderer.cpp"
-	"src/graphics/GPURenderer/RendererImplGPU.cpp"
 	"src/graphics/TextureSDL.cpp"
 	"src/graphics/GpuTextureSDL.cpp" 
 		src/graphics/SDLRenderer/RendererImplSDL.cpp
@@ -97,7 +96,10 @@ set(HEADER_FILES
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})
 
 if(NOT GRAPHICS_USE_SDL_RENDERER)
-	set(ALL_FILES src/graphics/GpuShader.cpp)	
+	set(ALL_FILES 
+		src/graphics/GpuShader.cpp
+		src/graphics/GPURenderer/RendererImplGPU.cpp
+	)
 endif()
 
 add_library(GRAPHICS_LIB STATIC ${ALL_FILES})
