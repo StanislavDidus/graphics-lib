@@ -17,6 +17,7 @@ namespace graphics
     {
         text_engine = std::make_unique<TextEngine>(renderer.get());
         SDL_SetRenderLogicalPresentation(renderer.get(), window.getWindowSize().x, window.getWindowSize().y, SDL_LOGICAL_PRESENTATION_OVERSCAN);
+        SDL_SetRenderDrawBlendMode(renderer.get(), SDL_BLENDMODE_BLEND);
     }
 
     std::shared_ptr<Texture> RendererImplSDL::loadTexture(const Surface &surface, TextureScaleMode scale_mode,
