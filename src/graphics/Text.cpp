@@ -15,6 +15,11 @@ namespace graphics
 		: text{text}
 	{
 		m_text = TTF_CreateText(text_engine.get(), font->get(), text.data(), text.length());
+		if (!m_text)
+		{
+			throw graphics_error{std::format("Failed to create text: {}", SDL_GetError())};
+		}
+		
 		setColor(color);
 	}
 
@@ -59,22 +64,34 @@ namespace graphics
 
 	void Text::setFont(const std::shared_ptr<Font>& font)
 	{
-		TTF_SetTextFont(m_text, font->get());
+		if (!TTF_SetTextFont(m_text, font->get()))
+		{
+			throw graphics_error{std::format("Failed to set font: {}", SDL_GetError())};
+		}
 	}
 
 
 	void Text::setColor(const Color& color)
 	{
-		TTF_SetTextColor(m_text, color.r, color.g, color.b, color.a);
+		if (!TTF_SetTextColor(m_text, color.r, color.g, color.b, color.a))
+		{
+			throw graphics_error{std::format("Failed to set color: {}", SDL_GetError())};
+		}
 	}
 
 	void Text::setText(const std::string& text)
 	{
-		TTF_SetTextString(m_text, text.c_str(), text.length());
+		if (!TTF_SetTextString(m_text, text.c_str(), text.length()))
+		{
+			throw graphics_error{std::format("Failed to set text: {}", SDL_GetError())};
+		}
 	}
 
 	void Text::setWrappedWidth(int wrapped_width)
 	{
-		TTF_SetTextWrapWidth(m_text, wrapped_width);
+		if (!TTF_SetTextWrapWidth(m_text, wrapped_width))
+		{
+			throw graphics_error{std::format("Failed to set wrapped width: {}", SDL_GetError())};
+		}
 	}
 } // namespace graphics
