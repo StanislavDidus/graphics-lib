@@ -6,7 +6,7 @@
     #include <SDL3_shadercross/SDL_shadercross.h>
 #endif
 
-void graphics::init()
+static void graphics::init()
 {
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO))
     {
