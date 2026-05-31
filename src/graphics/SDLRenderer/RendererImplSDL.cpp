@@ -95,7 +95,7 @@ namespace graphics
         setColor(color);
         SDL_FRect rect {x, y, width, height};
 
-        if (render_mode == RenderMode::UI)
+        if (render_mode != RenderMode::UI)
         {
             rect.x -= view.x;
             rect.y -= view.y;
@@ -138,7 +138,7 @@ namespace graphics
         SDL_Texture* texture_ = std::static_pointer_cast<TextureSDL>(texture)->get();
         
         SDL_FRect dst_ = dst;
-        if (render_mode == RenderMode::UI)
+        if (render_mode != RenderMode::UI)
         {
             dst_.x -= view.x;
             dst_.y -= view.y;
