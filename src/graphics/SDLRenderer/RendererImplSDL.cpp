@@ -130,6 +130,7 @@ namespace graphics
 
     void RendererImplSDL::drawText(const Text& text, float x, float y)
     {
+        setColor(Color::WHITE);
         TTF_DrawRendererText(text.getRendererDrawData(), x, y);
     }
 
