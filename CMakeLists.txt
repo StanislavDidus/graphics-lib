@@ -34,7 +34,7 @@ set(SOURCE_FILES
     "src/graphics/Font.cpp"
     "src/graphics/Text.cpp"
     "src/graphics/SpriteAnimation.cpp"
-    "src/graphics/GpuShader.cpp"
+    #"src/graphics/GpuShader.cpp"
     "src/graphics/GpuGraphicsPipeline.cpp"
     "src/graphics/GpuSampler.cpp"
     "src/graphics/TileMap.cpp"
@@ -95,6 +95,10 @@ set(HEADER_FILES
 )
 
 set(ALL_FILES ${SOURCE_FILES} ${HEADER_FILES})
+
+if(NOT GRAPHICS_USE_SDL_RENDERER)
+	set(ALL_FILES src/graphics/GpuShader.cpp)	
+endif()
 
 add_library(GRAPHICS_LIB STATIC ${ALL_FILES})
 add_library(GRAPHICS_LIB::graphics ALIAS GRAPHICS_LIB)
