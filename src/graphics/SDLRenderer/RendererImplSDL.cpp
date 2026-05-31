@@ -99,9 +99,9 @@ namespace graphics
         {
             rect.x -= view.x;
             rect.y -= view.y;
-        }
 
-        zoomRect(rect);
+            zoomRect(rect);
+        }
 
         if (render_type == RenderType::FILL)
         {
@@ -142,10 +142,10 @@ namespace graphics
         {
             dst_.x -= view.x;
             dst_.y -= view.y;
+            
+            zoomRect(dst_);
         }
 
-        zoomRect(dst_);
-        
         SDL_SetTextureColorMod(texture_, color.r, color.g, color.b);
         SDL_RenderTextureRotated(renderer.get(), texture_, &src, &dst_, angle, nullptr, flip);
         SDL_SetTextureColorMod(texture_, 255, 255, 255);
