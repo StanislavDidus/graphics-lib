@@ -187,7 +187,10 @@ namespace graphics
             };
             
             if (!SDL_HasRectIntersectionFloat(&camera_rect, &chunk_rect))
-                continue;
+            {
+                ++i;
+                continue; 
+            }
             
             for (int j = 0; j < chunk_size.width; ++j)
             {
