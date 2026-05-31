@@ -1,0 +1,27 @@
+#include "graphics/graphics.hpp"
+
+#include <format>
+
+#ifndef GRAPHICS_USE_SDL_RENDERER
+    #include <SDL3_shadercross/SDL_shadercross.h>
+#endif
+
+void graphics::init()
+{
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO))
+    {
+        throw graphics_error{std::format("Could not initialize SDL3: {}", SDL_GetError())};
+    }
+    
+    if (!TTF_Init())
+    {
+        throw graphics_error{std::format("Could not initialize SDL_tff: {}", SDL_GetError())};
+    }
+        
+#ifndef GRAPHICS_USE_SDL_RENDERER
+    if (!SDL_ShaderCross_Init())
+    {
+        throw graphics_error{std::format("Could not initialize SDL_shadercross: {}", SDL_GetError())};
+    }
+#endif
+}

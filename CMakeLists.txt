@@ -51,6 +51,7 @@ set(SOURCE_FILES
 		src/graphics/SDLRenderer/Chunk.cpp
 		src/graphics/GPURenderer/Chunk.cpp
 		src/graphics/GPURenderer/WindowClaimer.cpp
+		src/graphics/graphics.cpp
 )
 
 set(HEADER_FILES
