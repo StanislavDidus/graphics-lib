@@ -166,6 +166,8 @@ namespace graphics
         float tile_width_pixels = static_cast<float>(tile_size_pixels.width);
         float tile_height_pixels = static_cast<float>(tile_size_pixels.height);
         
+        SDL_FRect camera_rect = getCameraRect();
+        
         std::shared_ptr<Texture> texture = tile_map->getTexture();
         for (int i = 0; const auto& chunk : std::static_pointer_cast<TileMapSDL>(tile_map)->getChunks())
         {
@@ -175,6 +177,17 @@ namespace graphics
             
             float offset_x = x + chunk_x * chunk_width_world;
             float offset_y = y + chunk_y * chunk_height_world;
+            
+            SDL_FRect chunk_rect
+            {
+                offset_x,
+                offset_y,
+                chunk_width_world,
+                chunk_height_world
+            };
+            
+            if (!SDL_HasRectIntersectionFloat(&camera_rect, &chunk_rect))
+                continue;
             
             for (int j = 0; j < chunk_size.width; ++j)
             {
@@ -246,4 +259,21 @@ namespace graphics
 		rect.x = std::floor(rect.x);
 		rect.y = std::floor(rect.y);
 	}
+
+    SDL_FRect RendererImplSDL::getCameraRect() const
+    {
+        const auto& window_size = getStandardWindowSize();
+		
+        float world_width = window_size.x / zoom;
+        float world_height = window_size.y / zoom;
+		
+        float offset_x = (window_size.x - world_width) * 0.5f;
+        float offset_y = (window_size.y - world_height) * 0.5f;
+
+        return SDL_FRect{
+            view.x + offset_x,
+            view.y + offset_y,
+            world_width	,
+            world_height};
+    }
 }

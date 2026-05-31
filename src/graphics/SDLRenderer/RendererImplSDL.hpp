@@ -46,6 +46,7 @@ namespace graphics
         
         void setColor(const Color& color);
         void zoomRect(SDL_FRect& rect);
+        SDL_FRect getCameraRect() const;
 
         SDLRenderer renderer;
         std::unique_ptr<TextEngine> text_engine;
