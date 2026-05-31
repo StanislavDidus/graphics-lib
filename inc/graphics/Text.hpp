@@ -29,6 +29,7 @@ namespace graphics
 		std::shared_ptr<Texture> getTexture() const;
 		const std::string& getText() const;
 		glm::vec2 getSize() const;
+		Color getColor() const;
 
 		TTF_GPUAtlasDrawSequence* getGPUDrawData() const;
 		TTF_Text* getRendererDrawData() const;

@@ -47,6 +47,13 @@ namespace graphics
 		return {static_cast<float>(w), static_cast<float>(h)};
 	}
 
+	Color Text::getColor() const
+	{
+		Color color;
+		TTF_GetTextColor(m_text, &color.r, &color.g, &color.b, &color.a);
+		return color;
+	}
+
 	TTF_GPUAtlasDrawSequence* Text::getGPUDrawData() const
 	{
 		TTF_GPUAtlasDrawSequence* result = TTF_GetGPUTextDrawData(m_text);

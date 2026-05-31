@@ -360,7 +360,7 @@ namespace graphics
 						TextureAddressMode::CLAMP
 					})->get();
 
-				const Color color = Color::WHITE;
+				const Color color = text.getColor();
 
 				SpriteData sprite
 				{
