@@ -16,7 +16,7 @@ namespace graphics
         : renderer(window)
     {
         text_engine = std::make_unique<TextEngine>(renderer.get());
-        SDL_SetRenderLogicalPresentation(renderer.get(), window.getWindowSize().x, window.getWindowSize().y, SDL_LOGICAL_PRESENTATION_OVERSCAN);
+        SDL_SetRenderLogicalPresentation(renderer.get(), window.getWindowSize().x, window.getWindowSize().y, SDL_LOGICAL_PRESENTATION_STRETCH);
         SDL_SetRenderDrawBlendMode(renderer.get(), SDL_BLENDMODE_BLEND);
     }
 
