@@ -82,7 +82,7 @@ namespace graphics
 
     void RendererImplSDL::setView(const glm::vec2 &view)
     {
-        this->view = view;
+        this->view = {view.x + renderer.getWindowSize().x, view.y + renderer.getWindowSize().y};
     }
 
     void RendererImplSDL::setRenderMode(RenderMode render_mode)
