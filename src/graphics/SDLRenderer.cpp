@@ -25,8 +25,6 @@ namespace graphics
 
     glm::ivec2 SDLRenderer::getWindowSize() const
     {
-        int w, h;
-        SDL_GetWindowSize(window.get(), &w, &h);
-        return {w, h};
+        return window.getWindowSize();
     }
 }
